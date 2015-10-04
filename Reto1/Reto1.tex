@@ -4,25 +4,19 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
 
 % Para el código
 \usepackage{listings}
 \usepackage{xcolor}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \newcommand{\n}[1]{{\color{gray}#1}}
-\lstset{numbers=left,numberstyle=\tiny\color{gray}}
-
-% Para la tabla
-\usepackage{tikz}
-\usetikzlibrary{matrix, shapes, decorations, positioning, decorations.pathreplacing}
-\tikzstyle{invtable}=[matrix of nodes,inner sep=0pt, nodes in empty cells,
-nodes={minimum size=0.8cm,anchor=center,align=center}]
-%\tikzstyle{br}=[decoration={brace,amplitude=0.5em},decorate, thick]
-\everymath{\displaystyle}
+\lstset{numbers=left,numberstyle=\small\color{gray}}
 
 % Entorno para estilo de ejercicios
-\newenvironment{ejercicio}[1]
-{\noindent\textbf{#1} \vspace*{5mm}}{\vspace*{5mm}}
+\newenvironment{ejercicio}[1]{\textbf{#1} \vspace*{5mm}}{\vspace*{5mm}}
+\setlength{\parindent}{0pt}
 
 % Comando para destacar el resultado
 \newcommand{\resultado}[1]{\colorbox{gray!10}{$\displaystyle#1$}}
@@ -32,6 +26,6 @@ nodes={minimum size=0.8cm,anchor=center,align=center}]
 %\include{ej1}
 \include{ej2}
 \pagebreak
-%\include{ej3}
+\include{ej3}
 %\include{ej4}
 \end{document}
