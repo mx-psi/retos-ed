@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[spanish]{babel}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage[T1]{fontenc}
@@ -16,16 +17,19 @@
 
 % Entorno para estilo de ejercicios
 \newenvironment{ejercicio}[1]{\textbf{#1} \vspace*{5mm}}{\vspace*{5mm}}
-\setlength{\parindent}{0pt}
+\setlength{\parindent}{0pt} % Sin identación
 
 % Comando para destacar el resultado
 \newcommand{\resultado}[1]{\colorbox{gray!10}{$\displaystyle#1$}}
 
+\title{Reto 1: Estructura de Datos}
+\date{}
+\author{Pablo Baeyens Fernández \and José Manuel Muñoz Fuentes}
 
 \begin{document}
+\maketitle
 %\include{ej1}
 \include{ej2}
-\pagebreak
-\include{ej3}
+%\include{ej3}
 %\include{ej4}
 \end{document}
