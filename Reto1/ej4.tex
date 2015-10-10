@@ -1,0 +1,61 @@
+\begin{ejercicio}
+{4. Para cada función $f(n)$ y cada tiempo $t$ de la tabla siguiente, determinar el mayor tamaño de un problema que puede ser resuelto en un tiempo $t$ (suponiendo que el algoritmo para resolver el problema tarda $f(n)$ microsegundos, es decir, $f(n) \times 10^{-6}$ sg.)}
+
+\begin{itemize}
+\item Los valores de la fila $f(n) = \log_2 n$ deben ser los máximos que, siendo $s$ el tiempo en segundos: 
+$$
+\log_2 n \times 10^{-6} \le s \implies \log_2 n \le s \times 10^6 \implies n \le 2^{s \times 10^6}
+$$
+
+Sustituyendo $s$ por el tiempo de cada columna obtendríamos los resultados, con $2$ como base. Sin embargo, dado que en la tabla aparece un resultado usando $10$ como base, haremos lo mismo:
+$$
+n \le 2^{s \times 10^6} \implies \log_{10} n \le \log_{10} 2^{s \times 10^6} \implies \log_{10} n \le {s \times 10^6} \times \log_{10} 2 \implies n \le 10^{{s \times 10^6} \times \log_{10} 2}
+$$
+
+La última expresión nos permite obtener los valores máximos posibles de $n$ usando una potencia de $10$. Sustituyendo $s$ en cada columna por el valor correspondiente y redondeando a la baja, obtendremos los elementos de la fila. Dado que los números son muy grandes, daremos una expresión aproximada.
+
+\item Los valores de la fila $f(n) = n$ cumplen que $
+n \times 10^{-6} \le s$, es decir, $n \le s \times 10^6$. Los números siguen siendo muy grandes como para no aproximarlos, así que algunos estarán aproximados.
+
+\item Los valores de la fila $f(n) = n\ \log_2 n$ serán obtenidos hallando la solución de $h(n) = 0$, siendo $h(n) = n\ \log_2(n) - s \times 10^6$.
+
+Invertir $h(x)$ resulta incómodo, por ello aprovecharemos que $h(n)$ es una función continua, que $h(n) < 0 \ \ \forall s \ge 1$ y que $\displaystyle \lim_{n \to +\infty} h(n) = +\infty \ \ \forall s \ge 1$. Por tener esas propiedades, el teorema de Bolzano determina que, para algún valor de abscisa positivo (no necesariamente entero) de $n$, la función devolverá $0$.
+
+Usaremos un software que permite aproximar con precisión arbitraria el valor en el que una función continua se anula: Maxima y la función find\_root con los parámetros $n\ \log_2(n) - s \times 10^6, n, 1, 10^{30}$ para obtener los valores.
+
+\item Los valores de la fila $f(n) = n^3$ serán tales que $n^3 \times 10^{-6} \le s$ y, por consiguiente, $n \le \sqrt[3] {s \times 10^6}$. Esta vez los números empiezan a ser manejables en una tabla tan pequeña, por lo que hallaremos el valor que cumple la igualdad y redondearemos el valor a la baja para obtener el resultado exacto pedido.
+
+\item Los valores de la fila $f(n) = 2^n$ son los máximos posibles que cumplen $2^n \times 10^{-6} \le s$ y, por consiguiente, $n \le \log_2 (s \times 10^6)$ y $n \le 6\log_2 10 + \log_2 s$. Hallaremos el valor que cumple la igualdad y lo truncaremos.
+
+\item Los valores de la fila $f(n) = n!$ serán aquellos tales que $n! \times 10^{-6} \le s$. Ello lleva a que $n! \le s \times 10^6$. $n!$ crece tan rápido que es viable hallar los valores correctos probando todos los $n$ a partir de 1 hasta encontrar el primero que incumpla la igualdad, y tomar el inmediatamente anterior. 
+
+\end{itemize}
+
+Aplicando lo descrito arriba, la tabla obtenida resulta ser la siguiente (se ha considerado la longitud de 1 año como exactamente 365 días):
+
+\vspace*{0.4cm}
+
+\bgroup
+\def\arraystretch{1.6}
+\setlength\tabcolsep{12.5px}
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	\multirow{2}{*}{$f(n)$} & \multicolumn{5}{|c|}{$t$}\\
+	\cline{2-6}
+	& 1 sg. & 1 h. & 1 semana & 1 año & 1000 años \\
+	\hline
+	$\log_2 n$ & $\approx 10^{301030}$ & $\approx 10^{10^9}$ & $\approx 10^{1,8 \times 10^{11}}$ & $\approx 10^{9,5 \times 10^{12}}$ & $\approx 10^{9,5 \times 10^{15}}$  \\
+	\hline
+	$n$ & $10^6$ & $3,6 \times 10^9$ & $\approx 6 \times 10^{11}$ & $\approx 3,15 \times 10^{13}$ & $\approx 3,15 \times 10^{16}$ \\
+	\hline
+	$n \log_2 n$ & $62746$ & $\approx 1,33 \times 10^8$ & $\approx 1,78 \times 10^{10}$ & $\approx 7,98 \times 10^{11}$ & $\approx 6,41 \times 10^{14}$ \\
+	\hline
+	$n^3$ & $100$ & $1532$ & $8456$ & $31593$ & $315938$ \\
+	\hline
+	$2^n$ & $19$ & $31$ & $39$ & $44$ & $54$ \\
+	\hline
+	$n!$ & $9$ & $12$ & $14$ & $16$ & $18$ \\
+	\hline
+\end{tabular}
+\egroup
+\end{ejercicio}
