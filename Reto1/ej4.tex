@@ -2,7 +2,7 @@
 {4. Para cada función $f(n)$ y cada tiempo $t$ de la tabla siguiente, determinar el mayor tamaño de un problema que puede ser resuelto en un tiempo $t$ (suponiendo que el algoritmo para resolver el problema tarda $f(n)$ microsegundos, es decir, $f(n) \times 10^{-6}$ sg.)}
 
 \begin{itemize}
-\item Los valores de la fila $f(n) = \log_2 n$ deben ser los máximos que, siendo $s$ el tiempo en segundos: 
+\item Los valores de la fila $f(n) = \log_2 n$ deben ser los máximos que, siendo $s$ el tiempo en segundos:
 $$
 \log_2 n \times 10^{-6} \le s \implies \log_2 n \le s \times 10^6 \implies n \le 2^{s \times 10^6}
 $$
@@ -21,13 +21,13 @@ n \times 10^{-6} \le s$, es decir, $n \le s \times 10^6$. Los números siguen si
 
 Invertir $h(x)$ resulta incómodo, por ello aprovecharemos que $h(n)$ es una función continua, que $h(n) < 0 \ \ \forall s \ge 1$ y que $\displaystyle \lim_{n \to +\infty} h(n) = +\infty \ \ \forall s \ge 1$. Por tener esas propiedades, el teorema de Bolzano determina que, para algún valor de abscisa positivo (no necesariamente entero) de $n$, la función devolverá $0$.
 
-Usaremos un software que permite aproximar con precisión arbitraria el valor en el que una función continua se anula: Maxima y la función find\_root con los parámetros $n\ \log_2(n) - s \times 10^6, n, 1, 10^{30}$ para obtener los valores.
+Usaremos un software que permite aproximar con precisión arbitraria el valor en el que una función continua se anula: Maxima y la función \texttt{find\_root} con los parámetros $n\ \log_2(n) - s \times 10^6, n, 1, 10^{30}$ para obtener los valores.
 
 \item Los valores de la fila $f(n) = n^3$ serán tales que $n^3 \times 10^{-6} \le s$ y, por consiguiente, $n \le \sqrt[3] {s \times 10^6}$. Esta vez los números empiezan a ser manejables en una tabla tan pequeña, por lo que hallaremos el valor que cumple la igualdad y redondearemos el valor a la baja para obtener el resultado exacto pedido.
 
 \item Los valores de la fila $f(n) = 2^n$ son los máximos posibles que cumplen $2^n \times 10^{-6} \le s$ y, por consiguiente, $n \le \log_2 (s \times 10^6)$ y $n \le 6\log_2 10 + \log_2 s$. Hallaremos el valor que cumple la igualdad y lo truncaremos.
 
-\item Los valores de la fila $f(n) = n!$ serán aquellos tales que $n! \times 10^{-6} \le s$. Ello lleva a que $n! \le s \times 10^6$. $n!$ crece tan rápido que es viable hallar los valores correctos probando todos los $n$ a partir de 1 hasta encontrar el primero que incumpla la igualdad, y tomar el inmediatamente anterior. 
+\item Los valores de la fila $f(n) = n!$ serán aquellos tales que $n! \times 10^{-6} \le s$. Ello lleva a que $n! \le s \times 10^6$. $n!$ crece tan rápido que es viable hallar los valores correctos probando todos los $n$ a partir de 1 hasta encontrar el primero que incumpla la igualdad, y tomar el inmediatamente anterior.
 
 \end{itemize}
 
