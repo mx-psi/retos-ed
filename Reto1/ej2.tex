@@ -23,22 +23,25 @@ Primero analizamos los dos bucles del condicional:
 
 \begin{itemize}
 
-\item El \textbf{primer bucle} (\n{5-7}) se repite $\log_2(n)$ veces,
+\item El \textbf{primer bucle} (\n{5-7}) se repite $\log_2(n) + 1$ veces,
 ya que $k$ se  multiplica por 2 cada vez.
 El bucle interior (\n{6-7}) repite una sentencia $O(1)$ $k$ veces.
 Cada $k$ puede escribirse de la forma $2^i$ para $i \in \mathbb{N}$.
 Es decir, el número de pasos del bucle será:
 
-\[\sum_{i=0}^{\log_2(n)} 2^i = 2^{\log_2{n}} -1 = n -1 \in O(n)\]
+\[\sum_{i=0}^{\log_2(n)+1} 2^i = 2^{\log_2{n}+1} -1 = 2n -1 \in O(n)\]
 
-\item El \textbf{segundo bucle} (\n{9-11}) se repite $\log_2(n)$ veces.
+\item El \textbf{segundo bucle} (\n{9-11}) se repite $\log_2(n) +1$ veces.
 El bucle interior (\n{10-11}) repite una sentencia $O(1)$ $n$ veces.
 Es decir, el número de pasos del bucle será, por la regla del producto:
 $O(n\log(n))$
 \end{itemize}
 
-Como estamos ante un condicional tomamos el máximo de ambos,
-obteniendo que la eficiencia es:
+Podríamos considerar sólo el segundo bucle, dado que el número
+de sentencias ejecutadas en el primero es estrictamente menor
+que en el segundo.
+Como estamos ante un condicional tomamos el máximo de ambas
+partes, obteniendo que la eficiencia es:
 
 \[O(1) + O(\max\{n,n\log n\}) + O(1)  = \resultado{O(n\log n)}\]
 
