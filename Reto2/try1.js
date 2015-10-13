@@ -4,7 +4,7 @@ posint = function(x) {
 }
 
 solve = function(s, a) {
-	if (!posintn(s))
+	if (!posint(s))
 		return false;
 	var n = a.length;
 	if (n == 2) {
