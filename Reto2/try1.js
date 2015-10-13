@@ -1,10 +1,10 @@
-// Comprueba si un número es entero no negativo
-nonegint = function(x) {
-	return x >= 0 && (x%1) == 0;
+// Comprueba si un número es entero positivo
+posint = function(x) {
+	return x > 0 && (x%1) == 0;
 }
 
 solve = function(s, a) {
-	if (!nonegint(s))
+	if (!posintn(s))
 		return false;
 	var n = a.length;
 	if (n == 2) {
@@ -34,11 +34,11 @@ solve = function(s, a) {
 				return solt + "; " + ai + " - " + nuevo + " = " + s;
 			else if ((solt=solve(nuevo = s+ai, resto)) != false)
 				return solt + "; " + nuevo + " - " + ai + " = " + s;
-			else if ((solt=solve(nuevo = s/ai, resto)) != false)
+			else if (ai != 1 && (solt=solve(nuevo = s/ai, resto)) != false)
 				return solt + "; " + ai + " * " + nuevo + " = " + s;
 			else if ((solt=solve(nuevo = ai/s, resto)) != false)
 				return solt + "; " + ai + " / " + nuevo + " = " + s;
-			else if ((solt=solve(nuevo = s*ai, resto)) != false)
+			else if (ai != 1 && (solt=solve(nuevo = s*ai, resto)) != false)
 				return solt + "; " + nuevo + " / " + ai + " = " + s;
 			else if ((solt=solve(nuevo=s, resto)) != false)
 				return solt;
