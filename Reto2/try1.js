@@ -49,4 +49,5 @@ solve = function(s, a) {
 
 var sol = window.prompt("Valor a buscar","");
 var list = window.prompt("Valores disponibles (separados por comas)","").split(", ").join(",").split(",")
+for (var i in list) list[i] = parseInt(list[i], 10);
 alert("[" + list.join(", ") + "] -> " + sol + ":\n\n" + solve(sol,list));
