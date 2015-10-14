@@ -1,6 +1,6 @@
 // Comprueba si un número es entero positivo
 posint = function(x) {
-	return x > 0 && (x%1) == 0;
+	return x >= 1 && (x%1) == 0;
 }
 
 solve = function(s, a) {
@@ -47,7 +47,17 @@ solve = function(s, a) {
 	}
 }
 
-var sol = window.prompt("Valor a buscar","");
-var list = window.prompt("Valores disponibles (separados por comas)","").split(", ").join(",").split(",")
-for (var i in list) list[i] = parseInt(list[i], 10);
+var rand = confirm("Pulsa Aceptar para generar valores aleatorios, o Cancelar para introducirlos a mano");
+if (rand) {
+	var posibles = [1,2,3,4,5,6,7,8,9,10,25,50,75,100]; var pl = posibles.length;
+	var num_valores = 6;
+	var sol = Math.floor(Math.random()*900)+100;
+	var list = [];
+	for (var i = 0; i < num_valores; i++)
+		list[i] = posibles[Math.floor(Math.random()*pl)];
+} else {
+	var sol = window.prompt("Valor a buscar","");
+	var list = window.prompt("Valores disponibles (separados por comas)","").split(", ").join(",").split(",")
+	for (var i in list) list[i] = parseInt(list[i], 10);
+}
 alert("[" + list.join(", ") + "] -> " + sol + ":\n\n" + solve(sol,list));
