@@ -61,7 +61,7 @@ string cifras(int obj, int* a, int n){
       for(int j = 0; j < N; j++)
       {
         int nuevo_obj = (*inv[j])(obj,a[i]);
-        if(nuevo_obj != -1){
+        if(nuevo_obj > 0 && nuevo_obj != obj){
         string solt  = cifras(nuevo_obj, resto, n-1);
         if(solt != "No")
           return solt + "\n" + representa(nuevo_obj, a[i], j, obj);
