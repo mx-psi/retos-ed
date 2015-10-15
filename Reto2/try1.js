@@ -56,7 +56,7 @@ if (rand) {
 	for (var i = 0; i < num_valores; i++)
 		list[i] = posibles[Math.floor(Math.random()*pl)];
 } else {
-	var sol = window.prompt("Valor a buscar","");
+	var sol = parseInt(window.prompt("Valor a buscar",""), 10);
 	var list = window.prompt("Valores disponibles (separados por comas)","").split(", ").join(",").split(",")
 	for (var i in list) list[i] = parseInt(list[i], 10);
 }
