@@ -16,3 +16,12 @@
 9 * 75 = 675;
 675 + 42 = 717;
 717 + 50 = 767`
+
+####Algoritmo 2:
+* __Entrada__: número a buscar, números disponibles.
+* __Procedimiento__: 6 veces, o hasta que se encuentre el número a buscar, se amplía la lista de números disponibles con los números que pueden obtenerse usando operaciones (suma, producto, la resta del mayor menos el menor y la división del mayor entre el menor si es posible) con parejas de números disponibles. En todo momento se va almacenando la mejor solución obtenida. Requiere un tipo de dato que almacene un número, la posición de los dos elementos de los que se obtuvo, la operación con que se obtuvo y los elementos de la lista original de números que han sido usados. Después se construye la mejor solución obtenida.
+* __Salida__: una serie de operaciones que llevan al número buscado o al más próximo al mismo que se haya encontrado.
+* __Implementaciones__:
+  * __C++__: [try2.cpp]  (Reto2/try2.cpp).
+* __Problemas__:
+  * __Es poco menos que de fuerza bruta__: prueba todas las posibles combinaciones y devuelve la más cercana. Evidentemente no prueba caminos estúpidos o inválidos como divisiones no exactas, números temporales nulos o divisiones o productos por 1, pero la cantidad de caminos posibles sigue siendo muy elevada (aún más que en el anterior).
