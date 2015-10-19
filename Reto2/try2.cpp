@@ -33,9 +33,10 @@ inline bool SeSolapan(unsigned int a, unsigned int b) {
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
 bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int generacion) {
    int size_inicial = nodos.size();
-   for (int i = 0; i < size_inicial-1; i++)
+   for (int i = 0; i < size_inicial-1; i++) {
+   	unsigned int usados_i = nodos[i].usados;
       for (int j = i+1; j < size_inicial; j++)
-         if (!SeSolapan(nodos[i].usados, nodos[j].usados) && nodos[i].generacion + nodos[j].generacion == generacion)
+         if (!SeSolapan(usados_i, nodos[j].usados) && nodos[i].generacion + nodos[j].generacion == generacion)
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
                if (resultado != 0 && resultado != nodos[i].valor && resultado != nodos[j].valor) {
@@ -48,6 +49,7 @@ bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int gen
                   }
                }
             }
+	}
 
    return generacion < 6;
 }
