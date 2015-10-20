@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <vector>
 using namespace std;
 
@@ -54,7 +55,7 @@ bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int gen
    return generacion < 6;
 }
 
-// Recrea la secuencia de operaciones con las que se ha llegado a un determinado nodo 
+// Recrea la secuencia de operaciones con las que se ha llegado a un determinado nodo
 void Recrea(vector<Nodo> &vec, Nodo &nodo) {
    if (&nodo != 0 && nodo.generacion > 1) {
       Recrea(vec, vec[nodo.previo1]);
@@ -74,16 +75,28 @@ void Cifras(int solucion, int disponibles[]) {
    vector<Nodo> nodos(6);
    for (int i = 0; i < 6; i++)
       nodos[i] = {0, 0, 0, 1, (1 << i), disponibles[i]};
-      
+
    int mas_cercano = 0;
    for (int g = 1; OtraGeneracion(nodos, mas_cercano, solucion, g); g++);
-   
+
    Recrea(nodos, nodos[mas_cercano]);
 }
 
 int main() {
-   int solucion = 767;
-   int disponibles[] = {2,6,7,9,50,75};
-   
+   int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
+
+   srand(time(0));
+ 	 int solucion = (rand()%900) + 100;
+ 	 int disponibles[6];
+
+ 	for (int i = 0; i < 6; i++)
+ 		disponibles[i] = posibles[rand()%14];
+
+   cout << "[";
+   for(int i = 0; i < 6; i++)
+     cout << (i?",":"") << disponibles[i];
+   cout << "]\n";
+
+   cout << solucion << endl;
    Cifras(solucion, disponibles);
 }
