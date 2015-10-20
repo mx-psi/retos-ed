@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 #include <vector>
 using namespace std;
 
@@ -18,8 +19,7 @@ inline int Opera(int a, int b, short int op) {
 }
 
 struct Nodo {
-   int previo1;          // Posiciones de los nodos anteriores
-   int previo2;
+   int previo1, previo2; // Posiciones de los nodos anteriores
    short int op;         // Operación con la que se ha llegado a este nodo
    int generacion;       // Puede obtenerse de usados, pero está aquí para acelerar
    unsigned int usados;  // El i-ésimo bit menos significativo indica si el i-ésimo número disponible está usado
@@ -34,6 +34,7 @@ inline bool SeSolapan(unsigned int a, unsigned int b) {
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
 bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int generacion) {
    int size_inicial = nodos.size();
+   Nodo nuevo;
    for (int i = 0; i < size_inicial-1; i++) {
    	unsigned int usados_i = nodos[i].usados;
       for (int j = i+1; j < size_inicial; j++)
@@ -41,7 +42,7 @@ bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int gen
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
                if (resultado != 0 && resultado != nodos[i].valor && resultado != nodos[j].valor) {
-                  Nodo nuevo = {i, j, k, generacion, nodos[i].usados | nodos[j].usados, resultado};
+                  nuevo = {i, j, k, generacion, usados_i | nodos[j].usados, resultado};
                   nodos.push_back(nuevo);
                   int diferencia = Diferencia(nodos[nodos.size()-1].valor, objetivo);
                   if (diferencia < Diferencia(nodos[mas_cercano].valor, objetivo)) {
@@ -82,21 +83,26 @@ void Cifras(int solucion, int disponibles[]) {
    Recrea(nodos, nodos[mas_cercano]);
 }
 
-int main() {
-   int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
-
-   srand(time(0));
- 	 int solucion = (rand()%900) + 100;
- 	 int disponibles[6];
-
- 	for (int i = 0; i < 6; i++)
- 		disponibles[i] = posibles[rand()%14];
-
+int main(int argc, char* argv[]) {
+	int disponibles[6];
+	int solucion;
+	if (argc == 8) {
+		solucion = atoi(argv[7]);
+	 	for (int i = 0; i < 6; i++)
+	      disponibles[i] = atoi(argv[i+1]);
+	} else {
+	   int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
+	
+	   srand(time(0));
+	   solucion = (rand()%900) + 100;
+	   
+	 	for (int i = 0; i < 6; i++)
+	      disponibles[i] = posibles[rand()%14];
+	}
+	
    cout << "[";
    for(int i = 0; i < 6; i++)
-     cout << (i?",":"") << disponibles[i];
-   cout << "]\n";
-
-   cout << solucion << endl;
+      cout << (i?",":"") << disponibles[i];
+   cout << "] --> " << solucion << '\n' << endl;
    Cifras(solucion, disponibles);
 }
