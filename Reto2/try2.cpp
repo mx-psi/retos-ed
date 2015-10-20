@@ -31,6 +31,19 @@ inline bool SeSolapan(unsigned int a, unsigned int b) {
    return a&b;
 }
 
+inline bool Asociativa(short int k) {
+	return k%2 == 0;
+}
+
+/*	Evita las siguientes expresiones (también con * y /):
+	(a+b)+c, porque equivale a: a+(b+c), 
+	(a-b)-c, porque equivale a: a-(b+c),
+	a-(b-c), porque equivale a: (a+c)-b, y
+	a+(b+c) si b se obtuvo antes que a, porque equivale a: b+(a+c) */
+inline bool MalAsociacion(vector<Nodo> &nodos, int i, int j, short int k) {
+	return nodos[i].op == k || (nodos[j].op == k && (!Asociativa(k) || nodos[j].previo1 < i));
+}
+
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
 bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int generacion) {
    int size_inicial = nodos.size();
@@ -41,7 +54,7 @@ bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int gen
          if (!SeSolapan(usados_i, nodos[j].usados) && nodos[i].generacion + nodos[j].generacion == generacion)
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
-               if (resultado != 0 && resultado != nodos[i].valor && resultado != nodos[j].valor) {
+               if (resultado != 0 && resultado != nodos[i].valor && resultado != nodos[j].valor && !MalAsociacion(nodos, i, j, k)) {
                   nuevo = {i, j, k, generacion, usados_i | nodos[j].usados, resultado};
                   nodos.push_back(nuevo);
                   int diferencia = Diferencia(nodos[nodos.size()-1].valor, objetivo);
@@ -75,7 +88,7 @@ void Recrea(vector<Nodo> &vec, Nodo &nodo) {
 void Cifras(int solucion, int disponibles[]) {
    vector<Nodo> nodos(6);
    for (int i = 0; i < 6; i++)
-      nodos[i] = {0, 0, 0, 1, (1 << i), disponibles[i]};
+      nodos[i] = {0, 0, -1, 1, (1 << i), disponibles[i]}; // El -1 en la operación es para que no se compruebe asociatividad correcta
 
    int mas_cercano = 0;
    for (int g = 1; OtraGeneracion(nodos, mas_cercano, solucion, g); g++);
