@@ -1,13 +1,16 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <vector>
 using namespace std;
 
 char operadores[] = {'+', '-', '*', '/'};   // Se va a indicar la suma con 0, la resta con 1, el producto con 2 y el cociente con 3
 
 inline int Diferencia(int a, int b) {
-   return b<a ? a-b : b-a;
+   return b<=a ? a-b : b-a;
+}
+
+inline int Maximo(int a, int b) {
+	return b<=a ? a : b;
 }
 
 // Hace a op b. Aprovecha que siempre hay como mucho una resta y una division permitida
@@ -26,6 +29,40 @@ struct Nodo {
    int valor;
 };
 
+class VectorNodos {
+private:
+	static const int CAPACIDAD = 1144386;	// Máximo tamaño posible para 6 generaciones sin considerar la poda por asociatividad
+	Nodo* nodos;
+	int elementos;
+	int comienzo_generacion[7];
+	
+public:
+	VectorNodos()
+	:elementos(0), comienzo_generacion({0,0,0,0,0,0,0}) {
+		nodos = new Nodo[CAPACIDAD];
+	}
+	~VectorNodos() {
+		delete[] nodos;
+	}
+	const Nodo& operator[](int pos) const {
+		return nodos[pos];
+	}
+	void push_back(const Nodo& nodo) {
+		nodos[elementos++] = nodo;
+	}
+	int size() const {
+		return elementos;
+	}
+	// Indica en qué posición se inician los elementos de una generación
+	int ComienzoGeneracion(int g) {
+		return comienzo_generacion[g];
+	}
+	// Almacena la próxima posición en la que se guardarán nodos como la posición de la generación indicada
+	int NuevaGeneracion(int g) {
+		comienzo_generacion[g] = elementos;
+	}
+};
+
 // Comprueba si un par de nodos proceden de un mismo número inicial
 inline bool SeSolapan(unsigned int a, unsigned int b) {
    return a&b;
@@ -40,18 +77,21 @@ inline bool Asociativa(short int k) {
 	(a-b)-c, porque equivale a: a-(b+c),
 	a-(b-c), porque equivale a: (a+c)-b, y
 	a+(b+c) si b se obtuvo antes que a, porque equivale a: b+(a+c) */
-inline bool MalAsociacion(vector<Nodo> &nodos, int i, int j, short int k) {
+inline bool MalAsociacion(VectorNodos &nodos, int i, int j, short int k) {
 	return nodos[i].op == k || (nodos[j].op == k && (!Asociativa(k) || nodos[j].previo1 < i));
 }
 
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
-bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int generacion) {
-   int size_inicial = nodos.size();
+bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, int generacion) {
+   nodos.NuevaGeneracion(generacion);
    Nodo nuevo;
-   for (int i = 0; i < size_inicial-1; i++) {
-   	unsigned int usados_i = nodos[i].usados;
-      for (int j = i+1; j < size_inicial; j++)
-         if (!SeSolapan(usados_i, nodos[j].usados) && nodos[i].generacion + nodos[j].generacion == generacion)
+   int tope_i = nodos.ComienzoGeneracion((generacion+1)/2+1);
+   for (int i = 0; i < tope_i; i++) {
+      unsigned int usados_i = nodos[i].usados;
+      int inicio_j = Maximo(i+1, nodos.ComienzoGeneracion(generacion-nodos[i].generacion));
+      int tope_j = nodos.ComienzoGeneracion(generacion-nodos[i].generacion+1);
+      for (int j = inicio_j; j < tope_j; j++)
+         if (!SeSolapan(usados_i, nodos[j].usados))
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
                if (resultado != 0 && resultado != nodos[i].valor && resultado != nodos[j].valor && !MalAsociacion(nodos, i, j, k)) {
@@ -70,7 +110,7 @@ bool OtraGeneracion(vector<Nodo> &nodos, int &mas_cercano, int objetivo, int gen
 }
 
 // Recrea la secuencia de operaciones con las que se ha llegado a un determinado nodo
-void Recrea(vector<Nodo> &vec, Nodo &nodo) {
+void Recrea(VectorNodos &vec, const Nodo &nodo) {
    if (&nodo != 0 && nodo.generacion > 1) {
       Recrea(vec, vec[nodo.previo1]);
       Recrea(vec, vec[nodo.previo2]);
@@ -86,16 +126,18 @@ void Recrea(vector<Nodo> &vec, Nodo &nodo) {
 
 // Resuelve un problema y muestra la solución
 void Cifras(int solucion, int disponibles[]) {
-   vector<Nodo> nodos(6);
+   VectorNodos nodos;
+   Nodo nodo;
    for (int i = 0; i < 6; i++)
-      nodos[i] = {0, 0, -1, 1, (1 << i), disponibles[i]}; // El -1 en la operación es para que no se compruebe asociatividad correcta
+      nodos.push_back(nodo = {0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
 
    int mas_cercano = 0;
-   for (int g = 1; OtraGeneracion(nodos, mas_cercano, solucion, g); g++);
+   for (int g = 2; OtraGeneracion(nodos, mas_cercano, solucion, g); g++);
 
    Recrea(nodos, nodos[mas_cercano]);
 }
 
+// Programa principal. Genera los números al azar si no se pasan siete parámetros
 int main(int argc, char* argv[]) {
 	int disponibles[6];
 	int solucion;
