@@ -19,9 +19,20 @@
 
 ####Algoritmo 2:
 * __Entrada__: número a buscar, números disponibles.
-* __Procedimiento__: 6 veces, o hasta que se encuentre el número a buscar, se amplía la lista de números disponibles con los números que pueden obtenerse usando operaciones (suma, producto, la resta del mayor menos el menor y la división del mayor entre el menor si es posible) con parejas de números disponibles. En todo momento se va almacenando la mejor solución obtenida. Requiere un tipo de dato que almacene un número, la posición de los dos elementos de los que se obtuvo, la operación con que se obtuvo y los elementos de la lista original de números que han sido usados. Después se construye la mejor solución obtenida.
-* __Salida__: una serie de operaciones que llevan al número buscado o al más próximo al mismo que se haya encontrado.
+* __Definiciones__:
+  * __Nodo__: estructura que almacena al menos un valor, la posición de dos nodos previos (o inválidos) e información sobre qué números iniciales fueron necesarios para obtenerlo.
+  * __Árbol__: el conjunto de nodos que serán obtenidos durante el procedimiento.
+  * __Ampliar el árbol__: recorrer el árbol (de forma adecuada) y añadirle nodos obtenidos a partir de los propios nodos que tenía.
+  * __Generación__: se dirá que un nodo es de primera generación si procede directamente de los números disponibles al inicio del procedimiento; y se dirá que un nodo es de `n`-ésima generación si se obtuvo tras `n-1` ampliaciones del árbol.
+* __Procedimiento__: se conforma el árbol como 6 nodos consistentes en los valores iniciales, con nodos previos inválidos y con su propio valor como número inicial usado. Cinco veces, o hasta que se encuentre el número a buscar, se amplía el árbol añadiendo al mismo los nodos que pueden obtenerse usando operaciones (la suma, el producto, la resta del mayor menos el menor si no es nula y la división del mayor entre el menor si es posible) con parejas de nodos disponibles que cumplan las siguientes condiciones:
+  * La suma de sus generaciones es 1 más que el número de ampliaciones comenzadas.
+  * Proceden de números iniciales distintos (no necesariamente en valor, pero sí en posición).
+  * El resultado no es igual al valor de ninguno de los nodos de la pareja.
+  * El nodo de la pareja que se añadió antes al árbol no procede de la misma operación.
+  * Si la operación no es conmutativa (resta, cociente), el nodo de la pareja que se añadió después al árbol no procede de la misma operación.
+  * Si la operación es conmutativa (suma, producto) y el nodo de la pareja que se añadió después al árbol (sea `N` tal nodo) no procede de la misma operación, el primer nodo del que salió `N` se añadió al árbol después que el nodo de la pareja que se añadió antes.
+
+  Una vez se producen las ampliaciones, se construye la mejor solución obtenida.
+* __Salida__: una serie de operaciones que llevan al número buscado o al más próximo al mismo que se haya encontrado, con la particularidad de que la cantidad de números iniciales empleados para llegar a la solución será mínima.
 * __Implementaciones__:
   * __C++__: [try2.cpp]  (Reto2/try2.cpp).
-* __Problemas__:
-  * __Es poco menos que de fuerza bruta__: prueba todas las posibles combinaciones y devuelve la más cercana. Evidentemente no prueba caminos estúpidos o inválidos como divisiones no exactas, números temporales nulos o divisiones o productos por 1, pero la cantidad de caminos posibles sigue siendo muy elevada (aún más que en el anterior).
