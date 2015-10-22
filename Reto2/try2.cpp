@@ -3,14 +3,14 @@
 #include <ctime>
 using namespace std;
 
-char operadores[] = {'+', '-', '*', '/'};   // Se va a indicar la suma con 0, la resta con 1, el producto con 2 y el cociente con 3
+const char OPERADORES[] = {'+', '-', '*', '/'};   // Se va a indicar la suma con 0, la resta con 1, el producto con 2 y el cociente con 3
 
 inline int Diferencia(int a, int b) {
    return b<=a ? a-b : b-a;
 }
 
 inline int Maximo(int a, int b) {
-	return b<=a ? a : b;
+   return b<=a ? a : b;
 }
 
 // Hace a op b. Aprovecha que siempre hay como mucho una resta y una division permitida
@@ -31,54 +31,58 @@ struct Nodo {
 
 class VectorNodos {
 private:
-	static const int CAPACIDAD = 1144386;	// Máximo tamaño posible para 6 generaciones sin considerar la poda por asociatividad
-	Nodo* nodos;
-	int elementos;
-	int comienzo_generacion[7];
-	
+   static const int CAPACIDAD = 1144386;	// Máximo tamaño posible para 6 generaciones sin considerar la poda por asociatividad
+   Nodo* nodos;
+   int elementos;
+   int comienzo_generacion[7];
+   
 public:
-	VectorNodos()
-	:elementos(0), comienzo_generacion({0,0,0,0,0,0,0}) {
-		nodos = new Nodo[CAPACIDAD];
-	}
-	~VectorNodos() {
-		delete[] nodos;
-	}
-	const Nodo& operator[](int pos) const {
-		return nodos[pos];
-	}
-	void push_back(const Nodo& nodo) {
-		nodos[elementos++] = nodo;
-	}
-	int size() const {
-		return elementos;
-	}
-	// Indica en qué posición se inician los elementos de una generación
-	int ComienzoGeneracion(int g) {
-		return comienzo_generacion[g];
-	}
-	// Almacena la próxima posición en la que se guardarán nodos como la posición de la generación indicada
-	int NuevaGeneracion(int g) {
-		comienzo_generacion[g] = elementos;
-	}
+   VectorNodos()
+   :elementos(0), comienzo_generacion{0,0,0,0,0,0,0} {
+      nodos = new Nodo[CAPACIDAD];
+   }
+   ~VectorNodos() {
+      delete[] nodos;
+   }
+   const Nodo& operator[](int pos) const {
+      return nodos[pos];
+   }
+   void push_back(const Nodo& nodo) {
+      nodos[elementos++] = nodo;
+   }
+   int size() const {
+      return elementos;
+   }
+   // Indica en qué posición se inician los elementos de una generación
+   int ComienzoGeneracion(int g) const {
+      return comienzo_generacion[g];
+   }
+   // Almacena la próxima posición en la que se guardarán nodos como la posición de la generación indicada
+   void NuevaGeneracion(int g) {
+      comienzo_generacion[g] = elementos;
+   }
 };
 
-// Comprueba si un par de nodos proceden de un mismo número inicial
+// Comprueba si un par de nodos proceden de un mismo número inicial (y por tanto no pueden combinarse)
 inline bool SeSolapan(unsigned int a, unsigned int b) {
    return a&b;
 }
 
 inline bool Asociativa(short int k) {
-	return k%2 == 0;
+   return k%2 == 0;
 }
 
-/*	Evita las siguientes expresiones (también con * y /):
-	(a+b)+c, porque equivale a: a+(b+c), 
-	(a-b)-c, porque equivale a: a-(b+c),
-	a-(b-c), porque equivale a: (a+c)-b, y
-	a+(b+c) si b se obtuvo antes que a, porque equivale a: b+(a+c) */
-inline bool MalAsociacion(VectorNodos &nodos, int i, int j, short int k) {
-	return nodos[i].op == k || (nodos[j].op == k && (!Asociativa(k) || nodos[j].previo1 < i));
+/* Evita las siguientes expresiones (también con * y /):
+   (a+b)+c, porque equivale a: a+(b+c),
+   (a-b)-c, porque equivale a: a-(b+c),
+   a-(b-c), porque equivale a: (a+c)-b, y
+   a+(b+c) si b se obtuvo antes que a, porque equivale a: b+(a+c) */
+inline bool MalAsociacion(const VectorNodos &nodos, int i, int j, short int k) {
+   return nodos[i].op == k || (nodos[j].op == k && (!Asociativa(k) || nodos[j].previo1 < i));
+}
+
+inline bool Repite(const VectorNodos &nodos, int resultado, int i, int j) {
+   return resultado == nodos[i].valor || resultado == nodos[j].valor;
 }
 
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
@@ -94,7 +98,7 @@ bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, int gene
          if (!SeSolapan(usados_i, nodos[j].usados))
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
-               if (resultado != 0 && resultado != nodos[i].valor && resultado != nodos[j].valor && !MalAsociacion(nodos, i, j, k)) {
+               if (resultado != 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
                   nuevo = {i, j, k, generacion, usados_i | nodos[j].usados, resultado};
                   nodos.push_back(nuevo);
                   int diferencia = Diferencia(nodos[nodos.size()-1].valor, objetivo);
@@ -110,7 +114,7 @@ bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, int gene
 }
 
 // Recrea la secuencia de operaciones con las que se ha llegado a un determinado nodo
-void Recrea(VectorNodos &vec, const Nodo &nodo) {
+void Recrea(const VectorNodos &vec, const Nodo &nodo) {
    if (&nodo != 0 && nodo.generacion > 1) {
       Recrea(vec, vec[nodo.previo1]);
       Recrea(vec, vec[nodo.previo2]);
@@ -118,9 +122,9 @@ void Recrea(VectorNodos &vec, const Nodo &nodo) {
       int valor1 = vec[nodo.previo1].valor;
       int valor2 = vec[nodo.previo2].valor;
       if ((operador%2) && valor1 < valor2)
-         cout << valor2 << ' ' << operadores[operador] << ' ' << valor1 << " = " << nodo.valor << '\n';
+         cout << valor2 << ' ' << OPERADORES[operador] << ' ' << valor1 << " = " << nodo.valor << '\n';
       else
-         cout << valor1 << ' ' << operadores[operador] << ' ' << valor2 << " = " << nodo.valor << '\n';
+         cout << valor1 << ' ' << OPERADORES[operador] << ' ' << valor2 << " = " << nodo.valor << '\n';
    }
 }
 
@@ -137,27 +141,32 @@ void Cifras(int solucion, int disponibles[]) {
    Recrea(nodos, nodos[mas_cercano]);
 }
 
-// Programa principal. Genera los números al azar si no se pasan siete parámetros
-int main(int argc, char* argv[]) {
-	int disponibles[6];
-	int solucion;
-	if (argc == 8) {
-		solucion = atoi(argv[7]);
-	 	for (int i = 0; i < 6; i++)
-	      disponibles[i] = atoi(argv[i+1]);
-	} else {
-	   int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
-	
-	   srand(time(0));
-	   solucion = (rand()%900) + 100;
-	   
-	 	for (int i = 0; i < 6; i++)
-	      disponibles[i] = posibles[rand()%14];
-	}
-	
+// Muestra los números disponibles y el número objetivo
+void ImprimeEntrada(int solucion, int disponibles[]) {	
    cout << "[";
    for(int i = 0; i < 6; i++)
       cout << (i?",":"") << disponibles[i];
    cout << "] --> " << solucion << '\n' << endl;
+}
+
+// Programa principal. Genera los números al azar si no se pasan siete parámetros
+int main(int argc, char* argv[]) {
+   int disponibles[6];
+   int solucion;
+   if (argc == 8) {
+      solucion = atoi(argv[7]);
+      for (int i = 0; i < 6; i++)
+         disponibles[i] = atoi(argv[i+1]);
+   } else {
+      int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
+
+      srand(time(0));
+      solucion = (rand()%900) + 100;
+
+      for (int i = 0; i < 6; i++)
+         disponibles[i] = posibles[rand()%14];
+   }
+
+   ImprimeEntrada(solucion, disponibles);
    Cifras(solucion, disponibles);
 }
