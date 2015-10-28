@@ -9,10 +9,6 @@ inline int Diferencia(int a, int b) {
    return b<=a ? a-b : b-a;
 }
 
-inline int Maximo(int a, int b) {
-   return b<=a ? a : b;
-}
-
 // Hace a op b. Aprovecha que siempre hay como mucho una resta y una division permitida
 inline int Opera(int a, int b, short int op) {
    if (op == 0)   return a+b;
@@ -35,7 +31,7 @@ private:
    Nodo* nodos;
    int elementos;
    int comienzo_generacion[7];
-   
+
 public:
    VectorNodos()
    :elementos(0), comienzo_generacion{0,0,0,0,0,0,0} {
@@ -92,7 +88,7 @@ bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, int gene
    int tope_i = nodos.ComienzoGeneracion((generacion+1)/2+1);
    for (int i = 0; i < tope_i; i++) {
       unsigned int usados_i = nodos[i].usados;
-      int inicio_j = Maximo(i+1, nodos.ComienzoGeneracion(generacion-nodos[i].generacion));
+      int inicio_j = max(i+1, nodos.ComienzoGeneracion(generacion-nodos[i].generacion));
       int tope_j = nodos.ComienzoGeneracion(generacion-nodos[i].generacion+1);
       for (int j = inicio_j; j < tope_j; j++)
          if (!SeSolapan(usados_i, nodos[j].usados))
@@ -142,7 +138,7 @@ void Cifras(int solucion, int disponibles[]) {
 }
 
 // Muestra los números disponibles y el número objetivo
-void ImprimeEntrada(int solucion, int disponibles[]) {	
+void ImprimeEntrada(int solucion, int disponibles[]) {
    cout << "[";
    for(int i = 0; i < 6; i++)
       cout << (i?",":"") << disponibles[i];
@@ -168,5 +164,11 @@ int main(int argc, char* argv[]) {
    }
 
    ImprimeEntrada(solucion, disponibles);
+
+   clock_t tini = clock();
    Cifras(solucion, disponibles);
+   clock_t tfin = clock();
+
+   // Tiempo
+   cout << (tfin-tini)/(double)CLOCKS_PER_SEC << endl;
 }
