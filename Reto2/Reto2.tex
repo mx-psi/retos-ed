@@ -16,6 +16,19 @@
 \newcommand{\n}[1]{{\color{gray}#1}}
 \lstset{numbers=left,numberstyle=\small\color{gray}}
 
+\newcommand{\algorithm}[4]{
+	\fbox{\parbox{14cm}{
+		\textbf {\Large Algoritmo #1:} \\
+		\textbf {Entrada:} #2 \\
+		\textbf {Salida:} #3 \\
+		\textbf {Procedimiento:} \\
+		#4
+	}}
+}
+\newcommand{\cifrasalg}[2]{
+\algorithm{#1}{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999)$}{Una serie de operaciones con elementos de $C$ y con elementos obtenidos de operaciones previas que se acercan a $T$ lo máximo posible}{#2}
+}
+
 \title{Reto 2}
 \date{Estructura de Datos}
 \author{Pablo Baeyens Fernández\\José Manuel Muñoz Fuentes\\Darío Sierra Martínez}
@@ -24,14 +37,35 @@
 \maketitle
 
 \section{Introducción}
+En este reto se pide un algoritmo que, dado un conjunto de seis enteros que pertenezcan al conjunto $C = \{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25, 50, 75, 100\}$ y un entero $S \in [100, 1000)$ llamado solución, devuelva una lista de operaciones básicas (suma, resta, producto, división exacta) que, estando efectuadas sobre elementos del conjunto $C$ y sobre números obtenidos con operaciones previas, permitan obtener un valor tan cercano a $S$ como sea posible, sin llegar a usar más de una vez ningún elemento de $C$, y tampoco con un elemento obtenido mediante estas operaciones. \\
+
+Buscaremos, por consiguiente, un algoritmo que trate de obtener la solución exacta siempre que sea posible, o, si no, el valor más cercano a la misma que puede obtenerse.
 
 \section{Algoritmo}
-\subsection{Procedimiento}
+\subsection{Buscando el algoritmo}
+Pretendemos obtener un algoritmo de fuerza bruta que garantice la mejor solución posible en todos los casos. Una vez tengamos el algoritmo, trataremos de refinarlo todo lo posible, sin que deje de garantizar la mejor solución.\\
+
+Los algoritmos propuestos consistirán en tomar $L$ como la lista que se identifica con el conjunto $C$, y ampliar la lista con listas de tres elementos $[n, i, j, op]$, donde $n$ es un entero obtenido a partir de los elementos de las posiciones $i$ y $j$ mediante la operación básica $op$. Por comodidad, definiremos el valor de $L_i$ como $L_i[0]$ si $L_i$ es lista o como $L_i$ si es un entero. Esta estructura de $L$ nos permitirá, una vez hallemos la solución o un resultado lo más cercano posible a la misma, obtener la secuencia de pasos, mediante el siguiente procedimiento recursivo: \\
+
+\algorithm{de obtención de operaciones}{$L$, $T$, con $T = [n, i, j, op]$ o $T = n$}{La serie de operaciones con elementos de $L$ con la que se ha llegado a $n$}{
+	Si $T$ no es solo un número $n$: \\
+	\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item Aplicar este mismo algoritmo con entrada $L$, $L_i$
+	\item Aplicar este mismo algoritmo con entrada $L$, $L_j$
+	\item Si $op$ no es una operación conmutativa (es decir, es resta o cociente) y el valor de $L_i$ es menor que el de $L_j$, intercambiar $i$ y $j$
+	\item Devolver la concatenación de lo obtenido en los dos primeros puntos junto con \texttt{a operador b = n}, con $a$ el valor de $L_i$ y $b$ el valor de $L_j$
+	\end{itemize}
+	}
+
+
 \subsection{Características del algoritmo}
 
 \section{El tipo de dato}
 
 \section{Combinaciones mágicas}
-\subsection{Modificación del algoritmo}
+\subsection{Algoritmo para buscar combinaciones mágicas}
 
 \end{document}
