@@ -26,9 +26,9 @@
 	}}
 }
 \newcommand{\cifrasalg}[2]{
-\algorithm{#1}{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999)$}{Una
-serie de operaciones con elementos de $C$ y con elementos obtenidos de 
-operaciones previas que se acercan a $T$ lo máximo posible}{#2}
+	\algorithm{#1}{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999)$}{Una
+		serie de operaciones con elementos de $C$ y con elementos obtenidos de 
+		operaciones previas que se acercan a $T$ lo máximo posible}{#2}
 }
 
 \title{Reto 2}
@@ -39,38 +39,34 @@ operaciones previas que se acercan a $T$ lo máximo posible}{#2}
 \maketitle
 
 \section{Introducción}
-En este reto se pide un algoritmo que, dado un conjunto de seis enteros que
-pertenezcan al conjunto $C = \{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25, 50, 75, 100\}$
+En este reto se pide un algoritmo que, a partir de un conjunto $C$ de seis números enteros que
+pertenezcan al conjunto $C_T = \{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25, 50, 75, 100\}$ (no necesariamente distintos entre sí)
 y un entero $S \in [100, 1000)$ llamado solución, devuelva una lista de
 operaciones básicas (suma, resta, producto, división exacta) que, estando
 efectuadas sobre elementos del conjunto $C$ y sobre números obtenidos con
 operaciones previas, permitan obtener un valor tan cercano a $S$ como sea
-posible, sin llegar a usar más de una vez ningún elemento de $C$, y tampoco con
-un elemento obtenido mediante estas operaciones. \\
+posible, usando cada elemento de $C$ y cada número obtenido durante el proceso como máximo una vez \\
 
 Buscaremos, por consiguiente, un algoritmo que trate de obtener la solución
-exacta siempre que sea posible, o, si no, el valor más cercano a la misma que
-puede obtenerse.
+exacta siempre que sea posible, o en su defecto el valor más cercano a la solución que
+pueda obtenerse.
 
-\section{Algoritmo}
-\subsection{Buscando el algoritmo}
-Pretendemos obtener un algoritmo de fuerza bruta que garantice la mejor solución
-posible en todos los casos. Una vez tengamos el algoritmo, trataremos de
-refinarlo todo lo posible, sin que deje de garantizar la mejor solución.\\
+\section{Algoritmo}	
+Nota: en esta sección se definen funciones para poder describir el algoritmo. Estas funciones no tienen por qué existir en un hipotético programa que ponga en práctica este algoritmo. De hecho, ofrecería un mejor resultado introducir los valores que toman estas funciones para cada $L_i$ como un elemento más en la lista que lo constituye. \\
 
-Los algoritmos propuestos consistirán en tomar $L$ como la lista que se
-identifica con el conjunto $C$, y ampliar la lista con listas de tres elementos
-$[n, i, j, op]$, donde $n$ es un entero obtenido a partir de los elementos de
-las posiciones $i$ y $j$ mediante la operación básica $op$. Por comodidad,
-definiremos el valor de $L_i$ como $L_i[0]$ si $L_i$ es lista o como $L_i$ si es
+El algoritmo propuesto tiene como objetivo construir todos los caminos posibles que pueden seguirse usando los números de $C$ y las operaciones disponibles. Para ello, tomará $L$ como la lista que se
+identifica con el conjunto $C$, y ampliará $L$ con listas de cuatro elementos
+$[n, i, j, op]$, donde $n$ es un entero obtenido a partir de los elementos que ocupan
+las posiciones $i$ y $j$ en $L$ mediante la operación $op$. Por comodidad,
+definiremos ``el valor de $L_i$'' como el primer elemento de $L_i$ si $L_i$ es lista o como $L_i$ si es
 un entero. Esta estructura de $L$ nos permitirá, una vez hallemos la solución o
 un resultado lo más cercano posible a la misma, obtener la secuencia de pasos,
 mediante el siguiente procedimiento recursivo: \\
 
 \algorithm{de obtención de operaciones}
-{$L$, $T$, con $T = [n, i, j, op]$ o $T = n$}
+{$L$ y $N$, con $N = [n, i, j, op]$ o $N = n$}
 {La serie de operaciones con elementos de $L$ con la que se ha llegado a $n$}{
-	Si $T$ no es solo un número $n$: \\
+	Si $N$ no es solo un número $n$:
 	\begin{itemize}
 	\setlength{\itemsep}{1pt}
 	\setlength{\parskip}{0pt}
@@ -83,7 +79,31 @@ mediante el siguiente procedimiento recursivo: \\
 	junto con \texttt{a operador b = n}, con $a$ el valor de $L_i$ y $b$
 	el valor de $L_j$
 	\end{itemize}
-	}
+}\\
+
+Además se requiere otras dos definiciones:
+\begin{itemize}
+	\item Sea $L_k$ un elemento de $L$, se dirá que $gen(L_k) = 1$, o que $L_k$ es de ``primera generación'' si $k \le 6$ (es decir, $L_k$ es uno de de los seis números que procedían de $C$), y se dirá que $gen(L_k) = n$, o que $L_k$ es de ``$n$-ésima generación'' si la suma de las generaciones de los elementos de los que procede (es decir, $gen(L_{L_k.i}) + gen(L_{L_k.j}) = n$). El algoritmo se ejecutará de forma que, en cada iteración, se obtendrán elementos que serán exclusivamente de una generación en particular, controlando la generación de los dos elementos de los que procede cada uno.
+	
+	\item Definiremos la función $miembros(i)$ como el conjunto de los elementos de $L$ cuya generación es $i$, es decir, los $\{L_k : gen(k) = i\}$. Esto nos permitirá diferenciar los elementos de $L$ según en qué momento de la ejecución del algoritmo han sido obtenidos y determinar el inicio y el final de los bucles que recorren los elementos con los que se operará en cada paso.
+
+	\item Se define el conjunto de ``números usados por $L_k$'', expresado $U(L_k)$, como $\{L_k\}$ si $k \le 6$ (es decir, si $L_k$ se corresponde con alguno de los seis números de $C$), y como $A \cup B$ si $A =U(L_{L_k.i})$ y $B = U(L_{L_k.j})$. De esta forma, con $U(L_k)$ obtendremos todo el conjunto de números de $C$ que han intervenido para obtener $L_k$. Esto será crucial para poder comprobar a cada paso del algoritmo si es posible operar con dos números entre sí o si no es posible: la intersección de los números usados por cada uno debe ser vacía para proceder (porque, evidentemente, no puede usarse un elemento inicial más de una vez, y operar con dos elementos que hayan usado un mismo elemento equivaldría a usar un elemento inicial más de una vez).
+	
+\end{itemize}
+
+El algoritmo que se propone, con los bucles expresados aprovechando las funciones definidas (después se repetirá con el inicio y final de los bucles expresados explícitamente), es el siguiente:
+
+\cifrasalg{de obtención de operaciones}{Para $g = 2$ hasta $6$:\\
+%		Para $i = 1$ hasta $G_{((g+1)/2+1)}-1$:\\
+Para cada $i$ tal que $2 \cdot gen(L_i) \le g$:\\
+Para cada $j \in miembros(g-gen(L_i)))$ tal que $j > i$:\\
+Si $U(L_i) \cap  U(L_j) = \emptyset$:
+	%Seguir por aquí. E intentar tabular la anidación de bucles o algo, que queda feísimo como está ahora.
+}
+
+\vspace{0.4cm}
+
+Para poder definir con exactitud el inicio y el final de los bucles que recorren los elementos de $L$, se empleará una lista $G$ de seis elementos, que indicará en la posición $G_i$ el primer elemento de $L$ que es de $i$-ésima generación. Esto permitirá establecer el inicio y el final de cada bucle. Definiremos también $G_7$ como la posición siguiente a la del último elemento de $L$. La función $miembros(i)$ podría redefinirse aprovechando $G$ como $\{L_k : k \ge G_i, k < G_{i+1}\}$.
 
 
 \subsection{Características del algoritmo}
