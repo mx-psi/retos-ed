@@ -37,11 +37,11 @@
 \maketitle
 
 \section{Introducción}
-En este reto se pide un algoritmo que, a partir de un conjunto $C$ de seis números enteros que
-pertenezcan al conjunto $C_T = \{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25, 50, 75, 100\}$ (no necesariamente distintos entre sí)
+En este reto se pide un algoritmo que, a partir de un multiconjunto $C = \{c_1,c_2,c_3,c_4,c_5,c_6\}$ de seis números 
+que pertenezcan al conjunto $C_T = \{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25, 50, 75, 100\}$ (no necesariamente distintos entre sí)
 y un entero $S \in [100, 1000)$ llamado solución, devuelva una lista de
 operaciones básicas (suma, resta, producto, división exacta) que, estando
-efectuadas sobre elementos del conjunto $C$ y sobre números obtenidos con
+efectuadas sobre elementos del multiconjunto $C$ y sobre números obtenidos con
 operaciones previas, permitan obtener un valor tan cercano a $S$ como sea
 posible, usando cada elemento de $C$ y cada número obtenido durante el proceso como máximo una vez. \\
 
@@ -50,17 +50,17 @@ exacta siempre que sea posible, o en su defecto el valor más cercano a la soluc
 pueda obtenerse.
 
 \section{Algoritmo}
-El algoritmo propuesto tiene como objetivo construir todos los caminos posibles que pueden seguirse usando los números de $C$ y las operaciones disponibles. Para ello, tomará $L$ como la lista que se
-identifica con el conjunto $C$, y ampliará $L$ con listas de cuatro elementos
+El algoritmo propuesto tiene como objetivo construir todos los caminos posibles que pueden seguirse usando los números de $C$ y las operaciones disponibles, dando una solución exacta en cuanto se encuentre o el camino con una solución lo más cercana posible a $S$. Para ello, tomará $L$ como la lista que se
+identifica con el multiconjunto $C$, y ampliará $L$ con listas de cuatro elementos
 $[n, i, j, op]$, donde $n$ es un entero obtenido a partir de los elementos que ocupan
 las posiciones $i$ y $j$ en $L$ mediante la operación $op$.\\
 
-En primer lugar, se observa que, para cada par de números, solo hay una suma y un producto posibles (porque tales operaciones son conmutativas), y solo hay como máximo una resta y un cociente que den resultados válidos y distintos ($a-b > 0 \implies b - a < 0$, mientras que $a/b \ge 1 \implies b/a = a/b$ o $b/a \notin \mathds N$). Así, a la hora de recorrer $L$ para obtener nuevos elementos, solo tendremos que comprobar cada par de elementos una vez para hacer la operación de cada tipo que puede hacerse con ellos, y no dos veces. En el caso de la resta, tomaremos la diferencia del mayor menos el menos; y para el cociente, también haremos el del mayor entre el menor. Si el menor fuese $0$ o la división no fuese exacta, definiremos el resultado de la división como $0$. Se verá la utilidad de esto a la hora de filtrar elementos, más adelante. \\
+En primer lugar, se observa que, para cada par de números, solo hay una suma y un producto posibles (porque tales operaciones son conmutativas), y solo hay como máximo una resta y un cociente que den resultados válidos y distintos ($a-b > 0 \implies b - a < 0$, mientras que $a/b \ge 1 \implies b/a = a/b$ o $b/a \notin \mathds N$). Así, a la hora de recorrer $L$ para obtener nuevos elementos, solo tendremos que comprobar cada par de elementos una vez para hacer la operación de cada tipo que puede hacerse con ellos, y no dos veces. En el caso de la resta, tomaremos la diferencia del mayor menos el menor (o el valor absoluto de la resta); y para el cociente, también haremos el del mayor entre el menor. En el caso de la división, si el menor fuese $0$ o la división no fuese exacta, definiremos el resultado de la división como $0$. Se verá la utilidad de esto a la hora de filtrar elementos, más adelante. \\
 
 Por comodidad,
-definiremos $L_i$ como el $i$-ésimo elemento de $L$, y ``el valor de $L_i$'' como el primer elemento de $L_i$ si $L_i$ es lista o como $L_i$ si es
+definiremos $L_i$ como el $i$-ésimo elemento de $L$, haremos referencia a los elementos de $L_i$ con $L_i.[n/i/j/op]$, y ``el valor de $L_i$'' hará referencia a $L_i.n$ si $L_i$ es lista o a $L_i$ si es
 un entero. Esta estructura de $L$ nos permitirá, una vez hallemos la solución o
-un resultado lo más cercano posible a la misma, obtener la secuencia de pasos,
+un resultado lo más cercano posible a la misma, obtener la secuencia de pasos que se han seguido hasta llegar a la misma,
 mediante el siguiente procedimiento recursivo: \\
 
 \algorithm{de obtención de operaciones}
@@ -81,18 +81,20 @@ mediante el siguiente procedimiento recursivo: \\
 	\end{itemize}
 }\\
 
+Se observa que este procedimiento conmuta correctamente los operandos en el caso de las restas y los cocientes. \\
+
 Además se necesitan más definiciones:\\
 \emph{Nota: en esta sección se definen funciones para poder describir el algoritmo. Estas funciones no tienen por qué existir en un hipotético programa que ponga en práctica este algoritmo. De hecho, ofrecería un mejor resultado introducir los valores que toman estas funciones para cada $L_i$ como un elemento más en la lista que lo constituye.}
 \begin{itemize}
-	\item Sea $L_k$ un elemento de $L$, se dirá que $gen(L_k) = 1$, o que $L_k$ es de ``primera generación'' si $k \le 6$ (es decir, $L_k$ es uno de de los seis números que procedían de $C$), y se dirá que $gen(L_k) = n$, o que $L_k$ es de ``$n$-ésima generación'' si la suma de las generaciones de los elementos de los que procede (es decir, $gen(L_{L_k.i}) + gen(L_{L_k.j}) = n$). El algoritmo se ejecutará de forma que, en cada iteración, se obtendrán elementos que serán exclusivamente de una generación en particular, controlando la generación de los dos elementos de los que procede cada uno.
+	\item Sea $L_k$ un elemento de $L$, se dirá que $gen(L_k) = 1$, o que $L_k$ es de ``primera generación'' si $k \le 6$ (es decir, $L_k$ es uno de de los seis números que procedían de $C$), y se dirá que $gen(L_k) = n$, o que $L_k$ es de ``$n$-ésima generación'' si la suma de las generaciones de los elementos de los que procede (es decir, $gen(L_{L_k.i}) + gen(L_{L_k.j}) = n$). La generación representa el número de elementos que han sido necesarios para obtener $L_k$, o también el número de operaciones que se han requerido más $1$. El algoritmo se ejecutará de forma que, en cada iteración, se obtendrán elementos que serán exclusivamente de una generación en particular, controlando la generación de los dos elementos de los que procede cada uno con el apoyo de las definiciones siguientes.
 	
-	\item Definiremos la función $miembros(i)$ como el conjunto de los elementos de $L$ cuya generación es $i$, es decir, los $\{L_k : gen(k) = i\}$. Esto nos permitirá diferenciar los elementos de $L$ según en qué momento de la ejecución del algoritmo han sido obtenidos y determinar el inicio y el final de los bucles que recorren los elementos con los que se operará en cada paso.
+	\item Definiremos $miembros(i)$ como el conjunto de los elementos de $L$ cuya generación es $i$, es decir, los $\{L_k : gen(k) = i\}$. Esto nos permitirá diferenciar los elementos de $L$ según en qué momento de la ejecución del algoritmo han sido obtenidos y determinar el inicio y el final de los bucles que recorren los elementos con los que se operará en cada paso.
 
-	\item Se define el conjunto de ``números usados por $L_k$'', expresado $U(L_k)$, como $\{L_k\}$ si $k \le 6$ (es decir, si $L_k$ se corresponde con alguno de los seis números de $C$), y como $A \cup B$ si $A =U(L_{L_k.i})$ y $B = U(L_{L_k.j})$. De esta forma, $U(L_k)$ representa el conjunto de números de $C$ que han intervenido para obtener $L_k$. Esto será crucial para poder comprobar a cada paso del algoritmo si es posible operar con dos elementos entre sí: para ello, la intersección de los números usados por cada uno debe ser vacía para proceder (porque, evidentemente, no puede usarse un elemento inicial más de una vez, y operar con dos elementos que hayan usado un mismo elemento equivaldría a usar un elemento inicial más de una vez).
+	\item Se define el conjunto de ``números usados por $L_k$'', expresado $U(L_k)$, como $\{L_k\}$ si $k \le 6$ (es decir, si $L_k$ se corresponde con alguno de los seis números de $C$), y en caso contrario ($k > 6$) como $A \cup B$ donde $A =U(L_{L_k.i})$ y $B = U(L_{L_k.j})$. Se dirá que dos elementos de $L$, $L_a$ y $L_b$, ``se solapan'', si y solo si $U(L_a) \cap  U(L_b) \ne \emptyset$. De esta forma, $U(L_k)$ representa el conjunto de números de $C$ que han intervenido para obtener $L_k$, y dos elementos se solaparán cuando tengan algún elemento inicial en común. Esto será crucial para poder comprobar a cada paso del algoritmo si es posible operar con dos elementos entre sí: cada par de elementos que se usen para añadir uno nuevo deben no solaparse.
 	
 \end{itemize}
 
-Por otro lado, para reducir el número de elementos de $L$ se tendrá en cuenta las siguientes observaciones. Sea $a\ op\ b = c$ uno de los pasos realizadas en una solución (el orden de $a$ y $b$ es relevante: $L$ se recorre de forma que la posición de $a$ siempre es anterior a la de $b$), obteniendo $c$ a partir de la operación $op$ con $a$ y $b$:
+Por otro lado, para reducir el número de elementos de $L$ se tendrá en cuenta las siguientes observaciones. Sea $a\ op\ b = c$ uno de los pasos realizadas en una solución (el orden de $a$ y $b$ es irrelevante puesto que las operaciones son las mismas independiente del mismo, así que que todo lo siguiente puede leerse intercambiando los operandos), obteniendo $c$ a partir de la operación $op$ con $a$ y $b$:
 
 \begin{itemize}
 	\item Si una operación realizada cumple que $c=a$, existe otra solución que omite ese paso y simplemente usa $a$ en lugar de $c$, y lo mismo ocurre si $c=b$. Por ello, no se añadirá un elemento a $L$ si surge de una operación que da un resultado que coincida con el de uno de los elementos de los que se obtuvo.
@@ -112,18 +114,17 @@ Por otro lado, para reducir el número de elementos de $L$ se tendrá en cuenta 
 
 Diremos que una lista $[n, i, j, op]$ es ``válida'' si no puede ser eliminada por todo lo expuesto. De esta forma, eliminaremos múltiples caminos que serían redundantes.\\
 
-Se almacenará a cada elemento añadido el que más se aproxime a la solución en $N$. Cuando termine el algoritmo, se consultará $N$ y se generarán las operaciones realizadas con el algoritmo anterior. \\
+Se almacenará a cada elemento añadido el que más se aproxime a la solución en una variable llamada $N$. Cuando termine el algoritmo, se consultará $N$ y se generarán las operaciones realizadas con el algoritmo anterior. \\
 
-El algoritmo que se propone, con los bucles expresados aprovechando las funciones definidas (después se repetirá con el inicio y final de los bucles expresados explícitamente), devolverá un $L$ y $N$ con los que se podrá construir, con el algoritmo anterior, una solución que se acerque lo más posible al objetivo:\\
+El algoritmo que se propone, con los bucles expresados aprovechando las funciones definidas (después se repetirá con el inicio y final de los bucles expresados explícitamente, aunque eso resultará más engorroso), devolverá un $L$ y $N$ con los que se podrá construir, con el algoritmo anterior, una solución que se acerque lo más posible al objetivo:\\
 
 \cifrasalg{de obtención de solución}{Sea $L$ la lista que se corresponde con $C$ ($L = [c_1, c_2, c_3, c_4, c_5, c_6]$), y sea $N$ un elemento cualquiera (se modificará durante el algoritmo) de $L$.\\
 Para $g = 2$ hasta $6$:\\
-%		Para $i = 1$ hasta $G_{((g+1)/2+1)}-1$:\\
 Para cada $i$ tal que $2 \cdot gen(L_i) \le g$:\\
-Para cada $j \in miembros(g-gen(L_i)))$ tal que $j > i$:\\
-Si $U(L_i) \cap  U(L_j) = \emptyset$:\\
+Para cada $j \in miembros(g-gen(L_i))$ tal que $j > i$:\\
+Si $L_i$ y $L_j$ no se solapan ($U(L_i) \cap  U(L_j) = \emptyset$):\\
 Para cada $op$ operación:\\
-Si $[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es ``válido'':
+Si $[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es ``válida'':
 \begin{itemize}
 	\setlength{\itemsep}{1pt}
 	\setlength{\parskip}{0pt}
@@ -141,10 +142,17 @@ FIN: devuelve $L, N$
 
 \vspace{0.4cm}
 
-Para poder definir con exactitud el inicio y el final de los bucles que recorren los elementos de $L$, se empleará una lista $G$ de seis elementos, que indicará en la posición $G_i$ el primer elemento de $L$ que es de $i$-ésima generación. Esto permitirá establecer el inicio y el final de cada bucle. Definiremos también $G_7$ como la posición siguiente a la del último elemento de $L$. La función $miembros(i)$ podría redefinirse aprovechando $G$ como $\{L_k : k \ge G_i, k < G_{i+1}\}$.
+Para poder definir con exactitud el inicio y el final de los bucles que recorren los elementos de $L$, se empleará una lista $G$ de seis elementos, que indicará en la posición $G_i$ el primer elemento de $L$ que es de $i$-ésima generación. Esto permitirá establecer (aunque el pseudocódigo quedará mucho menos elegante) el inicio y el final de cada bucle. Definiremos también $G_7$ como la posición siguiente a la del último elemento de $L$. La función $miembros(i)$ podría redefinirse aprovechando $G$ como $\{L_k : k \ge G_i, k < G_{i+1}\}$.
 
+% Los dejo comentados porque el código está sujeto a cambios. Cuando esté listo del todo, lo reescribiré (sin borrar el actual) con esto en los bucles:
+% Los dos bucles quedarían así ('hasta' indica el último elemento, no el primero que no está):
+%Para $i = 1$ hasta $G_{((g+1)/2+1)}-1$:\\
+%Para $j = \max \{i+1, G(g-gen(L_i))\}$ hasta $G(g-gen(L_i)+1)\}$:\\
 
 \subsection{Características del algoritmo}
+Este algoritmo explora todas y cada una de las posibles combinaciones y operaciones (exceptuando muchas que pueden omitirse). Por ello, garantiza encontrar la solución más cercana posible a la pedida. Además, dado que construyen las generaciones una a una y en orden ascendente, se garantiza que el número de operaciones usadas para obtener un valor que se distancie lo mínimo posible a la solución será el mínimo, tanto en el caso de resultado exacto como en caso de valor aproximado.\\
+
+El algoritmo no ordena los operandos en cada resta o cociente aunque sea necesario. En cualquier caso, como siempre hay un único resultado válido, el algoritmo que presenta la solución se encargará de ello.
 
 \section{El tipo de dato}
 
