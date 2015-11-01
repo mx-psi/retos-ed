@@ -59,8 +59,7 @@ En primer lugar, se observa que, para cada par de números, solo hay una suma y 
 
 Por comodidad,
 definiremos $L_i$ como el $i$-ésimo elemento de $L$, haremos referencia a los elementos de $L_i$ con $L_i.[n/i/j/op]$, y ``el valor de $L_i$'' hará referencia a $L_i.n$ si $L_i$ es lista o a $L_i$ si es
-un entero. Esta estructura de $L$ nos permitirá, una vez hallemos la solución o
-un resultado lo más cercano posible a la misma, obtener la secuencia de pasos que se han seguido hasta llegar a la misma,
+un entero. Esta estructura de $L$ nos permitirá obtener la secuencia de pasos que se han seguido hasta llegar a cualquier elemento de $L$ (en particular, al número pedido o a un número lo más cercano posible al mismo),
 mediante el siguiente procedimiento recursivo: \\
 
 \algorithm{de obtención de operaciones}
@@ -81,40 +80,40 @@ mediante el siguiente procedimiento recursivo: \\
 	\end{itemize}
 }\\
 
-Se observa que este procedimiento conmuta correctamente los operandos en el caso de las restas y los cocientes. \\
+Se observa que este procedimiento conmuta correctamente los operandos en el caso de las restas y los cocientes a la hora de mostrar la operación. \\
 
 Además se necesitan más definiciones:\\
 \emph{Nota: en esta sección se definen funciones para poder describir el algoritmo. Estas funciones no tienen por qué existir en un hipotético programa que ponga en práctica este algoritmo. De hecho, ofrecería un mejor resultado introducir los valores que toman estas funciones para cada $L_i$ como un elemento más en la lista que lo constituye.}
 \begin{itemize}
 	\item Sea $L_k$ un elemento de $L$, se dirá que $gen(L_k) = 1$, o que $L_k$ es de ``primera generación'' si $k \le 6$ (es decir, $L_k$ es uno de de los seis números que procedían de $C$), y se dirá que $gen(L_k) = n$, o que $L_k$ es de ``$n$-ésima generación'' si la suma de las generaciones de los elementos de los que procede (es decir, $gen(L_{L_k.i}) + gen(L_{L_k.j}) = n$). La generación representa el número de elementos que han sido necesarios para obtener $L_k$, o también el número de operaciones que se han requerido más $1$. El algoritmo se ejecutará de forma que, en cada iteración, se obtendrán elementos que serán exclusivamente de una generación en particular, controlando la generación de los dos elementos de los que procede cada uno con el apoyo de las definiciones siguientes.
-
+	
 	\item Definiremos $miembros(i)$ como el conjunto de los elementos de $L$ cuya generación es $i$, es decir, los $\{L_k : gen(k) = i\}$. Esto nos permitirá diferenciar los elementos de $L$ según en qué momento de la ejecución del algoritmo han sido obtenidos y determinar el inicio y el final de los bucles que recorren los elementos con los que se operará en cada paso.
 
 	\item Se define el conjunto de ``números usados por $L_k$'', expresado $U(L_k)$, como $\{L_k\}$ si $k \le 6$ (es decir, si $L_k$ se corresponde con alguno de los seis números de $C$), y en caso contrario ($k > 6$) como $A \cup B$ donde $A =U(L_{L_k.i})$ y $B = U(L_{L_k.j})$. Se dirá que dos elementos de $L$, $L_a$ y $L_b$, ``se solapan'', si y solo si $U(L_a) \cap  U(L_b) \ne \emptyset$. De esta forma, $U(L_k)$ representa el conjunto de números de $C$ que han intervenido para obtener $L_k$, y dos elementos se solaparán cuando tengan algún elemento inicial en común. Esto será crucial para poder comprobar a cada paso del algoritmo si es posible operar con dos elementos entre sí: cada par de elementos que se usen para añadir uno nuevo deben no solaparse.
-
+	
 \end{itemize}
 
 Por otro lado, para reducir el número de elementos de $L$ se tendrá en cuenta las siguientes observaciones. Sea $a\ op\ b = c$ uno de los pasos realizadas en una solución (el orden de $a$ y $b$ es irrelevante puesto que las operaciones son las mismas independiente del mismo, así que que todo lo siguiente puede leerse intercambiando los operandos), obteniendo $c$ a partir de la operación $op$ con $a$ y $b$:
 
 \begin{itemize}
 	\item Si una operación realizada cumple que $c=a$, existe otra solución que omite ese paso y simplemente usa $a$ en lugar de $c$, y lo mismo ocurre si $c=b$. Por ello, no se añadirá un elemento a $L$ si surge de una operación que da un resultado que coincida con el de uno de los elementos de los que se obtuvo.
-	\item Si en una operación realizada cumple que $c < 0$, debe descartarse la operación y no añadirse el elemento porque está prohibido emplear elementos temporales negativos.
-	\item Si en una operación realizada cumple que $c = 0$, existe otra solución que no emplea esta operación (puesto que con un $0$ temporal solo puede obtenerse otro $0$ o un valor igual a otro número disponible, o en caso de división indica una operación inválida). Por ello, se descartará la operación en tal caso. Aquí es donde se aprovecha la redefinición de la división: como hemos determinado que si la división $a/b$ no es exacta o $b=0$ el resultado es $0$, esto hará que se descarte la operación en esos casos.
-	\item Si $a$ surgió a partir de la misma operación $op$ que se está realizando (es decir, $d\ op\ e = a,\ a\ op\ b = c$, y por tanto $(d\ op\ e)\ op\ b = c$), existe otra solución que no emplea esta operación (y por tanto puede descartarse esta operación), porque:
+	\item Si una operación realizada cumple que $c < 0$, debe descartarse el paso y no añadirse el elemento porque está prohibido emplear elementos temporales negativos.
+	\item Si una operación realizada cumple que $c = 0$, existe otra solución que no emplea este paso (puesto que con un $0$ temporal solo puede obtenerse otro $0$ o un valor igual a otro número disponible, o en caso de división indica una operación inválida). Por ello, se descartará el paso en tal caso. Aquí es donde se aprovecha la redefinición de la división: como hemos determinado que si la división $a/b$ no es exacta o $b=0$ el resultado es $0$, esto hará que se descarte el paso en esos casos.
+	\item Si $a$ surgió a partir de la misma operación $op$ que se está realizando (es decir, $d\ op\ e = a,\ a\ op\ b = c$, y por tanto $(d\ op\ e)\ op\ b = c$), existe otra solución que no emplea este paso (y por consiguente puede descartarse este), porque:
 	\begin{itemize}
 		\item Si $op$ es conmutativa (es suma o producto), la expresión $(d\ op\ e)\ op\ b = c$ equivale a $d\ op\ (e\ op\ b) = c$. Se hará esta segunda en su lugar.
 		\item Si $op$ no es conmutativa (es resta o división) y es válida (es decir, en caso de división es exacta), la expresión $(d\ op\ e)\ op\ b = c$ equivale a $d\ op\ (e\ op_{inv}\ b) = c$, siendo $op_{inv}$ la operación opuesta (si $op$ es resta, la suma; si $op$ es división, el producto). Se hará esta segunda en su lugar.
 	\end{itemize}
-	\item Si $b$ surgió a partir de la misma operación $op$ que se está realizando (es decir, $d\ op\ e = b,\ a\ op\ b = c$, y por tanto $a\ op\ (d\ op\ e) = c$), en algunos casos (pero no todos) también es posible descartar la operación; a saber:
+	\item Si $b$ surgió a partir de la misma operación $op$ que se está realizando (es decir, $d\ op\ e = b,\ a\ op\ b = c$, y por tanto $a\ op\ (d\ op\ e) = c$), en algunos casos (pero no todos) es posible descartar este paso; a saber:
 	\begin{itemize}
 		\item Si $op$ no es conmutativa y es válida (no se llega a un resultado negativo al restar ni a un cociente no exacto al dividir), la expresión $a\ op\ (d\ op\ e)\ = c$ equivale a $(a\ op_{inv}\ e)\ op\ d\ = c$. Se hará esta segunda en su lugar.
 		\item Si $op$ sí es conmutativa, y además la posición de $d$ en $L$ es anterior a la posición de $a$, la expresión $a\ op\ (d\ op\ e)\ = c$ equivale a $d\ op\ (a\ op\ e)\ = c$. Se hará esta segunda en su lugar.
 	\end{itemize}
 \end{itemize}
 
-Diremos que una lista $[n, i, j, op]$ es ``válida'' si no puede ser eliminada por todo lo expuesto. De esta forma, eliminaremos múltiples caminos que serían redundantes.\\
+Diremos que una lista $[n, i, j, op]$ es ``válida'' si no introduce un paso descartable por lo expuesto anteriormente. De esta forma, eliminaremos múltiples caminos que serían redundantes.\\
 
-Se almacenará a cada elemento añadido el que más se aproxime a la solución en una variable llamada $N$. Cuando termine el algoritmo, se consultará $N$ y se generarán las operaciones realizadas con el algoritmo anterior. \\
+Se almacenará en una variable llamada $N$ el elemento que más se aproxime a la solución. Cuando termine el algoritmo, se consultará $N$ y se generarán las operaciones realizadas con el algoritmo anterior. \\
 
 El algoritmo que se propone, con los bucles expresados aprovechando las funciones definidas (después se repetirá con el inicio y final de los bucles expresados explícitamente, aunque eso resultará más engorroso), devolverá un $L$ y $N$ con los que se podrá construir, con el algoritmo anterior, una solución que se acerque lo más posible al objetivo:\\
 
@@ -152,9 +151,33 @@ Para poder definir con exactitud el inicio y el final de los bucles que recorren
 \subsection{Características del algoritmo}
 Este algoritmo explora todas y cada una de las posibles combinaciones y operaciones (exceptuando muchas que pueden omitirse). Por ello, garantiza encontrar la solución más cercana posible a la pedida. Además, dado que construyen las generaciones una a una y en orden ascendente, se garantiza que el número de operaciones usadas para obtener un valor que se distancie lo mínimo posible a la solución será el mínimo, tanto en el caso de resultado exacto como en caso de valor aproximado.\\
 
-El algoritmo no ordena los operandos en cada resta o cociente aunque sea necesario. En cualquier caso, como siempre hay un único resultado válido, el algoritmo que presenta la solución se encargará de ello.
+El algoritmo no ordena los operandos en cada resta o cociente aunque sea necesario. En cualquier caso, como siempre hay un único resultado válido, el algoritmo que presenta la solución se encargará de mostrar los operandos en el orden correcto.
 
-\section{El tipo de dato}
+\section{Tipos de datos}
+\subsection{Tipo de dato para $L_k$}
+
+Cada $L_k$ debe contener, como mínimo, tipos de datos que se identifiquen con la descripción que se dio anteriormente ($[n, i, j, op]$). Se implementaría probablemente con una estructura que permitiese distintos tipos de datos.\\
+
+$n$ sería un tipo de dato entero con signo de, al menos, 32 bits. Es importante que el tamaño sea de al menos 32 bits, dado que si fuese de 16 bits sería posible salirse del rango y obtener resultados falsos o perder resultados correctos.
+\begin{itemize}
+	\item Un ejemplo de resultado falso: si trabajamos con enteros de 16 bits con signo, $100^2 \cdot 75$ daría como resultado $29104$, que podría dar lugar a una solución falsa. Con $C=\{4, 6, 8, 75, 100, 100\},\ S = 911$ (ejemplo de problema para el que no existe una solución exacta) se obtendría esta falsa solución: $100 \cdot 100=10000; 10000 \cdot 75=29104;29104/8=3638;3638+6=3644;3644/4=911$.
+	\item Un ejemplo de problema que no podría resolverse sería $C=\{3, 3, 25, 50, 75, 100\},\ S = 996$. Toda solución a este ejemplo pasa por obtener el número $99600$, que está fuera del rango de los enteros de 16 bits con o sin signo (si se ejecuta el algoritmo haciendo que se rechace todo resultado temporal igual a $99600$ de forma similar a como se hace con el $0$, no se obtiene solución exacta). Una solución (podría ser la única) es: $3 \cdot 50 = 53; 25 \cdot 53 = 1325; 3+1325=1328; 75 \cdot 1328 = 99600; 99600/100=996$.
+\end{itemize}
+
+$i$ y $j$ serían dos enteros de 32 bits que indicarían la posición de los $L_i$ y $L_j$ de los que se obtuvo el nodo anterior. Dado que los $L_k$ deben tener todos la misma estructura, y en lo propuesto los seis primeros elementos (que procedían de $C$) estaban compuestos solo por un número, para esos seis elementos iniciales podrían tomar un valor arbitrario (por ejemplo, el valor inválido -1, lo que requeriría enteros con signo). \\
+
+$op$ representaría la operación con la que se obtuvo el elemento. Podría representarse con cualquier tipo de dato. Para los seis primeros elementos, podría tomar un valor arbitrario, preferiblemente inválido.\\
+
+De cara al algoritmo que genera las operaciones con las que se llegó a un elemento, interesaría que, en los seis primeros elementos, al menos uno de los tres últimos elementos que componen esta estructura tuviese un valor inválido, dado que el algoritmo debe no hacer nada cuando está siendo ejecutado con uno de los seis primeros elementos como entrada. \\
+
+Además de los datos anteriores, que son indispensables, probablemente interesará añadir más elementos a la estructura:
+
+\begin{itemize}
+	\item Incluir un entero que indique la generación del elemento podría reducir el tiempo de ejecución del algoritmo respecto del tiempo que necesitaría si emplease una función que calculase la generación de un elemento explorando los elementos de los que procede. Un entero de 16 bits, que tomase el valor de la suma de las generaciones de los elementos de los que procede y que tomase el valor 1 para los elementos iniciales, sería suficiente para ello.
+	\item Sería particularmente interesante incluir un entero sin signo de al menos 16 bits que indique en el $i$-ésimo bit menos significativo si se ha usado el $i$-ésimo elemento del multiconjunto de números disponibles $C$. Tal bit sería $1$ si lo ha usado, o $0$ si no. Esto supondría que la comprobación de si dos elementos se solapan sería tan simple como comprobar si la operación lógica $AND$ de ambos es un valor no nulo. Al añadir nuevos elementos a $L$, este dato tomaría el valor de la operación lógica $OR$ sobre los datos en los dos elementos de los que se obtiene el nuevo. Por ejemplo, si el valor de este dato para dos elementos fuese $001011$ y $110000$, el elemento que se obtendría al operar con ambos tendría en este dato el valor $111011$. Este dato tomaría, para el elemento inicial $i$-ésimo, el valor $2^{i-1}$ o $1 << i$. ($1$ para el primero, $2$ para el segundo, $4$ para el tercero...)
+\end{itemize}
+
+\subsection{Tipo de dato para $L$}
 
 \section{Combinaciones mágicas}
 \subsection{Algoritmo para buscar combinaciones mágicas}
