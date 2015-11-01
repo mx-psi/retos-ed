@@ -11,7 +11,7 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
   for (int op = 0; op < 4; op++) {
     for (int j = nums.no_usa_uno(op); j < nums.size(); j+=nums.dup(j)){
       int nums_j = nums[j];
-      for (int k = j+1; k < nums.size(); k++){
+      for (int k = j+1; k < nums.size(); k+=nums.dup(k)){
         int nums_k = nums[k];
         int res = Opera(nums_j, nums_k, op);
         if(res == 0) continue;
