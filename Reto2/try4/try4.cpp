@@ -1,6 +1,5 @@
 #include "pila.h"
 #include "vector.h"
-#include <string>
 #include <ctime>
 #include <algorithm>
 using namespace std;
@@ -55,7 +54,7 @@ int main(){
   int m_a = list[5];
 
   // Objetivo
-  cout << nums << "--> " << obj << endl;
+  cout << nums << "⟶ " << obj << endl;
 
   clock_t tini = clock();
   Cifras(obj,nums,p,m_a);

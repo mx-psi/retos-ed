@@ -29,7 +29,7 @@ int Opera(const int a, const int b, int op){
 // Representación de operaciones
 char repr[4] = {'+', '-', '*', '/'};
 std::ostream& operator<<(std::ostream& os, const Operacion& op){
-  os << op.arg2 << repr[op.op] << op.arg1 << "=" << Opera(op.arg1, op.arg2, op.op);
+  os << op.arg2 << repr[op.op] << op.arg1 << "\t= " << Opera(op.arg1, op.arg2, op.op);
   return os;
 }
 

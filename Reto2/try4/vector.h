@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 class Vector{
   int v[7];
@@ -17,8 +16,21 @@ public:
 
   inline int operator[](int pos){return v[pos];}
   inline int size() const{return nelem;}
-  inline bool no_usa_uno(int op) const{return (op > 1 && v[0] == 1);}
-  inline bool dup(int j) const{return 1 + (v[j] == v[j+1]);}
+
+  inline bool no_usa_uno(int op) const{
+    int i = 0;
+    if(op > 1)
+      while(v[i] == 1)
+        i++;
+    return i;
+  }
+
+  inline bool dup(int j) const{
+    j++;
+    while(v[j] == v[j-1] && j < nelem)
+      j++;
+    return j;
+  }
 };
 
-ostream& operator<<(ostream& os, Vector& v);
+std::ostream& operator<<(std::ostream& os, Vector& v);
