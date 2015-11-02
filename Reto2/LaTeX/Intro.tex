@@ -51,8 +51,8 @@ Sea $a \circ b = c$ una cierta operación.
 Podemos considerar algunos criterios para reducr el número de operaciones:
 
 \begin{itemize}
-	\item Si $c = a$ o $c = b$ la operación puede omitirse de cualquier solución.
-	Esto sólo ocurre cuando uno de los operandos es $1$.
+	\item Si $c = a$ o $c = b$ la operación puede omitirse de cualquier solución,
+	dado que habrá otra solución que omite este paso.
 	\item Si $c = 0$ la operación puede omitirse de cualquier solución, ya que de
 	un 0 solo puede obtenerse otro 0 o un valor ya existente. Podemos redefinir
 	la división como 0 cuando no es válida y entrará en ese caso.
@@ -60,23 +60,22 @@ Podemos considerar algunos criterios para reducr el número de operaciones:
   ($d \circ e = a, (d \circ e) \circ b = c$),
   puede omitirse porque:
 	\begin{itemize}
-		\item Si $\circ$ es conmutativa ($+$ o $\cdot$)
+		\item Si $\circ$ es conmutativa ($+$ o $\cdot$) y por tanto asociativa,
 		$(d \circ e) \circ b = c$ equivale a $d \circ (e \circ b) = c$.
-		Podemos hacer sólo un caso.
+		Podemos hacer solo este segundo caso y omitir el primero.
 		\item Si $\circ$ no es conmutativa ($-$ o $/$) y es válida
 		$(d \circ e) \circ b = c$ equivale a $d \circ (e \circ^{-1} b) = c$
-		siendo $\circ^{-1}$ la operación opuesta. Podemos hacer sólo un caso.
+		siendo $\circ^{-1}$ la operación opuesta. Podemos hacer solo este segundo caso y omitir el primero.
 	\end{itemize}
 	\item Si $b$ surgió a partir de la misma operación $\circ$ que se está realizando
 	($d \circ e = b, a \circ (d \circ e) = c$),
 	en algunos casos también es posible descartar la operación; a saber:
 	\begin{itemize}
 		\item Si $\circ$ no es conmutativa y es válida, la expresión
-		$a \circ (d \circ e)\ = c$ equivale a $(a \circ^{-1} e) \circ d\ = c$.
-		Podemos hacer sólo un caso.
-		\item Si $\circ$ es conmutativa, y la posición de $d$ se ha obtenido antes
-		que $a$, $a \circ (d \circ e)\ = c$	equivale a $d \circ (a \circ e) = c$.
-		Podemos hacer sólo un caso.
+		$a \circ (d \circ e)\ = c$ equivale a $(a \circ^{-1} e) \circ d = c$.
+		Podemos hacer solo este segundo caso y omitir el primero.
+		\item Si $\circ$ es conmutativa, y la posición de $d$ en $L$ es anterior a la de $a$, $a \circ (d \circ e) = c$	equivale a $d \circ (a \circ e) = c$.
+		Podemos hacer solo este segundo caso y omitir el primero.
 	\end{itemize}
 \end{itemize}
 
