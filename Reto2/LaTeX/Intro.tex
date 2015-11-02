@@ -31,6 +31,9 @@ siguiente entrada y salida:
 	\end{enumerate}
 \end{description}
 
+Dado que utilizamos sólo estructuras de datos lineales, llamaremos $L$ a la lista
+que se identifica con el multiconjunto $C$.
+
 \subsection{Operaciones posibles}
 
 Podemos notar que para cumplir las condiciones de la salida del algoritmo,
@@ -42,6 +45,42 @@ dados 2 elementos $a,b$ existen cómo máximo 4 operaciones válidas:
 	\item $\abs{a-b}$. Esta operación se corresponde con la resta del menor al mayor.
 	\item $a/b$. Sólo si $b$ divide a $a$.
 \end{enumerate}
+
+Sea $a \circ b = c$ una cierta operación.
+Podemos considerar algunos criterios para reducr el número de operaciones:
+
+\begin{itemize}
+	\item Si $c = a$ o $c = b$ la operación puede omitirse de cualquier solución.
+	Esto sólo ocurre cuando uno de los operandos es $1$.
+	\item Si $c = 0$ la operación puede omitirse de cualquier solución, ya que de
+	un 0 solo puede obtenerse otro 0 o un valor ya existente. Podemos redefinir
+	la división como 0 cuando no es válida y entrará en ese caso.
+	\item Si $a$ surgió de la misma operación que se está realizando
+  ($d \circ e = a, (d \circ e) \circ b = c$),
+  puede omitirse porque:
+	\begin{itemize}
+		\item Si $\circ$ es conmutativa ($+$ o $\cdot$)
+		$(d \circ e) \circ b = c$ equivale a $d \circ (e \circ b) = c$.
+		Podemos hacer sólo un caso.
+		\item Si $\circ$ no es conmutativa ($-$ o $/$) y es válida
+		$(d \circ e) \circ b = c$ equivale a $d \circ (e \circ^{-1} b) = c$
+		siendo $\circ^{-1}$ la operación opuesta. Podemos hacer sólo un caso.
+	\end{itemize}
+	\item Si $b$ surgió a partir de la misma operación $\circ$ que se está realizando
+	($d \circ e = b, a \circ (d \circ e) = c$),
+	en algunos casos también es posible descartar la operación; a saber:
+	\begin{itemize}
+		\item Si $\circ$ no es conmutativa y es válida, la expresión
+		$a \circ (d \circ e)\ = c$ equivale a $(a \circ^{-1} e) \circ d\ = c$.
+		Podemos hacer sólo un caso.
+		\item Si $\circ$ es conmutativa, y la posición de $d$ se ha obtenido antes
+		que $a$, $a \circ (d \circ e)\ = c$	equivale a $d \circ (a \circ e) = c$.
+		Podemos hacer sólo un caso.
+	\end{itemize}
+\end{itemize}
+
+Decimos que una operación es \textbf{válida} si no puede omitirse por lo
+expuesto anteriormente.
 
 \subsection{Combinaciones posibles de elementos}
 
@@ -76,5 +115,3 @@ donde $T_n(|C|)$ devuelve el tamaño de los generables a partir de $C$ con $n$
 operaciones. La división no siempre es válida, por lo que tenemos que:
 
 \[T_3(|C|) < C^{\ast} < T_4(|C|)\]
-
-\subsection{Mejor aproximación}
