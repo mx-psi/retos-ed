@@ -25,23 +25,16 @@ se han seguido hasta llegar a cualquier elemento de $L$ (en particular, al núme
 pedido o a un número lo más cercano posible al mismo),
 mediante el siguiente procedimiento recursivo: \\
 
-\algorithm{de obtención de operaciones}
-{$L$ y $N$, con $N = [n, i, j, op]$ o $N = n$}
-{La serie de operaciones con elementos de $L$ con la que se ha llegado a $n$}{
-	Si $N$ no es solo un número $n$:
-	\begin{itemize}
-	\setlength{\itemsep}{1pt}
-	\setlength{\parskip}{0pt}
-	\setlength{\parsep}{0pt}
-	\item Aplicar este mismo algoritmo con entrada $L$, $L_i$
-	\item Aplicar este mismo algoritmo con entrada $L$, $L_j$
-	\item Si $op$ no es una operación conmutativa (es decir, es resta o cociente)
-	y el valor de $L_i$ es menor que el de $L_j$, intercambiar $i$ y $j$
-	\item Devolver la concatenación de lo obtenido en los dos primeros puntos
-	junto con \texttt{a operador b = n}, con $a$ el valor de $L_i$ y $b$
-	el valor de $L_j$
-	\end{itemize}
-}\\
+\begin{algorithm}[H]
+	\KwIn{$L$ y $N$, con $N = [n, i, j, op]$ o $N = n$}
+	\KwOut{Las operaciones con elementos de $L$ para llegar a $n$}
+	\If{$N \neq n$}{
+	Aplica este algoritmo con entrada $L$, $L_i$\;
+	Aplica este algoritmo con entrada $L$, $L_j$\;
+	\If{$op$ no es conmutativa y $L_i.n < L_j.n$}{intercambia $i$ y $j$\;}}
+	\KwResult{Concatenación de las llamadas recursivas con \texttt{a operador b = n}, con $a = L_i.n$, $b = L_j.n$}
+\caption{Obtención de operaciones}
+\end{algorithm}
 
 Se observa que este procedimiento conmuta correctamente los operandos en el caso
 de las restas y los cocientes a la hora de mostrar la operación. \\
@@ -153,29 +146,34 @@ expresados explícitamente, aunque eso resultará más engorroso), devolverá un
 $L$ y $N$ con los que se podrá construir, con el algoritmo anterior, una
 solución que se acerque lo más posible al objetivo:\\
 
-\cifrasalg{de obtención de solución}{Sea $L$ la lista que se corresponde con
+\begin{algorithm}[H]
+\KwIn{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999]$}
+\KwOut{$L$ y $N$ con $d(N,T)$ mínima.}
+Sea $L$ la lista que se corresponde con
 $C$ ($L = [c_1, c_2, c_3, c_4, c_5, c_6]$), y sea $N$ un elemento cualquiera
 (se modificará durante el algoritmo) de $L$.\\
-Para $g = 2$ hasta $6$:\\
-Para cada $i$ tal que $2 \cdot gen(L_i) \le g$:\\
-Para cada $j \in miembros(g-gen(L_i))$ tal que $j > i$:\\
-Si $L_i$ y $L_j$ no se solapan ($U(L_i) \cap  U(L_j) = \emptyset$):\\
-Para cada $op$ operación:\\
-Si $[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es ``válida'':
-\begin{itemize}
-	\setlength{\itemsep}{1pt}
-	\setlength{\parskip}{0pt}
-	\setlength{\parsep}{0pt}
-	\item Añadir $[n, i, j, op]$ a $L$
-	\item Si $|n-T| < |N.n-T|$:
-	\begin{itemize}
-		\item $N.n \leftarrow [n, i, j, op]$
-		\item Si $N = T$, FIN: devuelve $L, N$
-	\end{itemize}
-\end{itemize}
-FIN: devuelve $L, N$
-	%Intentar tabular la anidación de bucles o algo, que queda feísimo como está ahora.
+\ForAll{$g = 2$ hasta $6$}{
+	\ForAll{$i$ tal que $2 \cdot gen(L_i) \le g$}{
+		\ForAll{$j \in miembros(g-gen(L_i))$ tal que $j > i$:}{
+			\If{$L_i$ y $L_j$ no se solapan ($U(L_i) \cap  U(L_j) = \emptyset$)}{
+				\ForAll{$op$ operación}{
+					\If{$[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es ``válida''}{
+					 Añadir $[n, i, j, op]$ a $L$\;
+						\If{$|n-T| < |N.n-T|$}{
+							$N.n \leftarrow [n, i, j, op]$
+
+                \If{$N = T$}
+								{\KwRet{$L,N$}}
+						}
+					}
+				}
+			}
+		}
+	}
 }
+\KwRet{$L,N$}
+\caption{Obtención de la solución}
+\end{algorithm}
 
 \vspace{0.4cm}
 

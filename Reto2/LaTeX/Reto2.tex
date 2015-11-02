@@ -3,6 +3,7 @@
 \usepackage[spanish]{babel}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath,amsthm}
+\usepackage[spanish,onelanguage]{algorithm2e}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsfonts,dsfont}
@@ -17,22 +18,6 @@
 \newcommand{\n}[1]{{\color{gray}#1}}
 \lstset{numbers=left,numberstyle=\small\color{gray}}
 
-\newcommand{\algorithm}[4]{
-	\fbox{\parbox{14cm}{
-		\textbf {\Large Algoritmo #1:} \\
-		\textbf {Entrada:} #2 \\
-		\textbf {Salida:} #3 \\
-		\textbf {Procedimiento:} \\
-		#4
-	}}
-}
-
-\newcommand{\cifrasalg}[2]{
-	\algorithm{#1}{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999]$}{
-	$L$ y $N$ tales que $d(N,T)$ es mínima y puede construirse la serie de
-	operaciones con el algoritmo de obtención de operaciones}{#2}
-}
-
 \newcommand{\abs}[1]{|#1|}
 \theoremstyle{definition}
 \newtheorem{definition}{Definición}
@@ -44,7 +29,6 @@
 
 \begin{document}
 \maketitle
-
 \input{Intro.tex}
 \input{Algoritmo1.tex}
 \input{Combmagicas.tex}
