@@ -25,9 +25,9 @@ siguiente entrada y salida:
 
 	\item[Salida:] Lista de operaciones básicas ($+$,$-$,$\cdot$,$/$) tales que:
 	\begin{enumerate}
-		\item Cada operación usa sólo elementos generables por $C$.
-		\item Cada número se utiliza sólo una vez (contando repeticiones).
-		\item El último resultado es $T \in C^{\ast}$ tal que $d(S,T) = \underset{N \in C^{\ast}}{\min} d(S,N)$
+		\item Cada operación usa sólo elementos generables por $C$ que o bien estaban en $C$ o bien se han obtenido a través de una operación anterior en la lista.
+		\item Cada número se utiliza como máximo una vez (contando repeticiones).
+		\item El último resultado es $T \in C^{\ast}$ tal que $|S-T| = \displaystyle \min_{N \in C^{\ast}} |S-N|$
 	\end{enumerate}
 \end{description}
 
@@ -47,11 +47,11 @@ dados 2 elementos $a,b \in \mathbb{N}^{\ast}$ existen cómo máximo 4 operacione
 \end{enumerate}
 
 Sea $a \circ b = c$ una cierta operación.
-Podemos considerar algunos criterios para reducr el número de operaciones:
+Podemos considerar algunos criterios para reducir el número de operaciones:
 
 \begin{itemize}
 	\item Si $c = a$ o $c = b$ la operación puede omitirse de cualquier solución,
-	dado que habrá otra solución que omite este paso.
+	dado que habrá otra solución que omite este paso y simplemente usa $a$ o $b$, respectivamente, en lugar de $c$.
 	\item Si $c = 0$ la operación puede omitirse de cualquier solución, ya que de
 	un 0 solo puede obtenerse otro 0 o un valor ya existente. Podemos redefinir
 	la división como 0 cuando no es válida y entrará en ese caso.
@@ -73,7 +73,7 @@ Podemos considerar algunos criterios para reducr el número de operaciones:
 		\item Si $\circ$ no es conmutativa y es válida, la expresión
 		$a \circ (d \circ e)\ = c$ equivale a $(a \circ^{-1} e) \circ d = c$.
 		Podemos hacer solo este segundo caso y omitir el primero.
-		\item Si $\circ$ es conmutativa, y la posición de $d$ en $L$ es anterior a la de $a$, $a \circ (d \circ e) = c$	equivale a $d \circ (a \circ e) = c$.
+		\item Si $\circ$ es conmutativa y la posición de $d$ en $L$ es anterior a la de $a$, $a \circ (d \circ e) = c$	equivale a $d \circ (a \circ e) = c$.
 		Podemos hacer solo este segundo caso y omitir el primero.
 	\end{itemize}
 \end{itemize}
