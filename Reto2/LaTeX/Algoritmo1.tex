@@ -1,0 +1,203 @@
+\section{Algoritmo}
+El algoritmo propuesto tiene como objetivo construir todos los caminos posibles
+que pueden seguirse usando los números de $C$ y las operaciones disponibles,
+dando una solución exacta en cuanto se encuentre o el camino con una solución lo
+ más cercana posible a $S$. Para ello, tomará $L$ como la lista que se
+identifica con el multiconjunto $C$, y ampliará $L$ con listas de cuatro elementos
+$[n, i, j, op]$, donde $n$ es un entero obtenido a partir de los elementos que ocupan
+las posiciones $i$ y $j$ en $L$ mediante la operación $op$.\\
+
+A la hora de recorrer $L$ para obtener nuevos elementos, solo tendremos que
+comprobar cada par de elementos una vez para hacer la operación de cada tipo que
+puede hacerse con ellos, y no dos veces. En el caso de la resta, tomaremos la
+diferencia del mayor menos el menor (o el valor absoluto de la resta); y para
+el cociente, también haremos el del mayor entre el menor. En el caso de la
+división, si el menor fuese $0$ o la división no fuese exacta, definiremos el
+resultado de la división como $0$. Se verá la utilidad de esto a la hora de
+filtrar elementos, más adelante. \\
+
+Por comodidad,
+definiremos $L_i$ como el $i$-ésimo elemento de $L$, haremos referencia a los
+elementos de $L_i$ con $L_i.[n/i/j/op]$, y ``el valor de $L_i$'' hará referencia
+a $L_i.n$ si $L_i$ es lista o a $L_i$ si es un entero.
+Esta estructura de $L$ nos permitirá, una vez hallemos la solución o
+un resultado lo más cercano posible a la misma, obtener la secuencia de pasos
+que se han seguido hasta llegar a la misma,
+mediante el siguiente procedimiento recursivo: \\
+
+\algorithm{de obtención de operaciones}
+{$L$ y $N$, con $N = [n, i, j, op]$ o $N = n$}
+{La serie de operaciones con elementos de $L$ con la que se ha llegado a $n$}{
+	Si $N$ no es solo un número $n$:
+	\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item Aplicar este mismo algoritmo con entrada $L$, $L_i$
+	\item Aplicar este mismo algoritmo con entrada $L$, $L_j$
+	\item Si $op$ no es una operación conmutativa (es decir, es resta o cociente)
+	y el valor de $L_i$ es menor que el de $L_j$, intercambiar $i$ y $j$
+	\item Devolver la concatenación de lo obtenido en los dos primeros puntos
+	junto con \texttt{a operador b = n}, con $a$ el valor de $L_i$ y $b$
+	el valor de $L_j$
+	\end{itemize}
+}\\
+
+Se observa que este procedimiento conmuta correctamente los operandos en el caso
+de las restas y los cocientes. \\
+
+Además se necesitan más definiciones:\\
+\emph{Nota: en esta sección se definen funciones para poder describir el algoritmo.
+Estas funciones no tienen por qué existir en un hipotético programa que ponga en
+práctica este algoritmo. De hecho, ofrecería un mejor resultado introducir los
+valores que toman estas funciones para cada $L_i$ como un elemento más en la
+lista que lo constituye.}
+\begin{itemize}
+	\item Sea $L_k$ un elemento de $L$, se dirá que $gen(L_k) = 1$, o que $L_k$ es
+	de ``primera generación'' si $k \le 6$ (es decir, $L_k$ es uno de de los seis
+	números que procedían de $C$), y se dirá que $gen(L_k) = n$, o que $L_k$ es
+	de ``$n$-ésima generación'' si la suma de las generaciones de los elementos
+	de los que procede (es decir, $gen(L_{L_k.i}) + gen(L_{L_k.j}) = n$).
+	La generación representa el número de elementos que han sido necesarios
+	para obtener $L_k$, o también el número de operaciones que se han
+	requerido más $1$.
+	El algoritmo se ejecutará de forma que, en cada iteración, se obtendrán
+	elementos que serán exclusivamente de una generación en particular,
+	controlando la generación de los dos elementos de los que procede cada uno con
+	el apoyo de las definiciones siguientes.
+
+	\item Definiremos $miembros(i)$ como el conjunto de los elementos de $L$ cuya
+	generación es $i$, es decir, los $\{L_k : gen(k) = i\}$. Esto nos permitirá
+	diferenciar los elementos de $L$ según en qué momento de la ejecución del
+	algoritmo han sido obtenidos y determinar el inicio y el final de los bucles
+	que recorren los elementos con los que se operará en cada paso.
+
+	\item Se define el conjunto de ``números usados por $L_k$'', expresado
+	$U(L_k)$, como $\{L_k\}$ si $k \le 6$ (es decir, si $L_k$ se corresponde con
+	alguno de los seis números de $C$), y en caso contrario ($k > 6$) como
+	$A \cup B$ donde $A =U(L_{L_k.i})$ y $B = U(L_{L_k.j})$. Se dirá que dos
+	elementos de $L$, $L_a$ y $L_b$, ``se solapan'', si y solo si
+	$U(L_a) \cap  U(L_b) \ne \emptyset$.
+	De esta forma, $U(L_k)$ representa el conjunto de números de $C$ que han
+	intervenido para obtener $L_k$, y dos elementos se solaparán cuando tengan
+	algún elemento inicial en común. Esto será crucial para poder comprobar a cada
+	paso del algoritmo si es posible operar con dos elementos entre sí: cada par
+	de elementos que se usen para añadir uno nuevo deben no solaparse.
+
+\end{itemize}
+
+Por otro lado, para reducir el número de elementos de $L$ se tendrá en cuenta
+las siguientes observaciones. Sea $a\ op\ b = c$ uno de los pasos realizadas en
+una solución (el orden de $a$ y $b$ es irrelevante puesto que las operaciones
+son las mismas independiente del mismo, así que que todo lo siguiente puede
+leerse intercambiando los operandos), obteniendo $c$ a partir de la operación
+$op$ con $a$ y $b$:
+
+\begin{itemize}
+	\item Si una operación realizada cumple que $c=a$, existe otra solución que
+	omite ese paso y simplemente usa $a$ en lugar de $c$, y lo mismo ocurre si
+	$c=b$. Por ello, no se añadirá un elemento a $L$ si surge de una operación
+	que da un resultado que coincida con el de uno de los elementos de los que se
+	obtuvo.
+	\item Si en una operación realizada cumple que $c < 0$, debe descartarse la
+	operación y no añadirse el elemento porque está prohibido emplear elementos
+	temporales negativos.
+	\item Si en una operación realizada cumple que $c = 0$, existe otra solución
+	que no emplea esta operación (puesto que con un $0$ temporal solo puede
+	obtenerse otro $0$ o un valor igual a otro número disponible, o en caso de
+	división indica una operación inválida). Por ello, se descartará la operación
+	en tal caso. Aquí es donde se aprovecha la redefinición de la división: como
+	hemos determinado que si la división $a/b$ no es exacta o $b=0$ el resultado
+	es $0$, esto hará que se descarte la operación en esos casos.
+	\item Si $a$ surgió a partir de la misma operación $op$ que se está realizando
+	(es decir, $d\ op\ e = a,\ a\ op\ b = c$, y por tanto $(d\ op\ e)\ op\ b = c$),
+	existe otra solución que no emplea esta operación (y por tanto puede
+	descartarse esta operación), porque:
+	\begin{itemize}
+		\item Si $op$ es conmutativa (es suma o producto), la expresión
+		$(d\ op\ e)\ op\ b = c$ equivale a $d\ op\ (e\ op\ b) = c$. Se hará esta
+		segunda en su lugar.
+		\item Si $op$ no es conmutativa (es resta o división) y es válida (es decir,
+		en caso de división es exacta), la expresión $(d\ op\ e)\ op\ b = c$
+		equivale a $d\ op\ (e\ op_{inv}\ b) = c$, siendo $op_{inv}$ la operación
+		opuesta (si $op$ es resta, la suma; si $op$ es división, el producto).
+		Se hará esta segunda en su lugar.
+	\end{itemize}
+	\item Si $b$ surgió a partir de la misma operación $op$ que se está realizando
+	(es decir, $d\ op\ e = b,\ a\ op\ b = c$, y por tanto $a\ op\ (d\ op\ e) = c$),
+	 en algunos casos (pero no todos) también es posible descartar la operación;
+	 a saber:
+	\begin{itemize}
+		\item Si $op$ no es conmutativa y es válida (no se llega a un resultado
+		negativo al restar ni a un cociente no exacto al dividir), la expresión
+		$a\ op\ (d\ op\ e)\ = c$ equivale a $(a\ op_{inv}\ e)\ op\ d\ = c$.
+		Se hará esta segunda en su lugar.
+		\item Si $op$ sí es conmutativa, y además la posición de $d$ en $L$ es
+		anterior a la posición de $a$, la expresión $a\ op\ (d\ op\ e)\ = c$
+		equivale a $d\ op\ (a\ op\ e)\ = c$. Se hará esta segunda en su lugar.
+	\end{itemize}
+\end{itemize}
+
+Diremos que una lista $[n, i, j, op]$ es ``válida'' si no puede ser eliminada
+por todo lo expuesto. De esta forma, eliminaremos múltiples caminos que serían redundantes.\\
+
+Se almacenará a cada elemento añadido el que más se aproxime a la solución en
+una variable llamada $N$. Cuando termine el algoritmo, se consultará $N$ y se generarán las operaciones realizadas con el algoritmo anterior. \\
+
+El algoritmo que se propone, con los bucles expresados aprovechando las
+funciones definidas (después se repetirá con el inicio y final de los bucles
+expresados explícitamente, aunque eso resultará más engorroso), devolverá un
+$L$ y $N$ con los que se podrá construir, con el algoritmo anterior, una
+solución que se acerque lo más posible al objetivo:\\
+
+\cifrasalg{de obtención de solución}{Sea $L$ la lista que se corresponde con
+$C$ ($L = [c_1, c_2, c_3, c_4, c_5, c_6]$), y sea $N$ un elemento cualquiera
+(se modificará durante el algoritmo) de $L$.\\
+Para $g = 2$ hasta $6$:\\
+Para cada $i$ tal que $2 \cdot gen(L_i) \le g$:\\
+Para cada $j \in miembros(g-gen(L_i))$ tal que $j > i$:\\
+Si $L_i$ y $L_j$ no se solapan ($U(L_i) \cap  U(L_j) = \emptyset$):\\
+Para cada $op$ operación:\\
+Si $[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es ``válida'':
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item Añadir $[n, i, j, op]$ a $L$
+	\item Si $|n-T| < |N.n-T|$:
+	\begin{itemize}
+		\item $N.n \leftarrow [n, i, j, op]$
+		\item Si $N = T$, FIN: devuelve $L, N$
+	\end{itemize}
+\end{itemize}
+FIN: devuelve $L, N$
+	%Intentar tabular la anidación de bucles o algo, que queda feísimo como está ahora.
+}
+
+\vspace{0.4cm}
+
+Para poder definir con exactitud el inicio y el final de los bucles que recorren
+los elementos de $L$, se empleará una lista $G$ de seis elementos, que indicará
+en la posición $G_i$ el primer elemento de $L$ que es de $i$-ésima generación.
+Esto permitirá establecer (aunque el pseudocódigo quedará mucho menos elegante)
+el inicio y el final de cada bucle. Definiremos también $G_7$ como la posición
+siguiente a la del último elemento de $L$. La función $miembros(i)$ podría
+redefinirse aprovechando $G$ como $\{L_k : k \ge G_i, k < G_{i+1}\}$.
+
+% Los dejo comentados porque el código está sujeto a cambios. Cuando esté listo del todo, lo reescribiré (sin borrar el actual) con esto en los bucles:
+% Los dos bucles quedarían así ('hasta' indica el último elemento, no el primero que no está):
+%Para $i = 1$ hasta $G_{((g+1)/2+1)}-1$:\\
+%Para $j = \max \{i+1, G(g-gen(L_i))\}$ hasta $G(g-gen(L_i)+1)\}$:\\
+
+\subsection{Características del algoritmo}
+Este algoritmo explora todas y cada una de las posibles combinaciones y operaciones
+(exceptuando muchas que pueden omitirse). Por ello, garantiza encontrar la
+solución más cercana posible a la pedida. Además, dado que construyen las
+generaciones una a una y en orden ascendente, se garantiza que el número de
+operaciones usadas para obtener un valor que se distancie lo mínimo posible
+a la solución será el mínimo, tanto en el caso de resultado exacto como en
+caso de valor aproximado.\\
+
+El algoritmo no ordena los operandos en cada resta o cociente aunque sea necesario.
+En cualquier caso, como siempre hay un único resultado válido, el algoritmo
+que presenta la solución se encargará de ello.

@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{multirow}
+\usepackage[spanish]{babel}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts,dsfont}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
+
+% Para el código, por si queremos al menos mencionar una posible implementación
+% del tipo de dato
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\newcommand{\n}[1]{{\color{gray}#1}}
+\lstset{numbers=left,numberstyle=\small\color{gray}}
+
+\newcommand{\algorithm}[4]{
+	\fbox{\parbox{14cm}{
+		\textbf {\Large Algoritmo #1:} \\
+		\textbf {Entrada:} #2 \\
+		\textbf {Salida:} #3 \\
+		\textbf {Procedimiento:} \\
+		#4
+	}}
+}
+
+\newcommand{\cifrasalg}[2]{
+	\algorithm{#1}{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999]$}{
+	$L$ y $N$ tales que $d(N,T)$ es mínima y puede construirse la serie de
+	operaciones con el algoritmo de obtención de operaciones}{#2}
+}
+
+\newcommand{\abs}[1]{|#1|}
+\theoremstyle{definition}
+\newtheorem{definition}{Definición}
+
+
+\title{Reto 2}
+\date{Estructura de Datos}
+\author{Pablo Baeyens Fernández\\José Manuel Muñoz Fuentes\\Darío Sierra Martínez}
+
+\begin{document}
+\maketitle
+
+\input{Intro.tex}
+\input{Algoritmo1.tex}
+\input{Combmagicas.tex}
+
+\end{document}
