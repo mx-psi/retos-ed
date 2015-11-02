@@ -3,17 +3,26 @@
 
 \begin{definition}
 	$n \in \mathbb{N}$ se dice \textbf{generable por $C$} si $n \in C$ o
-	existen $a,b$ generables por $C$ tal que $n = a \circ b$ para cierta operación
-	$\circ \in \{+,-,/,\cdot \}$. El conjunto de los elementos generables por $C$ se nota $C^{\ast}$.
+	existen $a,b$ generables por $C$ (generadores de $n$) tales que:
+	\begin{itemize}
+		\item $n = a \circ b$ para cierta operación $\circ \in \{+,-,/,\cdot \}$.
+		\item Si $a,b \in C$, $a \neq b$ contando repetición y en otro caso sus
+		generadores son distintos.
+	\end{itemize}
+	El conjunto de los elementos generables por $C$ se nota $C^{\ast}$.
 \end{definition}
 
 El problema consiste en describir el procedimiento de un algoritmo con la
 siguiente entrada y salida:
 
 \begin{description}
-	\item[Entrada:] Multiconjunto $C \subseteq C_T = [1,10] \cup \{ 25, 50, 75, 100\}$
-	de 6 elementos (no necesariamente distintos) y un entero $S \in [100, 999]$ llamado
-	\textbf{solución}.
+	\item[Entrada:] La entrada consiste de:
+		\begin{itemize}
+			\item Multiconjunto $C \subseteq C_T = [1,10] \cup \{ 25, 50, 75, 100\}$
+			de 6 elementos (no necesariamente distintos).
+			\item Entero $S \in [100, 999]$ llamado \textbf{solución}.
+		\end{itemize}
+
 	\item[Salida:] Lista de operaciones básicas ($+$,$-$,$\cdot$,$/$) tales que:
 	\begin{enumerate}
 		\item Cada operación usa sólo elementos generables por $C$.
