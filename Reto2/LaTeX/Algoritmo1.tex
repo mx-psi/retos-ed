@@ -20,9 +20,9 @@ Por comodidad,
 definiremos $L_i$ como el $i$-ésimo elemento de $L$, haremos referencia a los
 elementos de $L_i$ con $L_i.[n/i/j/op]$, y ``el valor de $L_i$'' hará referencia
 a $L_i.n$ si $L_i$ es lista o a $L_i$ si es un entero.
-Esta estructura de $L$ nos permitirá, una vez hallemos la solución o
-un resultado lo más cercano posible a la misma, obtener la secuencia de pasos
-que se han seguido hasta llegar a la misma,
+n entero. Esta estructura de $L$ nos permitirá obtener la secuencia de pasos que
+se han seguido hasta llegar a cualquier elemento de $L$ (en particular, al número
+pedido o a un número lo más cercano posible al mismo),
 mediante el siguiente procedimiento recursivo: \\
 
 \algorithm{de obtención de operaciones}
@@ -44,7 +44,7 @@ mediante el siguiente procedimiento recursivo: \\
 }\\
 
 Se observa que este procedimiento conmuta correctamente los operandos en el caso
-de las restas y los cocientes. \\
+de las restas y los cocientes a la hora de mostrar la operación. \\
 
 Además se necesitan más definiciones:\\
 \emph{Nota: en esta sección se definen funciones para poder describir el algoritmo.
@@ -99,20 +99,20 @@ $op$ con $a$ y $b$:
 	$c=b$. Por ello, no se añadirá un elemento a $L$ si surge de una operación
 	que da un resultado que coincida con el de uno de los elementos de los que se
 	obtuvo.
-	\item Si en una operación realizada cumple que $c < 0$, debe descartarse la
-	operación y no añadirse el elemento porque está prohibido emplear elementos
-	temporales negativos.
-	\item Si en una operación realizada cumple que $c = 0$, existe otra solución
-	que no emplea esta operación (puesto que con un $0$ temporal solo puede
-	obtenerse otro $0$ o un valor igual a otro número disponible, o en caso de
-	división indica una operación inválida). Por ello, se descartará la operación
-	en tal caso. Aquí es donde se aprovecha la redefinición de la división: como
-	hemos determinado que si la división $a/b$ no es exacta o $b=0$ el resultado
-	es $0$, esto hará que se descarte la operación en esos casos.
+  \item Si una operación realizada cumple que $c < 0$, debe descartarse el paso
+  y no añadirse el elemento porque está prohibido emplear elementos temporales
+  negativos.
+	\item Si una operación realizada cumple que $c = 0$, existe otra solución que
+  no emplea este paso (puesto que con un $0$ temporal solo puede obtenerse otro
+  $0$ o un valor igual a otro número disponible, o en caso de división indica
+  una operación inválida). Por ello, se descartará el paso en tal caso. Aquí es
+  donde se aprovecha la redefinición de la división: como hemos determinado que
+  si la división $a/b$ no es exacta o $b=0$ el resultado es $0$, esto hará que
+  se descarte el paso en esos casos.
 	\item Si $a$ surgió a partir de la misma operación $op$ que se está realizando
-	(es decir, $d\ op\ e = a,\ a\ op\ b = c$, y por tanto $(d\ op\ e)\ op\ b = c$),
-	existe otra solución que no emplea esta operación (y por tanto puede
-	descartarse esta operación), porque:
+  (es decir, $d\ op\ e = a,\ a\ op\ b = c$, y por tanto $(d\ op\ e)\ op\ b = c$),
+  existe otra solución que no emplea este paso (y por consiguente puede
+  descartarse este), porque:
 	\begin{itemize}
 		\item Si $op$ es conmutativa (es suma o producto), la expresión
 		$(d\ op\ e)\ op\ b = c$ equivale a $d\ op\ (e\ op\ b) = c$. Se hará esta
@@ -138,11 +138,14 @@ $op$ con $a$ y $b$:
 	\end{itemize}
 \end{itemize}
 
-Diremos que una lista $[n, i, j, op]$ es ``válida'' si no puede ser eliminada
-por todo lo expuesto. De esta forma, eliminaremos múltiples caminos que serían redundantes.\\
+Diremos que una lista $[n, i, j, op]$ es ``válida'' si no introduce un paso
+descartable por lo expuesto anteriormente. De esta forma, eliminaremos múltiples
+ caminos que serían redundantes.\\
 
-Se almacenará a cada elemento añadido el que más se aproxime a la solución en
-una variable llamada $N$. Cuando termine el algoritmo, se consultará $N$ y se generarán las operaciones realizadas con el algoritmo anterior. \\
+Se almacenará en una variable llamada $N$ el elemento que más se aproxime a la
+solución. Cuando termine el algoritmo, se consultará $N$ y se generarán las
+operaciones realizadas con el algoritmo anterior. \\
+
 
 El algoritmo que se propone, con los bucles expresados aprovechando las
 funciones definidas (después se repetirá con el inicio y final de los bucles
@@ -199,5 +202,5 @@ a la solución será el mínimo, tanto en el caso de resultado exacto como en
 caso de valor aproximado.\\
 
 El algoritmo no ordena los operandos en cada resta o cociente aunque sea necesario.
-En cualquier caso, como siempre hay un único resultado válido, el algoritmo
-que presenta la solución se encargará de ello.
+En cualquier caso, como siempre hay un único resultado válido, el algoritmo que
+presenta la solución se encargará de mostrar los operandos en el orden correcto.

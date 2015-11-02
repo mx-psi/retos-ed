@@ -1,0 +1,67 @@
+\section{Tipos de datos}
+\subsection{Tipo de dato para $L_k$}
+
+Cada $L_k$ debe contener, como mínimo, tipos de datos que se identifiquen con la
+ descripción que se dio anteriormente ($[n, i, j, op]$). Se implementaría
+ probablemente con una estructura que permitiese distintos tipos de datos.\\
+
+$n$ sería un tipo de dato entero con signo de, al menos, 32 bits. Es importante
+que el tamaño sea de al menos 32 bits, dado que si fuese de 16 bits sería posible
+ salirse del rango y obtener resultados falsos o perder resultados correctos.
+\begin{itemize}
+	\item Un ejemplo de resultado falso: si trabajamos con enteros de 16 bits con
+	signo, $100^2 \cdot 75$ daría como resultado $29104$, que podría dar lugar a
+	una solución falsa. Con $C=\{4, 6, 8, 75, 100, 100\},\ S = 911$ (ejemplo de
+	problema para el que no existe una solución exacta) se obtendría esta falsa
+	solución: $100 \cdot 100=10000; 10000 \cdot 75=29104;29104/8=3638;3638+6=3644;3644/4=911$.
+	\item Un ejemplo de problema que no podría resolverse sería
+	$C=\{3, 3, 25, 50, 75, 100\},\ S = 996$. Toda solución a este ejemplo pasa por
+	obtener el número $99600$, que está fuera del rango de los enteros de 16 bits
+	con o sin signo (si se ejecuta el algoritmo haciendo que se rechace todo
+	resultado temporal igual a $99600$ de forma similar a como se hace con el
+	$0$, no se obtiene solución exacta). Una solución (podría ser la única) es:
+	$3 \cdot 50 = 53; 25 \cdot 53 = 1325; 3+1325=1328; 75 \cdot 1328 = 99600; 99600/100=996$.
+\end{itemize}
+
+$i$ y $j$ serían dos enteros de 32 bits que indicarían la posición de los $L_i$
+y $L_j$ de los que se obtuvo el nodo anterior. Dado que los $L_k$ deben tener
+todos la misma estructura, y en lo propuesto los seis primeros elementos (que
+procedían de $C$) estaban compuestos solo por un número, para esos seis
+elementos iniciales podrían tomar un valor arbitrario (por ejemplo, el valor
+inválido -1, lo que requeriría enteros con signo). \\
+
+$op$ representaría la operación con la que se obtuvo el elemento.
+Podría representarse con cualquier tipo de dato. Para los seis primeros
+elementos, podría tomar un valor arbitrario, preferiblemente inválido.\\
+
+De cara al algoritmo que genera las operaciones con las que se llegó a un
+elemento, interesaría que, en los seis primeros elementos, al menos uno de los
+tres últimos elementos que componen esta estructura tuviese un valor inválido,
+dado que el algoritmo debe no hacer nada cuando está siendo ejecutado con uno
+de los seis primeros elementos como entrada. \\
+
+Además de los datos anteriores, que son indispensables, probablemente interesará
+ añadir más elementos a la estructura:
+
+\begin{itemize}
+	\item Incluir un entero que indique la generación del elemento podría reducir
+	el tiempo de ejecución del algoritmo respecto del tiempo que necesitaría si
+	emplease una función que calculase la generación de un elemento explorando los
+	 elementos de los que procede. Un entero de 16 bits, que tomase el valor de la
+	  suma de las generaciones de los elementos de los que procede y que tomase el
+		 valor 1 para los elementos iniciales, sería suficiente para ello.
+	\item Sería particularmente interesante incluir un entero sin signo de al
+	menos 16 bits que indique en el $i$-ésimo bit menos significativo si se ha
+	usado el $i$-ésimo elemento del multiconjunto de números disponibles $C$. Tal
+	bit sería $1$ si lo ha usado, o $0$ si no. Esto supondría que la comprobación
+	de si dos elementos se solapan sería tan simple como comprobar si la operación
+	lógica $AND$ de ambos es un valor no nulo. Al añadir nuevos elementos a $L$,
+	este dato tomaría el valor de la operación lógica $OR$ sobre los datos en los
+	dos elementos de los que se obtiene el nuevo. Por ejemplo, si el valor de
+	este dato para dos elementos fuese $001011$ y $110000$, el elemento que se
+	obtendría al operar con ambos tendría en este dato el valor $111011$. Este
+	dato tomaría, para el elemento inicial $i$-ésimo, el valor $2^{i-1}$ o
+	$1 << i$. ($1$ para el primero, $2$ para el segundo, $4$ para el tercero \ldots)
+\end{itemize}
+
+\subsection{Tipo de dato para $L$}
