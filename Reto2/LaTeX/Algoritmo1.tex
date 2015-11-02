@@ -4,9 +4,10 @@
 Este algoritmo tiene como objetivo construir todos los caminos posibles
 que pueden seguirse usando los números de $C$ y las operaciones disponibles,
 dando una solución exacta en cuanto se encuentre o el camino con una solución lo
- más cercana posible a $S$. Para ello, ampliará $L$ con listas de 4 elementos
+más cercana posible a $S$. Para ello, ampliará $L$ con listas de 4 elementos
 $[n, i, j, op]$, donde $n$ es un entero obtenido a partir de los elementos que ocupan
-las posiciones $i$ y $j$ en $L$ mediante la operación $op$.\\
+las posiciones $i$ y $j$ en $L$ mediante la operación $op$, según se
+definieron las operaciones en la introducción.\\
 
 Por comodidad,
 definiremos $L_i$ como el $i$-ésimo elemento de $L$, haremos referencia a los
@@ -22,8 +23,9 @@ mediante el siguiente procedimiento recursivo:\\
 	\If{$N \neq n$}{
 	Aplica este algoritmo con entrada $L$, $L_i$\;
 	Aplica este algoritmo con entrada $L$, $L_j$\;
-	\If{$op$ no es conmutativa y $L_i.n < L_j.n$}{intercambia $i$ y $j$\;}}
+	\If{$op$ no es conmutativa y $L_i.n < L_j.n$}{intercambia $i$ y $j$\;}
 	\KwRet{\texttt{a operador b = n}, con $a = L_i.n$, $b = L_j.n$}
+	}
 \caption{Obtención de operaciones}
 \end{algorithm}
 
@@ -82,8 +84,8 @@ devuelve un $L$ y $N$ con los que se podrá construir, con el algoritmo anterior
 solución que se acerque lo más posible al objetivo:\\
 
 \begin{algorithm}[H]
-\KwIn{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999]$}
-\KwOut{$L$ y $N$ con $d(N,T)$ mínima.}
+\KwIn{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $S \in [100, 999]$}
+\KwOut{$L$ y $N$ con $|N-S|$ mínima.}
 
 $L = [c_1, c_2, c_3, c_4, c_5, c_6]$\;
 $N = c_6$\;
@@ -94,9 +96,9 @@ $N = c_6$\;
 				\ForAll{$op \in \{+,-,\cdot,/\}$}{
 					\If{$[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es \textbf{válida}}{
 					 Añadir $[n, i, j, op]$ a $L$\;
-           \If{$|n-T| < |N.n-T|$}{
-             $N.n \leftarrow [n, i, j, op]$
-               \If{$N = T$}
+           \If{$|n-S| < |N.n-S|$}{
+             $N.n \leftarrow [n, i, j, op]$\;
+               \If{$N.n = S$}
                {\KwRet{$L,N$}}
            }
 					}
