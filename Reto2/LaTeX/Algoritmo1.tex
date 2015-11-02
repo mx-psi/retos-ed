@@ -1,6 +1,6 @@
 \section{Primer algoritmo}
 
-\subsection{Almacenamiento de resultados}
+\subsection{Almacenamiento y presentación de resultados}
 Este algoritmo tiene como objetivo construir todos los caminos posibles
 que pueden seguirse usando los números de $C$ y las operaciones disponibles,
 dando una solución exacta en cuanto se encuentre o el camino con una solución lo
@@ -14,7 +14,7 @@ elementos de $L_i$ con $L_i.[n/i/j/op]$, y ``el valor de $L_i$'' hará referenci
 a $L_i.n$ si $L_i$ es lista o a $L_i$ si es un entero.
 Esta estructura de $L$ nos permitirá obtener la secuencia de pasos que
 se han seguido hasta llegar a cualquier elemento de $L$
-mediante el siguiente procedimiento recursivo:
+mediante el siguiente procedimiento recursivo:\\
 
 \begin{algorithm}[H]
 	\KwIn{$L$ y $N$, con $N = [n, i, j, op]$ o $N = n$}
@@ -50,7 +50,6 @@ lista que lo constituye.}
 La generación representa el número de elementos que han sido necesarios
 para obtener $L_k$, o también el número de operaciones que se han
 requerido más $1$.
-
 El algoritmo se ejecutará de forma que, en cada iteración, se obtendrán
 elementos que serán exclusivamente de una generación en particular,
 controlando la generación de los dos elementos de los que procede cada uno.

@@ -43,8 +43,7 @@ dados 2 elementos $a,b \in \mathbb{N}^{\ast}$ existen cómo máximo 4 operacione
 	\item $a+b$. Basta considerar un orden ya que es conmutativa.
 	\item $a\cdot b$. Basta considerar un orden ya que es conmutativa.
 	\item $\abs{a-b}$. Esta operación se corresponde con la resta del menor al mayor.
-	\item $a/b$. Sólo si $b$ divide a $a$. Basta considerar un orden ya que si $a > b$,
-	$b \nmid a$ y si $a = b$, $a/b = b/a$.
+	\item $\max\{a,b\}/\min\{a,b\}$. Esta operación es el cociente del mayor entre el menor, y solo es posible si el menor divide al mayor y el menor no es igual a $0$. Solo hay como máximo un orden posible porque $a > b \implies a \nmid b$ y $a = b \implies a/b = b/a$.
 \end{enumerate}
 
 Sea $a \circ b = c$ una cierta operación.
