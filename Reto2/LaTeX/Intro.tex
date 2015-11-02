@@ -37,13 +37,14 @@ que se identifica con el multiconjunto $C$.
 \subsection{Operaciones posibles}
 
 Podemos notar que para cumplir las condiciones de la salida del algoritmo,
-dados 2 elementos $a,b$ existen cómo máximo 4 operaciones válidas:
+dados 2 elementos $a,b \in \mathbb{N}^{\ast}$ existen cómo máximo 4 operaciones válidas:
 
 \begin{enumerate}
 	\item $a+b$. Basta considerar un orden ya que es conmutativa.
 	\item $a\cdot b$. Basta considerar un orden ya que es conmutativa.
 	\item $\abs{a-b}$. Esta operación se corresponde con la resta del menor al mayor.
-	\item $a/b$. Sólo si $b$ divide a $a$.
+	\item $a/b$. Sólo si $b$ divide a $a$. Basta considerar un orden ya que si $a > b$,
+	$b \nmid a$ y si $a = b$, $a/b = b/a$.
 \end{enumerate}
 
 Sea $a \circ b = c$ una cierta operación.
