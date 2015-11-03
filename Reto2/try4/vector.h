@@ -1,12 +1,14 @@
 #include <iostream>
+#include <algorithm>
 
 class Vector{
-  int v[7];
+  int v[6];
   int nelem;
 public:
 
   // Constructor a partir de un vector
   Vector(int l[6]):nelem(6){
+    std::sort(l, l+6);
     for (int i = 0; i < 6; i++)
       v[i] = l[i];
   }

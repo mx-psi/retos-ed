@@ -1,25 +1,44 @@
 #include "pila.h"
 #include "vector.h"
 #include <ctime>
-#include <algorithm>
 using namespace std;
 
 // Distancia
 inline int d(int a, int b){return abs(a-b);}
 
 bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
-  for (int op = 0; op < 4; op++) {
-    for (int j = nums.no_usa_uno(op); j < nums.size(); j+=nums.dup(j)){
-      int nums_j = nums[j];
-      for (int k = j+1; k < nums.size(); k+=nums.dup(k)){
-        int nums_k = nums[k];
-        int res = Opera(nums_j, nums_k, op);
-        if(res == 0) continue;
 
-        p.push({nums_j, nums_k, op});
-        nums.borra(k);
-        nums.borra(j);
-        int pos = nums.inserta(res);
+  // Caso base: 2 elementos
+  if(nums.size() == 2){
+    for (int op = 0; op < 4; op++) {
+      int res = Opera(nums[0], nums[1], op);
+      if(res == 0)
+        continue;
+
+      if(d(res,obj) < d(m_a,obj)){
+        m_a = res;
+        if(d(obj,m_a) == 0){
+          p.push({nums[0], nums[1], op});
+          return true;
+        }
+      }
+    }
+   return false;
+  }
+
+  // Caso recursivo: más de 2
+  for (int op = 0; op < 4; op++) {
+    for (int i = nums.no_usa_uno(op); i < nums.size(); i+=nums.dup(i)){
+      int nums_i = nums[i];
+      for (int j = i+1; j < nums.size(); j+=nums.dup(j)){
+        int nums_j = nums[j];
+        int res = Opera(nums_i, nums_j, op);
+        if(res == 0 || res == nums_i || res == nums_j) continue;
+
+        p.push({nums_i, nums_j, op});
+        nums.borra(j); // Borramos primero j para conservar posiciones
+        nums.borra(i);
+        int pos = nums.inserta(res); //pos: Posición de res
 
         if(d(res,obj) < d(m_a,obj)){
           m_a = res;
@@ -30,12 +49,11 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
 
         p.pop();
         nums.borra(pos);
-        nums.inserta(nums_k);
         nums.inserta(nums_j);
+        nums.inserta(nums_i);
       }
     }
   }
-  return false;
 }
 
 int main(){
@@ -47,23 +65,25 @@ int main(){
 
   for (int i = 0; i < 6; i++)
     list[i] = posibles[rand()%14];
-  sort(list, list+6);
 
   Pila p;
+  int m_a = 0;
+
   Vector nums(list);
-  int m_a = list[5];
 
   // Objetivo
   cout << nums << "⟶ " << obj << endl;
 
+  // Algoritmo
   clock_t tini = clock();
   Cifras(obj,nums,p,m_a);
   clock_t tfin = clock();
 
-  // Solución
+  // Impresión de la solución
   cout << "Obtenida: " << m_a << endl;
-  cout << p;
+  bool usados[6];
+  if(!p.empty())
+    p.Imprime(list, usados, p.size()-1);
 
-  // Tiempo
   cout << (tfin-tini)/(double)CLOCKS_PER_SEC << endl;
 }
