@@ -175,6 +175,11 @@ int main(int argc, char* argv[]) {
    }
 
    ImprimeEntrada(solucion, disponibles);
+   clock_t tini = clock();
    Cifras(solucion, disponibles);
+   clock_t tfin = clock();
+
+   // Muestra el tiempo transcurrido
+   cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }
 

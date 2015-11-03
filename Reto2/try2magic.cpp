@@ -169,6 +169,8 @@ bool Cifras(int disponibles[]) {
 
 // Programa principal. Comprueba todas las combinaciones en busca de las que sean mágicas
 int main() {
+   clock_t tini = clock();
+
    int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
    int a, b, c, d, e, f;
    for (a = 0; a < 14; a++)
@@ -180,5 +182,10 @@ int main() {
            int disponibles[6] = {posibles[a],posibles[b],posibles[c],posibles[d],posibles[e],posibles[f]};
            Cifras(disponibles);
         }
+
+   clock_t tfin = clock();
+
+   // Muestra el tiempo transcurrido
+   cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }
 
