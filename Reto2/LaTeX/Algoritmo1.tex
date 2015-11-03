@@ -1,12 +1,14 @@
 \section{Primer algoritmo}
 
-\subsection{Almacenamiento de resultados}
+\subsection{Almacenamiento y presentación de resultados}
 Este algoritmo tiene como objetivo construir todos los caminos posibles
 que pueden seguirse usando los números de $C$ y las operaciones disponibles,
 dando una solución exacta en cuanto se encuentre o el camino con una solución lo
- más cercana posible a $S$. Para ello, ampliará $L$ con listas de 4 elementos
-$[n, i, j, op]$, donde $n$ es un entero obtenido a partir de los elementos que ocupan
-las posiciones $i$ y $j$ en $L$ mediante la operación $op$.\\
+más cercana posible a $S$. Para ello, ampliará $L$ (que era la lista que se
+identificaba con $C$) con listas de 4 elementos $[n, i, j, op]$, donde $n$ es un
+entero obtenido a partir de los elementos que ocupan las posiciones $i$ y $j$ en
+$L$ mediante la operación $op$, según se definieron las operaciones en la
+introducción.\\
 
 Por comodidad,
 definiremos $L_i$ como el $i$-ésimo elemento de $L$, haremos referencia a los
@@ -14,7 +16,7 @@ elementos de $L_i$ con $L_i.[n/i/j/op]$, y ``el valor de $L_i$'' hará referenci
 a $L_i.n$ si $L_i$ es lista o a $L_i$ si es un entero.
 Esta estructura de $L$ nos permitirá obtener la secuencia de pasos que
 se han seguido hasta llegar a cualquier elemento de $L$
-mediante el siguiente procedimiento recursivo:
+mediante el siguiente procedimiento recursivo:\\
 
 \begin{algorithm}[H]
 	\KwIn{$L$ y $N$, con $N = [n, i, j, op]$ o $N = n$}
@@ -22,13 +24,16 @@ mediante el siguiente procedimiento recursivo:
 	\If{$N \neq n$}{
 	Aplica este algoritmo con entrada $L$, $L_i$\;
 	Aplica este algoritmo con entrada $L$, $L_j$\;
-	\If{$op$ no es conmutativa y $L_i.n < L_j.n$}{intercambia $i$ y $j$\;}}
+	\If{$op$ no es conmutativa y $L_i.n < L_j.n$}{intercambia $i$ y $j$\;}
 	\KwRet{\texttt{a operador b = n}, con $a = L_i.n$, $b = L_j.n$}
+	}
 \caption{Obtención de operaciones}
 \end{algorithm}
 
 Se observa que este procedimiento conmuta correctamente los operandos en el caso
-de las restas y los cocientes a la hora de mostrar la operación.
+de las restas y los cocientes a la hora de mostrar la operación, por lo que el
+algoritmo no tendrá que preocuparse por almacenar el orden en el que se encontraban
+los operandos (aunque sí por efectuar correctamente cada operación).
 
 \subsection{Algoritmo}
 
@@ -41,7 +46,8 @@ lista que lo constituye.}
 \begin{definition}
   Sea $L_k \in L$:
   \begin{itemize}
-    \item $L_k$ es de \textbf{primera generación}, $\gen(L_k) = 1$ si $L_k \in C$.
+    \item $L_k$ es de \textbf{primera generación}, $\gen(L_k) = 1$ si $L_k \in C$
+    (es decir, si es uno de los 6 elementos iniciales).
     \item $L_k$ es de \textbf{$n$-ésima generación}, $\gen(L_k) = n$ si $\gen(L_{L_k.i}) + \gen(L_{L_k.j}) = n$.
   \end{itemize}
   Los \textbf{miembros} de una generación $i$ son $\operatorname{miembros}(i) = \{L_k : gen(k) = i\}$.
@@ -50,15 +56,15 @@ lista que lo constituye.}
 La generación representa el número de elementos que han sido necesarios
 para obtener $L_k$, o también el número de operaciones que se han
 requerido más $1$.
-
 El algoritmo se ejecutará de forma que, en cada iteración, se obtendrán
 elementos que serán exclusivamente de una generación en particular,
-controlando la generación de los dos elementos de los que procede cada uno.
+controlando la generación de los dos elementos de los que procede cada uno.\\
 
 Los conjuntos de miembros nos permiten diferenciar los elementos de $L$ según en
 qué momento de la ejecución del algoritmo han sido obtenidos y determinar el
 inicio y el final de los bucles que recorren los elementos con los que se operará
-en cada paso.
+en cada paso. Como el algoritmo generará los elementos de generación en generación,
+será posible determinar la generación de un elemento por su posición.
 
 \begin{definition}
   Sea $L_k \in L$. Los \textbf{números usados por $L_k$}, $U(L_k)$ son:
@@ -72,32 +78,32 @@ en cada paso.
 
 De esta forma, $U(L_k)$ representa el conjunto de números de $C$ que han
 intervenido para obtener $L_k$, y dos elementos se solaparán cuando tengan
-algún elemento inicial en común. Esto será crucial para poder comprobar a cada
+algún elemento de $C$ en común. Esto será crucial para poder comprobar a cada
 paso del algoritmo si es posible operar con dos elementos entre sí: cada par
 de elementos que se usen para añadir uno nuevo deben no solaparse. \\
 
-Se almacenará en $N$ la mejor aproximación de $S$.
-Cuando termine el algoritmo, se consultará $N$ y se generarán las
-operaciones realizadas con el algoritmo anterior. El algoritmo que se propone
-devuelve un $L$ y $N$ con los que se podrá construir, con el algoritmo anterior, una
-solución que se acerque lo más posible al objetivo:\\
+Se almacenará en $N$ la mejor aproximación de $S$. Cuando termine el
+algoritmo, se consultará $N$ y se generarán las operaciones realizadas para
+obtener $N$ con el algoritmo anterior.\\
+
+Finalmente, el algoritmo queda así:\\
 
 \begin{algorithm}[H]
-\KwIn{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $T \in [100, 999]$}
-\KwOut{$L$ y $N$ con $d(N,T)$ mínima.}
+\KwIn{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $S \in [100, 999]$}
+\KwOut{$L$ y $N$ con $|N-S|$ mínima.}
 
 $L = [c_1, c_2, c_3, c_4, c_5, c_6]$\;
 $N = c_6$\;
-\ForAll{$g = 2$ hasta $6$}{
+\ForAll{$g$ desde $2$ hasta $6$}{
 	\ForAll{$i$ tal que $2 \cdot \gen(L_i) \le g$}{
 		\ForAll{$j \in miembros(g-\gen(L_i))$ tal que $j > i$:}{
 			\If{$U(L_i) \cap  U(L_j) = \emptyset$}{
 				\ForAll{$op \in \{+,-,\cdot,/\}$}{
 					\If{$[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es \textbf{válida}}{
 					 Añadir $[n, i, j, op]$ a $L$\;
-           \If{$|n-T| < |N.n-T|$}{
-             $N.n \leftarrow [n, i, j, op]$
-               \If{$N = T$}
+           \If{$|n-S| < |N.n-S|$}{
+             $N.n \leftarrow [n, i, j, op]$\;
+               \If{$N.n = S$}
                {\KwRet{$L,N$}}
            }
 					}
@@ -117,7 +123,7 @@ lista $G$ de 6 elementos, que indicará en la posición $G_i$ el primer elemento
 de $L$ que es de $i$-ésima generación. Definiremos también $G_7$ como la posición
 siguiente a la del último elemento de $L$.
 La función $\operatorname{miembros}(i)$ podría redefinirse aprovechando $G$ como
- $\{L_k : k \ge G_i, k < G_{i+1}\}$.
+$\{L_k : k \ge G_i, k < G_{i+1}\}$.
 
 % Los dejo comentados porque el código está sujeto a cambios. Cuando esté listo del todo, lo reescribiré (sin borrar el actual) con esto en los bucles:
 % Los dos bucles quedarían así ('hasta' indica el último elemento, no el primero que no está):

@@ -5,26 +5,34 @@ using namespace std;
 
 const char OPERADORES[] = {'+', '-', '*', '/'};   // Se va a indicar la suma con 0, la resta con 1, el producto con 2 y el cociente con 3
 
+// Calcula la diferencia entre dos enteros
 inline int Diferencia(int a, int b) {
    return b<=a ? a-b : b-a;
 }
 
-// Hace a op b. Aprovecha que siempre hay como mucho una resta y una division permitida
+// Calcula el cociente de dos enteros, según se describió el cociente en la teoría
+inline int Cociente(int a, int b) {
+	return a%b == 0 ? a/b : (b%a == 0 ? b/a : 0);
+}
+
+// Hace a op b
 inline int Opera(int a, int b, short int op) {
    if (op == 0)   return a+b;
    if (op == 1)   return Diferencia(a, b);
    if (op == 2)   return a*b;
-   if (op == 3)   return (a == 0 || b == 0) ? 0 : (a%b == 0 ? a/b : (b%a == 0 ? b/a : 0));
+   if (op == 3)   return Cociente(a, b);
 }
 
+// Estructura para el elemento L_k
 struct Nodo {
-   int previo1, previo2; // Posiciones de los nodos anteriores
-   short int op;         // Operación con la que se ha llegado a este nodo
-   int generacion;       // Puede obtenerse de usados, pero está aquí para acelerar
-   unsigned int usados;  // El i-ésimo bit menos significativo indica si el i-ésimo número disponible está usado
+   int previo1, previo2;       // Posiciones de los nodos anteriores
+   short int op;               // Operación con la que se ha llegado a este nodo
+   short int generacion;       // Puede obtenerse de usados, pero está aquí para acelerar
+   unsigned short int usados;  // El i-ésimo bit menos significativo indica si el i-ésimo número disponible está usado
    int valor;
 };
 
+// Clase para la lista L
 class VectorNodos {
 private:
    static const int CAPACIDAD = 1144386;	// Máximo tamaño posible para 6 generaciones sin considerar la poda por asociatividad
@@ -50,20 +58,21 @@ public:
       return elementos;
    }
    // Indica en qué posición se inician los elementos de una generación
-   int ComienzoGeneracion(int g) const {
+   int ComienzoGeneracion(short int g) const {
       return comienzo_generacion[g];
    }
    // Almacena la próxima posición en la que se guardarán nodos como la posición de la generación indicada
-   void NuevaGeneracion(int g) {
+   void NuevaGeneracion(short int g) {
       comienzo_generacion[g] = elementos;
    }
 };
 
 // Comprueba si un par de nodos proceden de un mismo número inicial (y por tanto no pueden combinarse)
-inline bool SeSolapan(unsigned int a, unsigned int b) {
+inline bool SeSolapan(unsigned short int a, unsigned short int b) {
    return a&b;
 }
 
+// Indica si una operación es asociativa
 inline bool Asociativa(short int k) {
    return k%2 == 0;
 }
@@ -77,17 +86,18 @@ inline bool MalAsociacion(const VectorNodos &nodos, int i, int j, short int k) {
    return nodos[i].op == k || (nodos[j].op == k && (!Asociativa(k) || nodos[j].previo1 < i));
 }
 
+// Indica si el resultado de la operación coincide con el valor de uno de los nodos de los que procede
 inline bool Repite(const VectorNodos &nodos, int resultado, int i, int j) {
    return resultado == nodos[i].valor || resultado == nodos[j].valor;
 }
 
-// Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
-bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, int generacion) {
+// Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos, hasta que se encuentre el objetivo
+bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, short int generacion) {
    nodos.NuevaGeneracion(generacion);
    Nodo nuevo;
    int tope_i = nodos.ComienzoGeneracion((generacion+1)/2+1);
    for (int i = 0; i < tope_i; i++) {
-      unsigned int usados_i = nodos[i].usados;
+      unsigned short int usados_i = nodos[i].usados;
       int inicio_j = max(i+1, nodos.ComienzoGeneracion(generacion-nodos[i].generacion));
       int tope_j = nodos.ComienzoGeneracion(generacion-nodos[i].generacion+1);
       for (int j = inicio_j; j < tope_j; j++)
@@ -124,25 +134,33 @@ void Recrea(const VectorNodos &vec, const Nodo &nodo) {
    }
 }
 
-// Resuelve un problema y muestra la solución
+// Muestra los números disponibles y el número objetivo
+void ImprimeEntrada(int solucion, int disponibles[]) {	
+   cout << "[";
+   for(int i = 0; i < 6; i++)
+      cout << (i?",":"") << disponibles[i];
+   cout << "] --> " << solucion << '\n' << endl;
+}
+
+// Resuelve un problema y muestra la solución y el tiempo empleado
 void Cifras(int solucion, int disponibles[]) {
+   ImprimeEntrada(solucion, disponibles);
+   clock_t tini = clock();
+   
    VectorNodos nodos;
    Nodo nodo;
-   for (int i = 0; i < 6; i++)
+   for (short int i = 0; i < 6; i++)
       nodos.push_back(nodo = {0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
 
    int mas_cercano = 0;
    for (int g = 2; OtraGeneracion(nodos, mas_cercano, solucion, g); g++);
 
-   Recrea(nodos, nodos[mas_cercano]);
-}
+   clock_t tfin = clock();
 
-// Muestra los números disponibles y el número objetivo
-void ImprimeEntrada(int solucion, int disponibles[]) {
-   cout << "[";
-   for(int i = 0; i < 6; i++)
-      cout << (i?",":"") << disponibles[i];
-   cout << "] --> " << solucion << '\n' << endl;
+   Recrea(nodos, nodos[mas_cercano]);
+
+   // Muestra el tiempo transcurrido
+   cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }
 
 // Programa principal. Genera los números al azar si no se pasan siete parámetros
@@ -153,7 +171,8 @@ int main(int argc, char* argv[]) {
       solucion = atoi(argv[7]);
       for (int i = 0; i < 6; i++)
          disponibles[i] = atoi(argv[i+1]);
-   } else {
+   }
+	else {
       int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
 
       srand(time(0));
@@ -163,12 +182,5 @@ int main(int argc, char* argv[]) {
          disponibles[i] = posibles[rand()%14];
    }
 
-   ImprimeEntrada(solucion, disponibles);
-
-   clock_t tini = clock();
    Cifras(solucion, disponibles);
-   clock_t tfin = clock();
-
-   // Tiempo
-   cout << (tfin-tini)/(double)CLOCKS_PER_SEC << endl;
 }
