@@ -25,10 +25,10 @@ inline int Opera(int a, int b, short int op) {
 
 // Estructura para el elemento L_k
 struct Nodo {
-   int previo1, previo2; // Posiciones de los nodos anteriores
-   short int op;         // Operación con la que se ha llegado a este nodo
-   int generacion;       // Puede obtenerse de usados, pero está aquí para acelerar
-   unsigned int usados;  // El i-ésimo bit menos significativo indica si el i-ésimo número disponible está usado
+   int previo1, previo2;       // Posiciones de los nodos anteriores
+   short int op;               // Operación con la que se ha llegado a este nodo
+   short int generacion;       // Puede obtenerse de usados, pero está aquí para acelerar
+   unsigned short int usados;  // El i-ésimo bit menos significativo indica si el i-ésimo número disponible está usado
    int valor;
 };
 
@@ -59,11 +59,11 @@ public:
       return elementos;
    }
    // Indica en qué posición se inician los elementos de una generación
-   int ComienzoGeneracion(int g) const {
+   int ComienzoGeneracion(short int g) const {
       return comienzo_generacion[g];
    }
    // Almacena la próxima posición en la que se guardarán nodos como la posición de la generación indicada
-   void NuevaGeneracion(int g) {
+   void NuevaGeneracion(short int g) {
       comienzo_generacion[g] = elementos;
    }
    // Marca un número entre 100 y 999 como obtenido
@@ -82,7 +82,7 @@ public:
 };
 
 // Comprueba si un par de nodos proceden de un mismo número inicial (y por tanto no pueden combinarse)
-inline bool SeSolapan(unsigned int a, unsigned int b) {
+inline bool SeSolapan(unsigned short int a, unsigned short int b) {
    return a&b;
 }
 
@@ -106,12 +106,12 @@ inline bool Repite(const VectorNodos &nodos, int resultado, int i, int j) {
 }
 
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
-bool OtraGeneracion(VectorNodos &nodos, int generacion) {
+bool OtraGeneracion(VectorNodos &nodos, short int generacion) {
    nodos.NuevaGeneracion(generacion);
    Nodo nuevo;
    int tope_i = nodos.ComienzoGeneracion((generacion+1)/2+1);
    for (int i = 0; i < tope_i; i++) {
-      unsigned int usados_i = nodos[i].usados;
+      unsigned short int usados_i = nodos[i].usados;
       int inicio_j = max(i+1, nodos.ComienzoGeneracion(generacion-nodos[i].generacion));
       int tope_j = nodos.ComienzoGeneracion(generacion-nodos[i].generacion+1);
       for (int j = inicio_j; j < tope_j; j++)
@@ -161,7 +161,7 @@ bool Cifras(int disponibles[]) {
    for (int i = 0; i < 6; i++)
       nodos.push_back(nodo = {0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
 
-   for (int g = 2; OtraGeneracion(nodos, g); g++);
+   for (short int g = 2; OtraGeneracion(nodos, g); g++);
 
    if (nodos.Magica())
    	ImprimeCombinacion(disponibles);
