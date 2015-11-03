@@ -12,7 +12,7 @@ inline int Diferencia(int a, int b) {
 
 // Calcula el cociente de dos enteros, según se describió el cociente en la teoría
 inline int Cociente(int a, int b) {
-	return (a == 0 || b == 0) ? 0 : (a%b == 0 ? a/b : (b%a == 0 ? b/a : 0));
+	return a%b == 0 ? a/b : (b%a == 0 ? b/a : 0);
 }
 
 // Hace a op b
