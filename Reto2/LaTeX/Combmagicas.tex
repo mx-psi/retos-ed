@@ -3,4 +3,73 @@
 \begin{definition}
   Una combinación $C$ se dice \textbf{mágica} si $[100,999] \subseteq C^{\ast}$.
 \end{definition}
+
+No existen propiedades destacables de las combinaciones mágicas, que nos permitan
+acotar el número de casos a probar. Podemos destacar que:
+\begin{enumerate}
+\item La multiplicación de sus elementos debe ser mayor o igual que 1000. %¿Seguro?
+\item Las combinaciones son heterogéneas. %????
+\end{enumerate}
+
 \subsection{Algoritmo para buscar combinaciones mágicas}
+
+Proponemos una refinación de la fuerza bruta:
+
+\subsection{Versión 1}
+Podría ocurrirsenos ejecutar 900 veces el algoritmo con cada combinación para
+ver si encuentra todos los números del 100, y eso ejecutarlo con las 27 mil
+combinaciones.
+
+Teniendo en cuenta que el tiempo de ejecución del peor caso (cualquier número
+que no se pueda obtener), en nuestra máquina ronda la décima de segundo el % Depende del algoritmo
+tiempo de ejecución total vendría dado por:
+$$ 0.1\frac{segundos}{ejecucion} \cdot 27'132 combinaciones  \cdot 900 \frac{ejecuciones}{combinacion}=2'441'880s \simeq 1 mes$$
+Evidentemente esto no es viable.
+
+\subsection{Versión 2}
+Si nos damos cuenta de que no tenemos que ejecutar el algoritmo 900 veces la
+cosa mejora, si buscamos un número que de antemano sabemos que no puede estar
+(ej: -1), estaremos generando todos los números posibles con el vector de
+entrada, de manera que podemos saber con una única ejecuión si la
+combinación es o no mágica.
+
+\subsubsection{Algoritmo de Verificación}
+Para verificar si la combinación es mágica modificaremos el algoritmo de
+busqueda anteriormente descrito. Puesto que no buscamos ningún número en
+concreto modificaremos la condición de parada.
+
+Creamos un vector con 900 booleanos, ejecutamos el algoritmo de búsqueda
+modificado, de manera que si un valor generado se encuentra entre 100 y 1000
+esa posición se pone a \textbf{true}. Si el vector entero está puesto a
+\textbf{true} antes de la finalización del algoritmo la combinación es mágica.
+
+Teniendo en cuenta que de esta manera nos quitamos el factor 900 el tiempo total
+usando 0.1 s como el tiempo en el peor caso tenemos que:
+$$ 0.1\frac{segundos}{ejecucion} \cdot 27'132 combinaciones  \cdot 1 \frac{ejecuciones}{combinacion}=2'713.2s \simeq 45 \textit{ minutos}$$
+Un tiempo mucho más razonable.
+
+\vspace{0.25cm}
+Describimos aquí el algoritmo con más detalle:
+\vspace{0.25cm}
+
+\begin{algorithm}[H]
+
+ \KwIn{$v_0,..v_n$, vector de n elementos;  $N$, meta, $\operatorname{aproximacion}=v_0$,\;
+  $p_0,..,p_k$ booleanos}
+
+ \KwOut{\texttt{true}, si $p_i =\texttt{true} $ $\forall i$, \texttt{false} en otro caso}
+ \hspace{0.25cm}	Sean los $b_0,..,b_{m}$ resultado de combinar los $v_i$ y $v_j$ $i \neq j$  \;
+ \While{$i<m$ y $\exists j$ tal que $p_j=\textbf{false}$}{
+
+  \eIf{$b_i$ $\geq 100$ y $b_i$ $\leq$ $1000$ }{
+   		$p_i=\textbf{true}$;
+   }{
+
+	Repetir el algoritmo con los $v_j$ que no se usaron para crear el $b_i$ y el $b_i$ \;
+	Avanzar el índice $i$ \;
+  }
+ }
+
+\end{algorithm}
+
+Si todos los $p_k$ están puestos a $\textbf{true}$ la combinación es mágica.
