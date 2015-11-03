@@ -5,22 +5,25 @@ using namespace std;
 
 const char OPERADORES[] = {'+', '-', '*', '/'};   // Se va a indicar la suma con 0, la resta con 1, el producto con 2 y el cociente con 3
 
+// Calcula la diferencia entre dos enteros
 inline int Diferencia(int a, int b) {
    return b<=a ? a-b : b-a;
 }
 
-inline int Maximo(int a, int b) {
-   return b<=a ? a : b;
+// Calcula el cociente de dos enteros, según se describió el cociente en la teoría
+inline int Cociente(int a, int b) {
+	return (a == 0 || b == 0) ? 0 : (a%b == 0 ? a/b : (b%a == 0 ? b/a : 0));
 }
 
-// Hace a op b. Aprovecha que siempre hay como mucho una resta y una division permitida
+// Hace a op b
 inline int Opera(int a, int b, short int op) {
    if (op == 0)   return a+b;
    if (op == 1)   return Diferencia(a, b);
    if (op == 2)   return a*b;
-   if (op == 3)   return (a == 0 || b == 0) ? 0 : (a%b == 0 ? a/b : (b%a == 0 ? b/a : 0));
+   if (op == 3)   return Cociente(a, b);
 }
 
+// Estructura para el elemento L_k
 struct Nodo {
    int previo1, previo2; // Posiciones de los nodos anteriores
    short int op;         // Operación con la que se ha llegado a este nodo
@@ -29,14 +32,15 @@ struct Nodo {
    int valor;
 };
 
+// Clase para la lista L
 class VectorNodos {
 private:
    static const int CAPACIDAD = 1144386;	// Máximo tamaño posible para 6 generaciones sin considerar la poda por asociatividad
    Nodo* nodos;
    int elementos;
    int comienzo_generacion[7];
-   bool barrido[1000];
-   
+   bool barrido[1000];		// Para las posiciones 100~999, almacena si algún elemento ha tomado ese valor
+
 public:
    VectorNodos()
    :elementos(0), comienzo_generacion{0,0,0,0,0,0,0}, barrido{0} {
@@ -62,10 +66,12 @@ public:
    void NuevaGeneracion(int g) {
       comienzo_generacion[g] = elementos;
    }
+   // Marca un número entre 100 y 999 como obtenido
    void Marca(int n) {
    	if (n >= 100 && n < 1000)
    		barrido[n] = true;
    }
+   // Devuelve true si todos los elementos entre 100 y 999 se pueden obtener (es decir, la combinación es mágica)
    bool Magica() {
    	for (int i = 100; i < 1000; i++)
    		if (!barrido[i])
@@ -80,6 +86,7 @@ inline bool SeSolapan(unsigned int a, unsigned int b) {
    return a&b;
 }
 
+// Indica si una operación es asociativa
 inline bool Asociativa(short int k) {
    return k%2 == 0;
 }
@@ -93,6 +100,7 @@ inline bool MalAsociacion(const VectorNodos &nodos, int i, int j, short int k) {
    return nodos[i].op == k || (nodos[j].op == k && (!Asociativa(k) || nodos[j].previo1 < i));
 }
 
+// Indica si el resultado de la operación coincide con el valor de uno de los nodos de los que procede
 inline bool Repite(const VectorNodos &nodos, int resultado, int i, int j) {
    return resultado == nodos[i].valor || resultado == nodos[j].valor;
 }
@@ -104,7 +112,7 @@ bool OtraGeneracion(VectorNodos &nodos, int generacion) {
    int tope_i = nodos.ComienzoGeneracion((generacion+1)/2+1);
    for (int i = 0; i < tope_i; i++) {
       unsigned int usados_i = nodos[i].usados;
-      int inicio_j = Maximo(i+1, nodos.ComienzoGeneracion(generacion-nodos[i].generacion));
+      int inicio_j = max(i+1, nodos.ComienzoGeneracion(generacion-nodos[i].generacion));
       int tope_j = nodos.ComienzoGeneracion(generacion-nodos[i].generacion+1);
       for (int j = inicio_j; j < tope_j; j++)
          if (!SeSolapan(usados_i, nodos[j].usados))
@@ -138,15 +146,15 @@ void Recrea(const VectorNodos &vec, const Nodo &nodo) {
    }
 }
 
-// Muestra los números disponibles y el número objetivo
-void ImprimeEntrada(int disponibles[]) {	
+// Muestra la combinación actual
+void ImprimeCombinacion(int disponibles[]) {	
    cout << "{";
    for(int i = 0; i < 6; i++)
       cout << (i?",":"") << disponibles[i];
    cout << "}" << endl;
 }
 
-// Resuelve un problema y muestra la solución
+// Comprueba si una determinada combinación es mágica
 bool Cifras(int disponibles[]) {
    VectorNodos nodos;
    Nodo nodo;
@@ -156,10 +164,10 @@ bool Cifras(int disponibles[]) {
    for (int g = 2; OtraGeneracion(nodos, g); g++);
 
    if (nodos.Magica())
-   	ImprimeEntrada(disponibles);
+   	ImprimeCombinacion(disponibles);
 }
 
-// Programa principal. Genera los números al azar si no se pasan siete parámetros
+// Programa principal. Comprueba todas las combinaciones en busca de las que sean mágicas
 int main() {
    int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
    int a, b, c, d, e, f;
@@ -173,3 +181,4 @@ int main() {
            Cifras(disponibles);
         }
 }
+
