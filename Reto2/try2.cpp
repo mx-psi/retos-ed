@@ -142,8 +142,11 @@ void ImprimeEntrada(int solucion, int disponibles[]) {
    cout << "] --> " << solucion << '\n' << endl;
 }
 
-// Resuelve un problema y muestra la solución
+// Resuelve un problema y muestra la solución y el tiempo empleado
 void Cifras(int solucion, int disponibles[]) {
+   ImprimeEntrada(solucion, disponibles);
+   clock_t tini = clock();
+   
    VectorNodos nodos;
    Nodo nodo;
    for (int i = 0; i < 6; i++)
@@ -152,7 +155,12 @@ void Cifras(int solucion, int disponibles[]) {
    int mas_cercano = 0;
    for (int g = 2; OtraGeneracion(nodos, mas_cercano, solucion, g); g++);
 
+   clock_t tfin = clock();
+
    Recrea(nodos, nodos[mas_cercano]);
+
+   // Muestra el tiempo transcurrido
+   cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }
 
 // Programa principal. Genera los números al azar si no se pasan siete parámetros
@@ -174,12 +182,5 @@ int main(int argc, char* argv[]) {
          disponibles[i] = posibles[rand()%14];
    }
 
-   ImprimeEntrada(solucion, disponibles);
-   clock_t tini = clock();
    Cifras(solucion, disponibles);
-   clock_t tfin = clock();
-
-   // Muestra el tiempo transcurrido
-   cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }
-
