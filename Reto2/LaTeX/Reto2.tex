@@ -20,8 +20,15 @@
 
 \newcommand{\abs}[1]{|#1|}
 \newcommand{\gen}{\operatorname{gen}}
+\SetKwFunction{Cifras}{Cifras}
 \theoremstyle{definition}
 \newtheorem*{definition}{Definición}
+\newenvironment{algo}{
+\vspace*{0.5cm}
+\begin{algorithm}[H]}{
+\end{algorithm}
+\vspace*{0.5cm}
+}
 
 
 \title{Reto 2}
@@ -33,7 +40,7 @@
 \input{Intro.tex}
 \input{Algoritmo1.tex}
 \input{Algoritmo2.tex}
-%\input{Algoritmo3.tex}
+\input{Algoritmo3.tex}
 \input{Combmagicas.tex}
 \input{TiposDeDatos.tex}
 \end{document}

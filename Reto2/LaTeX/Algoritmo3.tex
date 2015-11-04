@@ -1,0 +1,112 @@
+\section{Tercer algoritmo}
+
+\subsection{Almacenamiento y presentación de resultados}
+
+Este tercer y último algoritmo recorre por profundidad todos los caminos
+posibles utilizando un vector ordenado. Su principal ventaja es su \textbf{reducido
+uso de memoria}. Las estructuras de datos que utiliza el algoritmo son 3:
+
+\begin{description}
+	\item[Operaciones] Una operación es una tripleta $(a,b,\circ)$ que representa
+	la operación $a \circ b$.
+	\item[Pila] El algoritmo utiliza una pila de operaciones que usará, como
+	máximo un total de 6 elementos. Notaremos la pila como $P$ y sus elementos (al tratarla como
+	lista) como $P_i$. La pila \textbf{almacena las operaciones realizadas}.
+	Durante el algoritmo la usaremos como una	pila pero para la impresión
+	trataremos esta estructura como una lista por	simplicidad.
+	\item[Lista ordenada] Esta lista \textbf{ordenada} contiene
+	\textbf{los elementos con los que	se opera} en cada iteración.
+	Debido a las transformaciones realizadas su tamaño variará entre \textbf{2} y
+	\textbf{6} elementos. La notaremos como $L$ y sus elementos como $L_i$.
+\end{description}
+
+% Falta la representación de resultados
+
+\subsection{Caso base}
+
+El algoritmo es un algoritmo recursivo y presentamos de forma separada el caso
+base y el caso general. El \textbf{caso base} sucede cuando $|L| = 2$
+es decir, tenemos una lista de la forma $[L_0, L_1]$ con $L_0 \leq L_1$.
+En tal caso recorremos todas las combinaciones y si alguna llega a la solución,
+la devolvemos:
+
+\begin{algo}
+	\KwIn{$L$, lista con 2 elementos y $S$}
+	\KwOut{Si se ha conseguido llegar al objetivo}
+	\ForEach{$\circ \in \{+,-,\cdot,/\}$}{
+		$R := L_1 \circ L_0$\;
+		\If{$R$ no es válido}{\textbf{Continuar}\;}
+		\BlankLine
+		\If{$|R-S| < |M_a-S|$}{
+		$M_a := R$\;
+		\If{$res = S$}{
+			\textbf{Poner} $(L_1,L_0, \circ)$ en $P$\;
+			\KwRet{\texttt{true}}
+		}
+		}
+	}
+	\KwRet{\texttt{false}}
+\caption{Caso base del tercer algoritmo}
+\end{algo}
+
+La operación no será válida si no cumple las condiciones indicadas en la introducción,
+es decir, el resultado es uno de los operandos o es 0.
+
+\subsection{Caso general}
+
+En el caso general recorremos $L$ y realizamos para cada pareja válida cada operación.
+Reducimos por tanto el tamaño de $L$ a exactamente un elemento menos y llamamos
+recursivamente al algoritmo:
+
+
+\begin{algo}
+\Cifras{$L,S,M_a,P$}: \\
+\KwIn{$L$, lista con $n>2$ elemento, $S$, $M_a$, $P$}
+\KwOut{Si se ha conseguido llegar al objetivo}
+\ForEach{$\circ \in \{+,-,\cdot,/\}$}{
+\If{$\circ$ usa 1}{$i := 0$\;}
+\Else{Asignar a $i$ el primer índice tal que $L_i \neq 1$\;}
+\BlankLine
+
+\While{$i < |L|$}{
+$j:=i+1$\;
+\While{$j < |L|$}{
+$R := L_j \circ L_i$\;
+\lIf{$R$ no es válido}{\textbf{Continuar}}
+
+\BlankLine
+\textbf{Poner} $(L_j,L_i, \circ)$ en $P$\;
+\textbf{Borrar} $L_i,L_j$ de $L$\;
+\textbf{Insertar} $R$ en $L$\;
+\BlankLine
+
+\If{$|R-S| < |M_a-S|$}{
+$M_a := R$\;
+\lIf{$res = S$}{\KwRet{\texttt{true}}}
+}
+\BlankLine
+
+\lIf{\Cifras{$L,S,M_a,P$}}{\KwRet{\texttt{true}}}
+\BlankLine
+
+\textbf{Quitar} de $P$\;
+\textbf{Borrar} $R$ de $L$\;
+\textbf{Insertar} $L_i,L_j$ en $L$\;
+
+Avanzar hasta el siguiente $j$ con $L_j$ diferente\;
+}
+Avanzar hasta el siguiente $i$ con $L_i$ diferente\;
+}
+}
+\KwRet{\texttt{false}}
+\caption{Caso general del tercer algoritmo}
+\end{algo}
+
+Aprovechamos que el algoritmo está ordenado para evitar comprobar
+casos duplicados y evitar productos y divisiones por 1.
+La pila puede almacenar resultados basura que no contribuyan a
+llegar al resultado, por lo que debemos imprimir sólo las que
+necesitamos de acuerdo al algoritmo de impresión visto en la
+sección anterior.
+
+\subsection{Características del algoritmo}
