@@ -73,7 +73,7 @@ public:
    }
    // Devuelve true si todos los elementos entre 100 y 999 se pueden obtener (es decir, la combinación es mágica)
    bool Magica() {
-   	for (int i = 100; i < 1000; i++)
+   	for (int i = 999; i > 99; i--)
    		if (!barrido[i])
    			return false;
    			
