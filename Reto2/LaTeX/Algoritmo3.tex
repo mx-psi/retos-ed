@@ -12,8 +12,6 @@ uso de memoria}. Las estructuras de datos que utiliza el algoritmo son 3:
 	\item[Pila] El algoritmo utiliza una pila de operaciones que usará, como
 	máximo un total de 6 elementos. Notaremos la pila como $P$ y sus elementos (al tratarla como
 	lista) como $P_i$. La pila \textbf{almacena las operaciones realizadas}.
-	Durante el algoritmo la usaremos como una	pila pero para la impresión
-	trataremos esta estructura como una lista por	simplicidad.
 	\item[Lista ordenada] Esta lista \textbf{ordenada} contiene
 	\textbf{los elementos con los que	se opera} en cada iteración.
 	Debido a las transformaciones realizadas su tamaño variará entre \textbf{2} y
@@ -21,6 +19,55 @@ uso de memoria}. Las estructuras de datos que utiliza el algoritmo son 3:
 \end{description}
 
 % Falta la representación de resultados
+
+Para la representación de resultados debemos acceder a la pila como si
+fuera un vector para hacer que el algoritmo sea más eficiente.
+Describimos un algoritmo recursivo que nos permite imprimir las operaciones
+hasta llegar al final. Utilizamos 3 funciones auxiliares que dependen
+de la implementación y que son:
+
+\begin{itemize}
+	\item $R((a,b,\circ)) = a \circ b$
+	\item $\operatorname{Arg1}((a,b,\circ)) = a$
+	\item $\operatorname{Arg2}((a,b,\circ)) = b$
+\end{itemize}
+
+Con estas operaciones podemos describir el algoritmo:
+
+\begin{algo}
+\Imprime{$U,n$}: \\
+\KwIn{$U$, vector que nos marca los elementos usados,
+$n$ posición a imprimir}
+
+  \If{$R(P_n) \in L$ y no ha sido usado}{
+		Márcalo como usado \;
+		\textbf{Termina}\;
+	}
+
+	\BlankLine
+
+	\ForEach{$i \in [0,n-1]$}{
+		\If{$R(P_i) = \operatorname{Arg1}(P_i)$}{
+			\Imprime{$U,i$}\;
+			\textbf{Sal} del bucle\;
+		}
+	}
+
+	\BlankLine
+
+	\ForEach{$i \in [0,n-1]$}{
+		\If{$R(P_i) = \operatorname{Arg2}(P_i)$}{
+			\Imprime{$U,i$}\;
+			\textbf{Sal} del bucle\;
+		}
+	}
+
+  \textbf{Imprimir} $P_n$\;
+\end{algo}
+
+De esta forma, sólo tendremos que llamar $\texttt{Imprime}(v,n)$ con
+$n$ el último índice de la pila y $v$ un vector de 6 elementos booleanos
+falsos para imprimir la solución.
 
 \subsection{Caso base}
 
@@ -46,7 +93,6 @@ la devolvemos:
 		}
 	}
 	\KwRet{\texttt{false}}
-\caption{Caso base del tercer algoritmo}
 \end{algo}
 
 La operación no será válida si no cumple las condiciones indicadas en la introducción,
@@ -110,3 +156,36 @@ necesitamos de acuerdo al algoritmo de impresión visto en la
 sección anterior.
 
 \subsection{Características del algoritmo}
+
+Cada operación realizada sobre la lista $L$ antes de la llamada
+recursiva borra dos elementos e inserta uno, lo que reduce el
+tamaño de ésta en 1. Además, cuando restauramos el estado inicial
+de la lista, esta no puede aumentar su tamaño. Es decir, la lista
+\textbf{no puede tener nunca más de 6 elementos}, la cantidad
+de elementos que tiene inicialmente.
+
+Por otra parte, la pila $P$ sólo puede aumentar de tamaño al
+reducirse el de $L$, lo que limita su tamaño también a
+\textbf{un máximo de 6 elementos} (cada uno de ellos con 3
+enteros). Es decir, además de las variables locales sólo
+necesitamos tener en memoria un total de \textbf{24 enteros}
+para ejecutar el algoritmo.
+
+Esto nos limita a la hora de ofrecer la solución cuando no llegamos
+a la mejor aproximación, ya que la pila estará vacía en este
+caso. Para obtener la solución en este caso deberíamos llamar
+al algoritmo de nuevo con la mejor aproximación.
+
+La otra gran ventaja del algoritmo es que nos permite podar gran
+cantidad de casos al estar $L$ ordenada. Algunas de las optimizaciones
+que podemos realizar son:
+
+\begin{itemize}
+	\item Saltar elementos repetidos.
+	\item Evitar repeticiones por conmutatividad y casos no válidos
+	como resultados negativos o divisiones que nunca serán válidas.
+	\item Evitar utilizar unos cuando la operación sea producto o suma.
+	\item Podríamos, utilizando el algoritmo de búsqueda binaria,
+	tratar la división como un caso especial y buscar sólo los múltiplos
+	del número más pequeño.
+\end{itemize}
