@@ -7,7 +7,9 @@
 struct Operacion{int arg1, arg2, op;};
 
 int Opera(const int a, const int b, int op);
+
 inline int Resultado(Operacion o){return Opera(o.arg1, o.arg2, o.op);}
+
 std::ostream& operator<<(std::ostream& os, const Operacion& op);
 
 

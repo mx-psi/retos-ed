@@ -1,6 +1,5 @@
 #include "vector.h"
 #include <iostream>
-#include <cassert>
 using namespace std;
 
 ostream& operator<<(ostream& os, Vector& v){
@@ -13,7 +12,6 @@ ostream& operator<<(ostream& os, Vector& v){
 
 //Borra el elemento en la posición pos
 void Vector::borra(int pos){
-  assert(nelem>0);
   for(int i = pos; i < nelem; i++)
     v[i] = v[i+1];
   nelem--;
@@ -21,17 +19,20 @@ void Vector::borra(int pos){
 
 // Inserta un elemento ordenadamente
 int Vector::inserta(int n){
-  assert(nelem<6);
-  int i;
+  int pos = 0, ini = v[0] < n, fin = nelem-1;
 
-  for(i = 0; i < nelem; i++)
-    if(v[i] > n)
-      break;
+  while (ini <= fin) {
+    pos = (ini+fin)/2;
+    if (v[pos] < n)
+      ini = pos+1;
+    else
+      fin = pos-1;
+  }
 
-  for(int j = nelem; j > i; j--)
+  for(int j = nelem; j > ini; j--)
     v[j] = v[j-1];
 
-  v[i] = n;
+  v[ini] = n;
   nelem++;
-  return i;
+  return ini;
 }

@@ -17,7 +17,7 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
 
       if(d(res,obj) < d(m_a,obj)){
         m_a = res;
-        if(d(obj,m_a) == 0){
+        if(obj == m_a){
           p.push({nums[0], nums[1], op});
           return true;
         }
@@ -42,7 +42,8 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
 
         if(d(res,obj) < d(m_a,obj)){
           m_a = res;
-          if(d(obj,m_a) == 0) return true;
+          if(obj == m_a)
+            return true;
         }
         if(Cifras(obj,nums,p,m_a))
           return true;
@@ -54,6 +55,7 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
       }
     }
   }
+  return false;
 }
 
 int main(){
