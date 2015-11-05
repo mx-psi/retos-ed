@@ -30,6 +30,8 @@ mediante el siguiente procedimiento recursivo:\\
 \caption{Obtención de operaciones}
 \end{algorithm}
 
+\vspace{0.4cm}
+
 Se observa que este procedimiento conmuta correctamente los operandos en el caso
 de las restas y los cocientes a la hora de mostrar la operación, por lo que el
 algoritmo no tendrá que preocuparse por almacenar el orden en el que se encontraban
@@ -96,7 +98,7 @@ $L = [c_1, c_2, c_3, c_4, c_5, c_6]$\;
 $N = c_6$\;
 \ForAll{$g$ desde $2$ hasta $6$}{
 	\ForAll{$i$ tal que $2 \cdot \gen(L_i) \le g$}{
-		\ForAll{$j \in miembros(g-\gen(L_i))$ tal que $j > i$:}{
+		\ForAll{$j \in miembros(g-\gen(L_i))$ tal que $j > i$}{
 			\If{$U(L_i) \cap  U(L_j) = \emptyset$}{
 				\ForAll{$op \in \{+,-,\cdot,/\}$}{
 					\If{$[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es \textbf{válida}}{
@@ -118,25 +120,58 @@ $N = c_6$\;
 
 \vspace{0.4cm}
 
+Puede observarse que, cuando $g = 6$, si el nuevo $n$ no está más cerca de $S$ que $N.n$, no es necesario añadir $[n,i,j,op]$ a $L$. Añadir esta condición oscurece el algoritmo, pero se tendrá en cuenta en la implementación.\\
+
 Para definir el inicio y el final de los bucles que recorren $L$, se empleará una
 lista $G$ de 6 elementos, que indicará en la posición $G_i$ el primer elemento
 de $L$ que es de $i$-ésima generación. Definiremos también $G_7$ como la posición
 siguiente a la del último elemento de $L$.
 La función $\operatorname{miembros}(i)$ podría redefinirse aprovechando $G$ como
-$\{L_k : k \ge G_i, k < G_{i+1}\}$.
+$\{L_k : k \ge G_i, k < G_{i+1}\}$. \\
 
-% Los dejo comentados porque el código está sujeto a cambios. Cuando esté listo del todo, lo reescribiré (sin borrar el actual) con esto en los bucles:
-% Los dos bucles quedarían así ('hasta' indica el último elemento, no el primero que no está):
-%Para $i = 1$ hasta $G_{((g+1)/2+1)}-1$:\\
-%Para $j = \max \{i+1, G(g-gen(L_i))\}$ hasta $G(g-gen(L_i)+1)\}$:\\
+El bucle que recorre los $i$ debe terminar al final de la última generación $\bar g$ tal que $2\cdot \bar g \le g$, que es la posición anterior a la que comienza la generación posterior. \\
+
+El bucle que recorre los $j$ debe recorrer la generación que, sumada a la de $i$, dé $g$; pero si ambas fuesen la misma, debería empezar después de $i$. \\
+
+Con los bucles escritos de esta forma, el algoritmo queda así:
+
+\begin{algorithm}[H]
+	\KwIn{$C = \{c_1, c_2, c_3, c_4, c_5, c_6\}$, $S \in [100, 999]$}
+	\KwOut{$L$ y $N$ con $|N-S|$ mínima.}
+	
+	$L = [c_1, c_2, c_3, c_4, c_5, c_6]$\;
+	$N = c_6$\;
+	\ForAll{$g$ desde $2$ hasta $6$}{
+		\ForAll{$i = 1$ hasta $G_{((g+1)/2+1)}-1$}{
+			\ForAll{$j = \max \{i+1, G(g-gen(L_i))\}$ hasta $G(g-gen(L_i)+1)\}$}{
+				\If{$U(L_i) \cap  U(L_j) = \emptyset$}{
+					\ForAll{$op \in \{+,-,\cdot,/\}$}{
+						\If{$[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es \textbf{válida}}{
+							Añadir $[n, i, j, op]$ a $L$\;
+							\If{$|n-S| < |N.n-S|$}{
+								$N.n \leftarrow [n, i, j, op]$\;
+								\If{$N.n = S$}
+								{\KwRet{$L,N$}}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	\KwRet{$L,N$}
+	\caption{Obtención de la solución (bucles for)}
+\end{algorithm}
 
 \subsection{Características del algoritmo}
 Este algoritmo explora todas las posibles operaciones válidas.
 Por ello, garantiza encontrar la solución más cercana posible a la pedida.
 Además, dado que construyen las generaciones una a una y en orden ascendente,
 se garantiza que el número de operaciones usadas para obtener un valor que se
-distancie lo mínimo posible a la solución será el mínimo, tanto en el caso de
+distancie lo menos posible a la solución será el mínimo, tanto en el caso de
 resultado exacto como en caso de valor aproximado.\\
+
+Este algoritmo destaca por el bajo tiempo de ejecución de su implementación. Usando la versión modificada para hallar combinaciones mágicas de este algoritmo, se han obtenido todas las combinaciones mágicas en $66,46$ segundos.\\
 
 El algoritmo no ordena los operandos en cada resta o cociente aunque sea necesario.
 En cualquier caso, como siempre hay un único resultado válido, el algoritmo que

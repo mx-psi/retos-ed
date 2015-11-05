@@ -35,7 +35,7 @@ struct Nodo {
 // Clase para la lista L
 class VectorNodos {
 private:
-   static const int CAPACIDAD = 1144386;	// Máximo tamaño posible para 6 generaciones sin considerar la poda por asociatividad
+   static const int CAPACIDAD = 177699;	// Máximo tamaño posible para 5 generaciones sin considerar la poda por asociatividad más 993
    Nodo* nodos;
    int elementos;
    int comienzo_generacion[7];
@@ -43,7 +43,7 @@ private:
 
 public:
    VectorNodos()
-   :elementos(0), comienzo_generacion{0,0,0,0,0,0,0}, barrido{0} {
+   :elementos(0), comienzo_generacion{}, barrido{} {
       nodos = new Nodo[CAPACIDAD];
    }
    ~VectorNodos() {
@@ -73,7 +73,7 @@ public:
    }
    // Devuelve true si todos los elementos entre 100 y 999 se pueden obtener (es decir, la combinación es mágica)
    bool Magica() {
-   	for (int i = 100; i < 1000; i++)
+   	for (int i = 999; i > 99; i--)
    		if (!barrido[i])
    			return false;
    			
@@ -108,7 +108,6 @@ inline bool Repite(const VectorNodos &nodos, int resultado, int i, int j) {
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos
 bool OtraGeneracion(VectorNodos &nodos, short int generacion) {
    nodos.NuevaGeneracion(generacion);
-   Nodo nuevo;
    int tope_i = nodos.ComienzoGeneracion((generacion+1)/2+1);
    for (int i = 0; i < tope_i; i++) {
       unsigned short int usados_i = nodos[i].usados;
@@ -120,10 +119,8 @@ bool OtraGeneracion(VectorNodos &nodos, short int generacion) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
                if (resultado != 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
                   nodos.Marca(resultado);
-               	if (generacion != 6) {
-                     nuevo = {i, j, k, generacion, usados_i | nodos[j].usados, resultado};
-                     nodos.push_back(nuevo);
-                  }
+               	if (generacion != 6)
+                     nodos.push_back({i, j, k, generacion, usados_i | nodos[j].usados, resultado});
                }
             }
 	}
@@ -159,7 +156,7 @@ bool Cifras(int disponibles[]) {
    VectorNodos nodos;
    Nodo nodo;
    for (int i = 0; i < 6; i++)
-      nodos.push_back(nodo = {0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
+      nodos.push_back({0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
 
    for (short int g = 2; OtraGeneracion(nodos, g); g++);
 

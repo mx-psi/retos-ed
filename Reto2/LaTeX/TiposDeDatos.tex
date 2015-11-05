@@ -24,7 +24,7 @@ que el tamaño sea de al menos 32 bits, dado que si fuese de 16 bits sería posi
 \end{itemize}
 
 $i$ y $j$ serían dos enteros de 32 bits que indicarían la posición de los $L_i$
-y $L_j$ de los que se obtuvo el nodo anterior. Dado que los $L_k$ deben tener
+y $L_j$ de los que se obtuvo el nodo anterior (como se verá en la siguiente sección, el tamaño de $L$ es menor que $2^{31}$). Dado que los $L_k$ deben tener
 todos la misma estructura, y en lo propuesto los seis primeros elementos (que
 procedían de $C$) estaban compuestos solo por un número, para esos seis
 elementos iniciales podrían tomar un valor arbitrario (por ejemplo, el valor
@@ -38,7 +38,9 @@ De cara al algoritmo que genera las operaciones con las que se llegó a un
 elemento, interesaría que, en los seis primeros elementos, al menos uno de los
 tres últimos elementos que componen esta estructura tuviese un valor inválido,
 dado que el algoritmo debe no hacer nada cuando está siendo ejecutado con uno
-de los seis primeros elementos como entrada. \\
+de los seis primeros elementos como entrada. En la implementación optaremos
+por darle un valor inválido al campo $op$. Esto facilitará la labor a la función
+que comprueba si uno de los operandos procede de la misma operación. \\
 
 Además de los datos anteriores, que son indispensables, probablemente interesará
  añadir más elementos a la estructura:
@@ -47,9 +49,9 @@ Además de los datos anteriores, que son indispensables, probablemente interesar
 	\item Incluir un entero que indique la generación del elemento podría reducir
 	el tiempo de ejecución del algoritmo respecto del tiempo que necesitaría si
 	emplease una función que calculase la generación de un elemento explorando los
-	 elementos de los que procede. Un entero de 16 bits, que tomase el valor de la
+	 elementos de los que procede. Un entero de 16 bits que tomase el valor de la
 	  suma de las generaciones de los elementos de los que procede y que tomase el
-		 valor 1 para los elementos iniciales, sería suficiente para ello.
+		 valor 1 para los elementos iniciales sería suficiente para ello.
 	\item Sería particularmente interesante incluir un entero sin signo de al
 	menos 16 bits que indique en el $i$-ésimo bit menos significativo si se ha
 	usado el $i$-ésimo elemento del multiconjunto de números disponibles $C$. Tal
@@ -65,3 +67,36 @@ Además de los datos anteriores, que son indispensables, probablemente interesar
 \end{itemize}
 
 \subsection{Tipo de dato para $L$}
+$L$ debe estar representado por una clase que permita, al menos, añadir elementos $L_k$. Dado que el número de elementos es demasiado como para almacenarlos en la pila, se optará por una estructura lineal situada en memoria dinámica. El tipo de dato reservará espacio para un número suficiente (según se calculará a continuación) de elementos del tipo de dato descrito anteriormente, y además almacenará las posiciones en las que se inicia cada generación de elementos, para controlar dónde deben comenzar y acabar los bucles que recorren los elementos. \\
+
+Convendrá que esta clase disponga de métodos para añadir elementos, consultar los elementos actuales, obtener la posición de inicio de cada generación y marcar como final de la generación el último elemento actual, además de un destructor que libere la memoria reservada. Para las combinaciones mágicas, se modificará ligeramente esta estructura. \\
+
+\subsubsection{Tamaño de $L$}
+
+El número de elementos de $L$ para los que debe reservarse memoria viene determinado por la suma de elementos de cada generación:
+\begin{itemize}
+	\item Para la primera generación tenemos seis elementos: los seis números iniciales.
+	\item La segunda generación estará conformada por los resultados de operar con pares de elementos de la primera generación.
+	\item La tercera reunirá resultados de operar con un elemento de la primera y otro de la segunda.
+	\item La cuarta estará constituida tanto por operaciones con un elemento de la primera y otro de la tercera como por operaciones con pares de elementos de la segunda.
+	\item La quinta tendrá elementos que procederán de otros previos de las generaciones 1 y 4 o 2 y 3.
+	\item La sexta surgirá al operar elementos de las generaciones 1 y 5, 2 y 4 o 3 y 3. Pueden descartarse los elementos de esta generación que no se acerquen al objetivo más que otros elementos previos.
+\end{itemize}
+
+En general, los elementos de la generación $n$, para $n>1$, proceden de pares de elementos de las generaciones $i,j$ con $i \le n/2$ tales que $i+j=n$.\\
+
+Si decidimos no añadir los elementos de la sexta generación a no ser que tomen un valor más cercano al objetivo $S$ que todos los demás, en esta generación habrá menos de $994$ elementos, dado que con cualquier combinación de $5$ números iniciales es posible llegar a, al menos, el valor $6$ ($(1+1+1)*(1+1)$), y aun en tal caso es imposible que haya $994$ elementos que, uno detrás de otro, sean mejores que el anterior: si hubiese $993$ seguidos, el último sería ya la solución para cualquier solución entre 100 y 999.\\
+
+Sea $T(i)$ el número de elementos que tendremos de la generación $i$-ésima. El número de espacios que deberán reservarse en memoria será $T = \displaystyle \sum_{i=1}^6 T(i)$, o $T = \displaystyle \sum_{i=1}^5 T(i) + 993$ si excluimos la sexta generación. Ahora calcularemos una cota superior para $T$ suponiendo que todas las operaciones son válidas (es decir, que podremos hacer para cada pareja que no se solape las cuatro operaciones).\\
+
+A la hora de operar con elementos de dos generaciones $i,j$ no necesariamente distintas, para cada elemento de la $i$-ésima generación el número de elementos que puede obtenerse de él será igual al número de elementos de $j$-ésima generación que pueden combinarse con tal elemento de $i$ (sea esto $P(i,j)$), 4 veces (una por operación, dado que suponemos que todas son válidas), es decir, $4 \cdot T(i) \cdot P(i,j)$.\\
+
+Sea $L_i$ un elemento de $i$-ésima generación. Si entendemos los elementos usados por $L_i$ como una lista de elementos $1$ o $0$ que indican si el número inicial que se encuentra en esa posición ha sido usado o no (es prácticamente lo que se hace en la estructura de $L_k$ usando los bits de un entero como booleanos), tal lista tendrá $i$ unos y $6-i$ ceros, dado que $L_i$ habrá usado $i$ números iniciales. Para poder combinarse con $L_i$, los elementos de $j$-ésima generación $L_j$ deberán cumplir que los números usados por $L_i$ no lo estén. Por tanto, los $j$ números usados por $L_j$ estarían repartidos por los no usados por $L_i$. Dado que hay $C_{n}^k$ formas de seleccionar $k$ elementos de un grupo de $n$, y puesto que en cada generación el número de elementos cuya lista de elementos sea una en particular es el mismo para cualquier lista válida, la cantidad de elementos de $j$-ésima generación disponibles para combinar con $L_i$ será $\displaystyle P(i,j) = T(j) \cdot \frac {C_{6-i}^j} {C_6^j}$.\\
+
+Por ello, si las generaciones $i$ y $j$ son distintas, el número de elementos que pueden obtenerse a partir de elementos de ambas es $\displaystyle 4 \cdot T(i) \cdot P(i,j) = 4 \cdot T(i) \cdot T(j) \cdot \frac {C_{6-i}^j} {C_6^j}$. Si $i=j$, tal número se reduce a la mitad, puesto que solo hay una forma de combinar cada par de números. Por comodidad definiremos la función $I(i,j) = 1/2\ si\ i=j,\ 1\ si\ i \ne j$. La función que determina cuántos elementos hay en una generación (a la que llamamos previamente $T(i)$) queda así:
+
+$$T(1) = 6;\ T(n) = \sum_{i=1}^{n/2} 4 \cdot T(i) \cdot T(n-i) \cdot \frac {C_{6-i}^{n-i}} {C_6^{n-i}} \cdot I(i,n-i) \ \ \forall n \in \{2,3,4,5,6\}$$
+
+Ya podemos obtener el tamaño máximo. Si incluye toda la sexta generación, $\displaystyle T = \sum_{i=1}^6 T(i) = 1\ 144\ 386$, o si no, $\displaystyle T = \sum_{i=1}^5 T(i) + 993 = 177\ 699$. Podremos fijar el tamaño de la estructura que representa a $L$ con ese valor (o cualquier valor mayor, pero eso supondría un desperdicio de memoria). \\
+
+Cabe observar que podría acotarse más el tamaño si se tienen en cuenta las dos últimas condiciones que debía cumplir una operación para ser válida (que el primer elemento no proceda de la misma operación y que el segundo elemento no proceda de la misma operación en ciertos casos). Sin embargo, dado que en la implementación no se observa diferencia en el rendimiento si se reserva memoria para $10T$ espacios en lugar de $T$, aceptaremos $T$.
