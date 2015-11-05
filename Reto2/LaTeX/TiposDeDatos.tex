@@ -80,12 +80,14 @@ El número de elementos de $L$ para los que debe reservarse memoria viene determ
 	\item La tercera reunirá resultados de operar con un elemento de la primera y otro de la segunda.
 	\item La cuarta estará constituida tanto por operaciones con un elemento de la primera y otro de la tercera como por operaciones con pares de elementos de la segunda.
 	\item La quinta tendrá elementos que procederán de otros previos de las generaciones 1 y 4 o 2 y 3.
-	\item La sexta surgirá al operar elementos de las generaciones 1 y 5, 2 y 4 o 3 y 3.
+	\item La sexta surgirá al operar elementos de las generaciones 1 y 5, 2 y 4 o 3 y 3. Pueden descartarse los elementos de esta generación que no se acerquen al objetivo más que otros elementos previos.
 \end{itemize}
 
 En general, los elementos de la generación $n$, para $n>1$, proceden de pares de elementos de las generaciones $i,j$ con $i \le n/2$ tales que $i+j=n$.\\
 
-Sea $T(i)$ el número de elementos que tendremos de la generación $i$-ésima. El número de espacios que deberán reservarse en memoria será $T = \displaystyle \sum_{i=1}^6 T(i)$. Ahora calcularemos una cota superior para $T$ suponiendo que todas las operaciones son válidas (es decir, que podremos hacer para cada pareja que no se solape las cuatro operaciones).\\
+Si decidimos no añadir los elementos de la sexta generación a no ser que tomen un valor más cercano al objetivo $S$ que todos los demás, en esta generación habrá menos de $994$ elementos, dado que con cualquier combinación de $5$ números iniciales es posible llegar a, al menos, el valor $6$ ($(1+1+1)*(1+1)$), y aun en tal caso es imposible que haya $994$ elementos que, uno detrás de otro, sean mejores que el anterior: si hubiese $993$ seguidos, el último sería ya la solución para cualquier solución entre 100 y 999.\\
+
+Sea $T(i)$ el número de elementos que tendremos de la generación $i$-ésima. El número de espacios que deberán reservarse en memoria será $T = \displaystyle \sum_{i=1}^6 T(i)$, o $T = \displaystyle \sum_{i=1}^5 T(i) + 993$ si excluimos la sexta generación. Ahora calcularemos una cota superior para $T$ suponiendo que todas las operaciones son válidas (es decir, que podremos hacer para cada pareja que no se solape las cuatro operaciones).\\
 
 A la hora de operar con elementos de dos generaciones $i,j$ no necesariamente distintas, para cada elemento de la $i$-ésima generación el número de elementos que puede obtenerse de él será igual al número de elementos de $j$-ésima generación que pueden combinarse con tal elemento de $i$ (sea esto $P(i,j)$), 4 veces (una por operación, dado que suponemos que todas son válidas), es decir, $4 \cdot T(i) \cdot P(i,j)$.\\
 
@@ -95,6 +97,6 @@ Por ello, si las generaciones $i$ y $j$ son distintas, el número de elementos q
 
 $$T(1) = 6;\ T(n) = \sum_{i=1}^{n/2} 4 \cdot T(i) \cdot T(n-i) \cdot \frac {C_{6-i}^{n-i}} {C_6^{n-i}} \cdot I(i,n-i) \ \ \forall n \in \{2,3,4,5,6\}$$
 
-Ya podemos obtener el tamaño máximo, que será $\displaystyle T = \sum_{i=1}^6 T(i) = 1\ 144\ 386$. Podremos fijar el tamaño de la estructura que representa a $L$ con ese valor (o cualquier valor mayor, pero eso supondría un desperdicio de memoria). \\
+Ya podemos obtener el tamaño máximo. Si incluye toda la sexta generación, $\displaystyle T = \sum_{i=1}^6 T(i) = 1\ 144\ 386$, o si no, $\displaystyle T = \sum_{i=1}^5 T(i) + 993 = 177\ 699$. Podremos fijar el tamaño de la estructura que representa a $L$ con ese valor (o cualquier valor mayor, pero eso supondría un desperdicio de memoria). \\
 
 Cabe observar que podría acotarse más el tamaño si se tienen en cuenta las dos últimas condiciones que debía cumplir una operación para ser válida (que el primer elemento no proceda de la misma operación y que el segundo elemento no proceda de la misma operación en ciertos casos). Sin embargo, dado que en la implementación no se observa diferencia en el rendimiento si se reserva memoria para $10T$ espacios en lugar de $T$, aceptaremos $T$.

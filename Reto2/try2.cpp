@@ -35,7 +35,7 @@ struct Nodo {
 // Clase para la lista L
 class VectorNodos {
 private:
-   static const int CAPACIDAD = 1144386;	// Máximo tamaño posible para 6 generaciones sin considerar la poda por asociatividad
+   static const int CAPACIDAD = 177699;	// Máximo tamaño posible para 5 generaciones sin considerar la poda por asociatividad más 993
    Nodo* nodos;
    int elementos;
    int comienzo_generacion[7];
@@ -104,9 +104,11 @@ bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, short in
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
                if (resultado != 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
-                  nodos.push_back({i, j, k, generacion, usados_i | nodos[j].usados, resultado});
                   int diferencia = Diferencia(resultado, objetivo);
-                  if (diferencia < Diferencia(nodos[mas_cercano].valor, objetivo)) {
+                  bool es_mejor = diferencia < Diferencia(nodos[mas_cercano].valor, objetivo);
+                  if (generacion != 6 || es_mejor)
+						   nodos.push_back({i, j, k, generacion, usados_i | nodos[j].usados, resultado});
+                  if (es_mejor) {
                      mas_cercano = nodos.size()-1;
                      if (diferencia == 0) return false;
                   }

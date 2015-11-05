@@ -120,6 +120,8 @@ $N = c_6$\;
 
 \vspace{0.4cm}
 
+Puede observarse que, cuando $g = 6$, si el nuevo $n$ no está más cerca de $S$ que $N.n$, no es necesario añadir $[n,i,j,op]$ a $L$. Añadir esta condición oscurece el algoritmo, pero se tendrá en cuenta en la implementación.\\
+
 Para definir el inicio y el final de los bucles que recorren $L$, se empleará una
 lista $G$ de 6 elementos, que indicará en la posición $G_i$ el primer elemento
 de $L$ que es de $i$-ésima generación. Definiremos también $G_7$ como la posición
@@ -169,7 +171,7 @@ se garantiza que el número de operaciones usadas para obtener un valor que se
 distancie lo menos posible a la solución será el mínimo, tanto en el caso de
 resultado exacto como en caso de valor aproximado.\\
 
-Este algoritmo destaca por el bajo tiempo de ejecución de su implementación. Usando la versión modificada para hallar combinaciones mágicas de este algoritmo, se han obtenido todas las combinaciones mágicas en $67,06$ segundos.\\
+Este algoritmo destaca por el bajo tiempo de ejecución de su implementación. Usando la versión modificada para hallar combinaciones mágicas de este algoritmo, se han obtenido todas las combinaciones mágicas en $66,46$ segundos.\\
 
 El algoritmo no ordena los operandos en cada resta o cociente aunque sea necesario.
 En cualquier caso, como siempre hay un único resultado válido, el algoritmo que
