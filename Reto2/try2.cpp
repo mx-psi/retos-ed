@@ -42,7 +42,7 @@ private:
 
 public:
    VectorNodos()
-   :elementos(0), comienzo_generacion{0,0,0,0,0,0,0} {
+   :elementos(0), comienzo_generacion{} {
       nodos = new Nodo[CAPACIDAD];
    }
    ~VectorNodos() {
@@ -94,7 +94,6 @@ inline bool Repite(const VectorNodos &nodos, int resultado, int i, int j) {
 // Añade a un vector de nodos todos los que pueden obtenerse a partir de ellos, hasta que se encuentre el objetivo
 bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, short int generacion) {
    nodos.NuevaGeneracion(generacion);
-   Nodo nuevo;
    int tope_i = nodos.ComienzoGeneracion((generacion+1)/2+1);
    for (int i = 0; i < tope_i; i++) {
       unsigned short int usados_i = nodos[i].usados;
@@ -105,9 +104,8 @@ bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, short in
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
                if (resultado != 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
-                  nuevo = {i, j, k, generacion, usados_i | nodos[j].usados, resultado};
-                  nodos.push_back(nuevo);
-                  int diferencia = Diferencia(nodos[nodos.size()-1].valor, objetivo);
+                  nodos.push_back({i, j, k, generacion, usados_i | nodos[j].usados, resultado});
+                  int diferencia = Diferencia(resultado, objetivo);
                   if (diferencia < Diferencia(nodos[mas_cercano].valor, objetivo)) {
                      mas_cercano = nodos.size()-1;
                      if (diferencia == 0) return false;
@@ -150,7 +148,7 @@ void Cifras(int solucion, int disponibles[]) {
    VectorNodos nodos;
    Nodo nodo;
    for (short int i = 0; i < 6; i++)
-      nodos.push_back(nodo = {0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
+      nodos.push_back({0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
 
    int mas_cercano = 0;
    for (int g = 2; OtraGeneracion(nodos, mas_cercano, solucion, g); g++);
