@@ -28,9 +28,9 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
 
   // Caso recursivo: más de 2
   for (int op = 0; op < 4; op++) {
-    for (int i = nums.no_usa_uno(op); i < nums.size(); i+=nums.dup(i)){
+    for (int i = nums.no_usa_uno(op); i < nums.size(); i+=nums.avanza(i)){
       int nums_i = nums[i];
-      for (int j = i+1; j < nums.size(); j+=nums.dup(j)){
+      for (int j = i+1; j < nums.size(); j+=nums.avanza(j)){
         int nums_j = nums[j];
         int res = Opera(nums_i, nums_j, op);
         if(res == 0 || res == nums_i || res == nums_j) continue;

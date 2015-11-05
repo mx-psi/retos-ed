@@ -18,8 +18,6 @@ uso de memoria}. Las estructuras de datos que utiliza el algoritmo son 3:
 	\textbf{6} elementos. La notaremos como $L$ y sus elementos como $L_i$.
 \end{description}
 
-% Falta la representación de resultados
-
 Para la representación de resultados debemos acceder a la pila como si
 fuera un vector para hacer que el algoritmo sea más eficiente.
 Describimos un algoritmo recursivo que nos permite imprimir las operaciones
@@ -187,5 +185,25 @@ que podemos realizar son:
 	\item Evitar utilizar unos cuando la operación sea producto o suma.
 	\item Podríamos, utilizando el algoritmo de búsqueda binaria,
 	tratar la división como un caso especial y buscar sólo los múltiplos
-	del número más pequeño.
+	del número más pequeño, lo que sería útil en tamaños de entrada mayores.
 \end{itemize}
+
+\subsection{Implementación}
+
+Para la implementación definimos clases \texttt{Pila} y \texttt{Vector} que
+se utilizan para manejar $P$ y $L$ respectivamente. Como vimos en la sección
+anterior, su tamaño está acotado y variará entre 0 y 6 elementos, así que
+optamos por implementarlos utilizando \textbf{vectores estáticos} de 6 elementos.
+
+La clase \texttt{Pila} guarda \texttt{structs} que representan cada operación
+con 3 enteros: los operandos y la operación. Implementamos los métodos habituales
+y el algoritmo de impresión descrito en la primera parte. Dado su reducido tamaño,
+implementar la pila como un vector estático es ventajoso para simplificar el código
+y nos permite acceso aleatorio en la parte final.
+
+La clase \texttt{Vector} guarda enteros. Consta de un método de inserción y borrado
+ordenados y de métodos que nos devuelven la primera posición que no tiene un uno
+y que avanzan hasta el siguiente elemento distinto.
+
+El algoritmo se implementa más fácilmente utilizando bucles \texttt{for} que iteran
+sobre los elementos no repetidos.

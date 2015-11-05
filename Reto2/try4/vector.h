@@ -27,7 +27,7 @@ public:
     return i;
   }
 
-  inline bool dup(int j) const{
+  inline bool avanza(int j) const{
     j++;
     while(v[j] == v[j-1] && j < nelem)
       j++;
