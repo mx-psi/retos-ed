@@ -18,6 +18,7 @@ public:
   Pila():nelem(0){}
   inline void push(Operacion op){pila[nelem++]=op;}
   inline void pop(){nelem--;}
+  inline void clear(){nelem = 0;}
   inline int  size(){return nelem;}
   inline bool empty(){return !nelem;}
 

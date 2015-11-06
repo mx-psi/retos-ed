@@ -10,11 +10,16 @@ public:
 
   // Constructor a partir de un vector no ordenado
   Vector(int l[6]):nelem(6){
-    std::sort(l, l+6);
     for (int i = 0; i < 6; i++)
       v[i] = l[i];
   }
 
+  void reinicia(int l[6]){
+    nelem = 6;
+    for (int i = 0; i < 6; i++)
+      v[i] = l[i];
+  }
+  
   void borra(int pos);
   int inserta(int n);
 
