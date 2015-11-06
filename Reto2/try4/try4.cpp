@@ -28,7 +28,7 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
 
   // Caso recursivo: más de 2
   for (int op = 0; op < 4; op++) {
-    for (int i = nums.no_usa_uno(op); i < nums.size(); i+=nums.avanza(i)){
+    for (int i = nums.inicial(op); i < nums.size(); i+=nums.avanza(i)){
       int nums_i = nums[i];
       for (int j = i+1; j < nums.size(); j+=nums.avanza(j)){
         int nums_j = nums[j];
@@ -36,9 +36,9 @@ bool Cifras(int obj, Vector& nums, Pila& p, int& m_a){
         if(res == 0 || res == nums_i || res == nums_j) continue;
 
         p.push({nums_i, nums_j, op});
-        nums.borra(j); // Borramos primero j para conservar posiciones
+        nums.borra(j);
         nums.borra(i);
-        int pos = nums.inserta(res); //pos: Posición de res
+        int pos = nums.inserta(res);
 
         if(d(res,obj) < d(m_a,obj)){
           m_a = res;
@@ -85,7 +85,7 @@ int main(){
   cout << "Obtenida: " << m_a << endl;
   bool usados[6];
   if(!p.empty())
-    p.Imprime(list, usados, p.size()-1);
+    p.Imprime(list, usados);
 
   cout << (tfin-tini)/(double)CLOCKS_PER_SEC << endl;
 }

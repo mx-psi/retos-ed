@@ -1,8 +1,6 @@
 #include "vector.h"
-#include <iostream>
-using namespace std;
 
-ostream& operator<<(ostream& os, Vector& v){
+std::ostream& operator<<(std::ostream& os, Vector& v){
   os << "[";
   for (int i = 0; i < v.size(); i++)
     os << v[i] << (i+1!=v.size()?",":"");

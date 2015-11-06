@@ -1,6 +1,4 @@
 #include <iostream>
-#include <cassert>
-
 #ifndef __PILA__
 #define __PILA__
 
@@ -18,16 +16,13 @@ class Pila{
   int nelem;
 public:
   Pila():nelem(0){}
-  inline void push(Operacion o){pila[nelem++]=o;}
+  inline void push(Operacion op){pila[nelem++]=op;}
   inline void pop(){nelem--;}
-  inline int size(){return nelem;}
-
-  // Pop devolviendo el valor
-  inline Operacion pops(){return pila[--nelem];}
+  inline int  size(){return nelem;}
   inline bool empty(){return !nelem;}
 
   // Imprime la solución
-  void Imprime(int iniciales[6], bool usados[6], int n);
+  void Imprime(int iniciales[6], bool usados[6], int n = -1);
 };
 
 #endif

@@ -1,5 +1,7 @@
 #include <iostream>
-#include <algorithm>
+#include <algorithm> //sort
+#ifndef __VECTOR__
+#define __VECTOR__
 
 class Vector{
   int v[6];
@@ -19,20 +21,21 @@ public:
   inline int operator[](int pos){return v[pos];}
   inline int size() const{return nelem;}
 
-  inline bool no_usa_uno(int op) const{
+  inline bool inicial(int op) const{
     int i = 0;
-    if(op > 1)
-      while(v[i] == 1)
+    if(op > 1) // Si op es * o /
+      while(v[i] == 1 && i < size())
         i++;
     return i;
   }
 
   inline bool avanza(int j) const{
     j++;
-    while(v[j] == v[j-1] && j < nelem)
+    while(v[j] == v[j-1] && j < size())
       j++;
     return j;
   }
 };
 
 std::ostream& operator<<(std::ostream& os, Vector& v);
+#endif

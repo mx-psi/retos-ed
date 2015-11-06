@@ -1,4 +1,3 @@
-#include <iostream>
 #include "pila.h"
 
 int Opera(const int a, const int b, int op){
@@ -11,12 +10,15 @@ int Opera(const int a, const int b, int op){
 
 // Representación de operaciones
 char repr[4] = {'+', '-', '*', '/'};
+
 std::ostream& operator<<(std::ostream& os, const Operacion& op){
   os << op.arg2 << repr[op.op] << op.arg1 << "\t= " << Opera(op.arg1, op.arg2, op.op);
   return os;
 }
 
 void Pila::Imprime(int iniciales[6], bool usados[6], int n){
+  if(n == -1) n = size() - 1;
+
   // Si está en los iniciales y no ha sido usado no hace nada
   for (int i = 0; i < 6; i++)
     if(Resultado(pila[n]) == iniciales[i] && !usados[i]){
