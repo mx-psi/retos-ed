@@ -67,13 +67,70 @@ De esta forma, sólo tendremos que llamar $\texttt{Imprime}(v,n)$ con
 $n$ el último índice de la pila y $v$ un vector de 6 elementos booleanos
 falsos para imprimir la solución.
 
+\subsection{Caso general}
+El algoritmo es un algoritmo recursivo y presentamos de forma separada
+el caso base y el caso general.
+En el caso general recorremos $L$ y realizamos para cada pareja válida cada operación.
+Reducimos por tanto el tamaño de $L$ a exactamente un elemento menos y llamamos
+recursivamente al algoritmo:
+
+
+\begin{algo}
+\Cifras{$L,S,M_a,P$}: \\
+\KwIn{$L$, lista con $n>2$ elemento, $S$, $M_a$, $P$}
+\KwOut{Si se ha conseguido llegar al objetivo}
+\ForEach{$\circ \in \{+,-,\cdot,/\}$}{
+\If{$\circ$ usa 1}{$i := 0$\;}
+\Else{$i = \underset{k > i}{\min} \; L_k \neq 1$\;}
+\BlankLine
+
+\While{$i < |L|$}{
+$j:=i+1$\;
+\While{$j < |L|$}{
+$R := L_j \circ L_i$\;
+\lIf{$R$ no es válido}{\textbf{Continuar}}
+
+\BlankLine
+\textbf{Poner} $(L_j,L_i, \circ)$ en $P$\;
+\textbf{Borrar} $L_i,L_j$ de $L$\;
+\textbf{Insertar} $R$ en $L$\;
+\BlankLine
+
+\If{$|R-S| < |M_a-S|$}{
+$M_a := R$\;
+\lIf{$M_a = S$}{\KwRet{\texttt{true}}}
+}
+\BlankLine
+
+\lIf{\Cifras{$L,S,M_a,P$}}{\KwRet{\texttt{true}}}
+\BlankLine
+
+\textbf{Quitar} de $P$\;
+\textbf{Borrar} $R$ de $L$\;
+\textbf{Insertar} $L_i,L_j$ en $L$\;
+
+$j := \underset{k > j}{\min} \; L_k \neq L_j$\;
+}
+$i := \underset{k > i}{\min} \; L_k \neq L_i$\;
+}
+}
+\KwRet{\texttt{false}}
+\caption{Caso general del tercer algoritmo}
+\end{algo}
+
+Aprovechamos que el algoritmo está ordenado para evitar comprobar
+casos duplicados y evitar productos y divisiones por 1.
+La pila puede almacenar resultados basura que no contribuyan a
+llegar al resultado, por lo que debemos imprimir sólo las que
+necesitamos de acuerdo al algoritmo de impresión visto en la
+sección anterior.
+
 \subsection{Caso base}
 
-El algoritmo es un algoritmo recursivo y presentamos de forma separada el caso
-base y el caso general. El \textbf{caso base} sucede cuando $|L| = 2$
-es decir, tenemos una lista de la forma $[L_0, L_1]$ con $L_0 \leq L_1$.
-En tal caso recorremos todas las combinaciones y si alguna llega a la solución,
-la devolvemos:
+El \textbf{caso base} sucede cuando $|L| = 2$ es decir, tenemos
+una lista de la forma $[L_0, L_1]$ con $L_0 \leq L_1$.
+En tal caso recorremos todas las combinaciones y si alguna llega
+a la solución, la devolvemos:
 
 \begin{algo}
 	\KwIn{$L$, lista con 2 elementos y $S$}
@@ -95,63 +152,6 @@ la devolvemos:
 
 La operación no será válida si no cumple las condiciones indicadas en la introducción,
 es decir, el resultado es uno de los operandos o es 0.
-
-\subsection{Caso general}
-
-En el caso general recorremos $L$ y realizamos para cada pareja válida cada operación.
-Reducimos por tanto el tamaño de $L$ a exactamente un elemento menos y llamamos
-recursivamente al algoritmo:
-
-
-\begin{algo}
-\Cifras{$L,S,M_a,P$}: \\
-\KwIn{$L$, lista con $n>2$ elemento, $S$, $M_a$, $P$}
-\KwOut{Si se ha conseguido llegar al objetivo}
-\ForEach{$\circ \in \{+,-,\cdot,/\}$}{
-\If{$\circ$ usa 1}{$i := 0$\;}
-\Else{Asignar a $i$ el primer índice tal que $L_i \neq 1$\;}
-\BlankLine
-
-\While{$i < |L|$}{
-$j:=i+1$\;
-\While{$j < |L|$}{
-$R := L_j \circ L_i$\;
-\lIf{$R$ no es válido}{\textbf{Continuar}}
-
-\BlankLine
-\textbf{Poner} $(L_j,L_i, \circ)$ en $P$\;
-\textbf{Borrar} $L_i,L_j$ de $L$\;
-\textbf{Insertar} $R$ en $L$\;
-\BlankLine
-
-\If{$|R-S| < |M_a-S|$}{
-$M_a := R$\;
-\lIf{$res = S$}{\KwRet{\texttt{true}}}
-}
-\BlankLine
-
-\lIf{\Cifras{$L,S,M_a,P$}}{\KwRet{\texttt{true}}}
-\BlankLine
-
-\textbf{Quitar} de $P$\;
-\textbf{Borrar} $R$ de $L$\;
-\textbf{Insertar} $L_i,L_j$ en $L$\;
-
-Avanzar hasta el siguiente $j$ con $L_j$ diferente\;
-}
-Avanzar hasta el siguiente $i$ con $L_i$ diferente\;
-}
-}
-\KwRet{\texttt{false}}
-\caption{Caso general del tercer algoritmo}
-\end{algo}
-
-Aprovechamos que el algoritmo está ordenado para evitar comprobar
-casos duplicados y evitar productos y divisiones por 1.
-La pila puede almacenar resultados basura que no contribuyan a
-llegar al resultado, por lo que debemos imprimir sólo las que
-necesitamos de acuerdo al algoritmo de impresión visto en la
-sección anterior.
 
 \subsection{Características del algoritmo}
 
