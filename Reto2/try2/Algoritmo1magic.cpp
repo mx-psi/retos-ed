@@ -154,7 +154,6 @@ void ImprimeCombinacion(int disponibles[]) {
 // Comprueba si una determinada combinación es mágica
 bool Cifras(int disponibles[]) {
    VectorNodos nodos;
-   Nodo nodo;
    for (int i = 0; i < 6; i++)
       nodos.push_back({0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
 

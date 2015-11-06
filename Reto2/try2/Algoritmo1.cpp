@@ -148,7 +148,6 @@ void Cifras(int solucion, int disponibles[]) {
    clock_t tini = clock();
    
    VectorNodos nodos;
-   Nodo nodo;
    for (short int i = 0; i < 6; i++)
       nodos.push_back({0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
 
