@@ -1,13 +1,12 @@
-\section{Tipos de datos}
-\subsection{Tipo de dato para $L_k$}
+\subsubsection{Tipo de dato para $L_k$}
 
-Cada $L_k$ debe contener, como mínimo, tipos de datos que se identifiquen con la
- descripción que se dio anteriormente ($[n, i, j, op]$). Se implementaría
- probablemente con una estructura que permitiese distintos tipos de datos.\\
+Cada $L_k$ debe estar representado por una estructura que incluya, como
+mínimo, tipos de datos que se identifiquen con la descripción que se dio
+anteriormente ($[n, i, j, op]$).\\
 
-$n$ sería un tipo de dato entero con signo de, al menos, 32 bits. Es importante
+$n$ será un tipo de dato entero con signo de 32 bits. Es importante
 que el tamaño sea de al menos 32 bits, dado que si fuese de 16 bits sería posible
- salirse del rango y obtener resultados falsos o perder resultados correctos.
+salirse del rango y obtener resultados falsos o perder resultados correctos.
 \begin{itemize}
 	\item Un ejemplo de resultado falso: si trabajamos con enteros de 16 bits con
 	signo, $100^2 \cdot 75$ daría como resultado $29104$, que podría dar lugar a
@@ -23,27 +22,29 @@ que el tamaño sea de al menos 32 bits, dado que si fuese de 16 bits sería posi
 	$3 \cdot 50 = 53; 25 \cdot 53 = 1325; 3+1325=1328; 75 \cdot 1328 = 99600; 99600/100=996$.
 \end{itemize}
 
-$i$ y $j$ serían dos enteros de 32 bits que indicarían la posición de los $L_i$
+$i$ y $j$ serán dos enteros de 32 bits que indicarán la posición de los $L_i$
 y $L_j$ de los que se obtuvo el nodo anterior (como se verá en la siguiente sección, el tamaño de $L$ es menor que $2^{31}$). Dado que los $L_k$ deben tener
 todos la misma estructura, y en lo propuesto los seis primeros elementos (que
 procedían de $C$) estaban compuestos solo por un número, para esos seis
 elementos iniciales podrían tomar un valor arbitrario (por ejemplo, el valor
-inválido -1, lo que requeriría enteros con signo). \\
+inválido -1, lo que requeriría enteros con signo), aunque en la
+implementación no se optará por ello. \\
 
-$op$ representaría la operación con la que se obtuvo el elemento.
-Podría representarse con cualquier tipo de dato. Para los seis primeros
-elementos, podría tomar un valor arbitrario, preferiblemente inválido.\\
+$op$ representará la operación con la que se obtuvo el elemento.
+Podría representarse con cualquier tipo de dato; optaremos por un entero
+de 16 bits. Para los seis primeros elementos, podría tomar un valor
+arbitrario, preferiblemente inválido.\\
 
 De cara al algoritmo que genera las operaciones con las que se llegó a un
-elemento, interesaría que, en los seis primeros elementos, al menos uno de los
+elemento, interesará que, en los seis primeros elementos, al menos uno de los
 tres últimos elementos que componen esta estructura tuviese un valor inválido,
 dado que el algoritmo debe no hacer nada cuando está siendo ejecutado con uno
 de los seis primeros elementos como entrada. En la implementación optaremos
 por darle un valor inválido al campo $op$. Esto facilitará la labor a la función
 que comprueba si uno de los operandos procede de la misma operación. \\
 
-Además de los datos anteriores, que son indispensables, probablemente interesará
- añadir más elementos a la estructura:
+Además de los datos anteriores, que son indispensables, probablemente
+interesará hacer (y en la implementación se ha hecho) lo siguiente:
 
 \begin{itemize}
 	\item Incluir un entero que indique la generación del elemento podría reducir
@@ -66,7 +67,7 @@ Además de los datos anteriores, que son indispensables, probablemente interesar
 	$1 << i$. ($1$ para el primero, $2$ para el segundo, $4$ para el tercero\ldots)
 \end{itemize}
 
-\subsection{Tipo de dato para $L$}
+\subsubsection{Tipo de dato para $L$}
 $L$ debe estar representado por una clase que permita, al menos, añadir elementos $L_k$. Dado que el número de elementos es demasiado como para almacenarlos en la pila, se optará por una estructura lineal situada en memoria dinámica. El tipo de dato reservará espacio para un número suficiente (según se calculará a continuación) de elementos del tipo de dato descrito anteriormente, y además almacenará las posiciones en las que se inicia cada generación de elementos, para controlar dónde deben comenzar y acabar los bucles que recorren los elementos. \\
 
 Convendrá que esta clase disponga de métodos para añadir elementos, consultar los elementos actuales, obtener la posición de inicio de cada generación y marcar como final de la generación el último elemento actual, además de un destructor que libere la memoria reservada. Para las combinaciones mágicas, se modificará ligeramente esta estructura. \\
