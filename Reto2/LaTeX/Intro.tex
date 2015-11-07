@@ -86,37 +86,3 @@ Podemos considerar algunos criterios para reducir el número de operaciones:
 
 Decimos que una operación es \textbf{válida} si no puede omitirse por lo
 expuesto anteriormente.
-
-\subsection{Combinaciones posibles de elementos}
-
-En esta sección damos cotas al tamaño de $C^{\ast}$. En primer lugar calculamos
-los conjuntos $C$ posibles a escoger de $C_T$. Como $|C_T| = 14$, $|C| = 6$ y
-podemos repetir elementos esto resulta en:
-
-\[\operatorname{CR}_{14}^{6} = 27132 \textit{ combinaciones posibles}\]
-
-Cada elemento puede combinarse una única vez con otro de $C$
-y ninguno puede combinarse consigo mismo. El número total de parejas que podemos
-obtener de $C$ son entonces $C_{6}^{2}=15$.
-Como cada pareja puede operarse 4 veces tenemos un conjunto de 60 elementos.
-Llamamos a este conjunto $C^1$.
-
-Cada elemento de $C^1$ puede combinarse con los 4 elementos de $C$ que no se
-usaron para crearlo, obteniendo un conjunto de 5 elementos;
-si esto lo hacemos con todos los elementos del conjunto de las combinaciones
-obtendremos todos los posibles conjuntos de 5 elementos resultantes de operar
-2 de $C$.
-
-En general, si llamamos $C^{n+1}$ al conjunto de combinaciones válidas obtenidas
-a partir de $C^n$ y aplicamos el razonamiento anterior podemos acotar $C^{\ast}$
-por:
-
-\[ 4 \cdot C_6^2 \cdot 4 \cdot C_5^2 \cdot 4 \cdot C_4^2 \cdot 4 \cdot C_3^2 \cdot 4 \cdot C_2^2= 2764000\]
-
-De esta forma, podemos definir $T:\mathbb{N} \to \mathbb{N}$:
-\[T_n(i)=n^i\prod_{k=0}^{i}C_{i-k}^{2}\]
-
-donde $T_n(|C|)$ devuelve el tamaño de los generables a partir de $C$ con $n$
-operaciones. La división no siempre es válida, por lo que tenemos que:
-
-\[T_3(|C|) < C^{\ast} < T_4(|C|)\]
