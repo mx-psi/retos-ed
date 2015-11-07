@@ -25,7 +25,7 @@ mediante el siguiente procedimiento recursivo:\\
 	Aplica este algoritmo con entrada $L$, $L_i$\;
 	Aplica este algoritmo con entrada $L$, $L_j$\;
 	\If{$op$ no es conmutativa y $L_i.n < L_j.n$}{intercambia $i$ y $j$\;}
-	\KwRet{\texttt{a operador b = n}, con $a = L_i.n$, $b = L_j.n$}
+	\KwRet{\texttt{a operador b = n}, con $a = L_i.n$, $b = L_j.n$, \texttt{operador} una representación de op}
 	}
 \caption{Obtención de operaciones}
 \end{algorithm}
@@ -96,9 +96,9 @@ Finalmente, el algoritmo queda así:\\
 
 $L = [c_1, c_2, c_3, c_4, c_5, c_6]$\;
 $N = c_6$\;
-\ForAll{$g$ desde $2$ hasta $6$}{
-	\ForAll{$i$ tal que $2 \cdot \gen(L_i) \le g$}{
-		\ForAll{$j \in miembros(g-\gen(L_i))$ tal que $j > i$}{
+\ForAll{$g$ \textnormal{\textbf{desde}} $2$ \textnormal{\textbf{hasta}} $6$}{
+	\ForAll{$i$ \textnormal{\textbf{tal que}} $2 \cdot \gen(L_i) \le g$}{
+		\ForAll{$j \in miembros(g-\gen(L_i))$ \textnormal{\textbf{tal que}} $j > i$}{
 			\If{$U(L_i) \cap  U(L_j) = \emptyset$}{
 				\ForAll{$op \in \{+,-,\cdot,/\}$}{
 					\If{$[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es \textbf{válida}}{
@@ -129,9 +129,9 @@ siguiente a la del último elemento de $L$.
 La función $\operatorname{miembros}(i)$ podría redefinirse aprovechando $G$ como
 $\{L_k : k \ge G_i, k < G_{i+1}\}$. \\
 
-El bucle que recorre los $i$ debe terminar al final de la última generación $\bar g$ tal que $2\cdot \bar g \le g$, que es la posición anterior a la que comienza la generación posterior. \\
+El bucle que recorre los $i$ debe terminar al final de la última generación $\bar g$ tal que $2\cdot \bar g \le g$, que es la posición anterior a la que comienza la generación posterior. Tal posición es $G_{((g+1)/2+1)}-1$, usando la división entera (con truncamiento)\\
 
-El bucle que recorre los $j$ debe recorrer la generación que, sumada a la de $i$, dé $g$; pero si ambas fuesen la misma, debería empezar después de $i$. \\
+El bucle que recorre los $j$ debe recorrer la generación $\bar g$ que $\bar g + gen(L_i) = g$; pero si ambas fuesen la misma, debería empezar después de $i$. Así, el inicio estará en $\max \{i+1, G_{(g-gen(L_i))}\}$ y el final en $G_{(g-gen(L_i)+1)-1}\}$.\\
 
 Con los bucles escritos de esta forma, el algoritmo queda así:
 
@@ -141,9 +141,9 @@ Con los bucles escritos de esta forma, el algoritmo queda así:
 	
 	$L = [c_1, c_2, c_3, c_4, c_5, c_6]$\;
 	$N = c_6$\;
-	\ForAll{$g$ desde $2$ hasta $6$}{
-		\ForAll{$i = 1$ hasta $G_{((g+1)/2+1)}-1$}{
-			\ForAll{$j = \max \{i+1, G(g-gen(L_i))\}$ hasta $G(g-gen(L_i)+1)\}$}{
+	\ForAll{$g$ \textnormal{\textbf{desde}} $2$ \textnormal{\textbf{hasta}} $6$}{
+		\ForAll{$i$ \textnormal{\textbf{desde}} $1$ \textnormal{\textbf{hasta}} $G_{((g+1)/2+1)}-1$}{
+			\ForAll{$j$ \textnormal{\textbf{desde}} $\max \{i+1, G_{(g-gen(L_i))}\}$ \textnormal{\textbf{hasta}} $G_{(g-gen(L_i)+1)}-1\}$}{
 				\If{$U(L_i) \cap  U(L_j) = \emptyset$}{
 					\ForAll{$op \in \{+,-,\cdot,/\}$}{
 						\If{$[n, i, j, op]$, con $n = L_i.n\ op\ L_j.n$, es \textbf{válida}}{
