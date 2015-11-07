@@ -1,39 +1,31 @@
 \section{Segundo Algoritmo}
-A partir de aquí los conjuntos pasarán a llamarse vectores.
-
-La entrada es un vector de 6 elementos, los combinamos y
-producimos un vector de 60 elementos.
-Recorremos este vector: si el elemento está, hemos terminado.
+La entrada es un vector de 6 elementos, los combinamos y producimos un vector de
+60 elementos. Recorremos este vector: si el elemento está, hemos terminado.
 De lo contrario cogemos el primer elemento del vector de las combinaciones y
 creamos un vector de tamaño 5 con este elemento y los 4 que no se hayan usado
 para crearlo, repetimos el proceso.
 
-Creamos un algoritmo recursivo, que describimos a continuación:
-Sean los $v_0,..,v_n$ valores de entrada:
-\vspace{1cm}
+Creamos un algoritmo recursivo, que describimos a continuación.
+Sea $L$ la lista inicial.
 
-\begin{algorithm}[H]
-
- \KwIn{$v_0,..v_n$, vector de n elementos;  $N$, meta}
- \KwOut{Operaciones con los $v_0,..v_n$ hasta llegar a $N$}
- \hspace{0.25cm}	Sean los $b_0,..,b_{m}$ resultado de combinar los $v_i$ y $v_j$ $i \neq j$  \;
- \While{i $<$ m}{
-  \eIf{$b_i$ = $N$}{
-   \KwRet{$v_j, v_k$ que se usaron para crear el $b_i$}
+\begin{algo}
+ \KwIn{$L$,$S$}
+ \KwOut{Operaciones hasta llegar a $S$}
+ \hspace{0.25cm}	Sean $b_0,..,b_m$ el resultado de combinar los $L_i$ y $L_j$ con $i \neq j$  \;
+ \While{$i < m$}{
+  \eIf{$b_i$ = $S$}{
+   \KwRet{Devuelve los $L_j, L_k$ que se usaron para crear el $b_i$}
    }{
-	Repetir el algoritmo con los $v_j$ que no se usaron para crear el $b_i$ y el $b_i$ \;
+	Repetir el algoritmo con los $L_j$ que no se usaron para crear el $b_i$ y el $b_i$ \;
 	Avanzar el índice $i$ \;
   }
  }
-\caption{Segundo algoritmo sin mejor aproximación}
-\end{algorithm}
+\end{algo}
 
-\vspace{0.25cm}
-
-La principal ventaja de esta implementación es que sólo tenemos en memoria
+La principal característica de esta implementación es que sólo tenemos en memoria
 aquellos elementos necesarios para seguir avanzando, una vez que ya hemos
-recorrido todos los posibles elementos asociados al elemento $b_i$, estos
-dejan de ser necesarios, y se eliminan de memoria.
+recorrido todos los posibles elementos asociados al elemento $b_i$,
+estos dejan de ser necesarios, y se eliminan de memoria.
 
 \subsubsection{Eficiencia}
 
@@ -49,19 +41,18 @@ ya creado el algoritmo de búsqueda, basta con crear un campo nuevo en el que
 vamos guardando la mejor aproximación:
 \vspace{0.25cm}
 
-\begin{algorithm}[H]
- \KwIn{$v_0,..v_n$, vector de n elementos;  $N$, meta, $aproximacion=v_0$}
- \KwOut{Operaciones con los $v_0,..v_n$ hasta llegar a $N$  }
- \hspace{0.25cm}	Sean los $b_0,..,b_{m}$ resultado de combinar los $v_i$ y $v_j$ $i \neq j$  \;
- \While{$i<m$}{
+\begin{algo}
+  \KwIn{$L$,$S$,$M_a$}
+  \KwOut{Operaciones hasta llegar a $M_a$}
+ \hspace{0.25cm}	Sean los $b_0,..,b_m$ resultado de combinar los $L_i$ y $L_j$ $i \neq j$  \;
+ \While{$i < m$}{
 
-  \eIf{$b_i = N$}{
-    \KwRet{Devuelve los $v_j, v_k$ que se usaron para crear el $b_i$\;}
+  \eIf{$b_i$ = $S$}{
+   \KwRet{Devuelve los $L_j, L_k$ que se usaron para crear el $b_i$}
    }{
-   	\If{$|b_i-aproximacion|$ $<$ $|aproximacion-N|$}{$aproximacion=b_i$\;}
-	Repetir el algoritmo con los $v_j$ que no se usaron para crear el $b_i$ y el $b_i$ \;
-	Avanza el índice $i$ \;
+   	\If{$|b_i-M_a|$ $<$ $|M_a-S|$}{$M_a:=b_i$\;}
+	Repetir el algoritmo con los $L_j$ que no se usaron para crear el $b_i$, y el $b_i$ \;
+	Avanzar el índice $i$ \;
   }
  }
-\caption{Segundo algoritmo con mejor aproximación}
-\end{algorithm}
+\end{algo}

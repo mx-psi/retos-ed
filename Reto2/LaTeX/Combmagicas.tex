@@ -5,18 +5,10 @@
 \end{definition}
 
 No existen propiedades destacables de las combinaciones mágicas, que nos permitan
-acotar el número de casos a probar. Podemos destacar que:
-\begin{enumerate}
-\item La multiplicación de sus elementos debe ser mayor o igual que 1000. %¿Seguro?
-\item Las combinaciones son heterogéneas. %????
-\end{enumerate}
-
-\subsection{Algoritmo para buscar combinaciones mágicas}
-
-Proponemos una refinación de la fuerza bruta:
+acotar el número de casos a probar. Proponemos una refinación de la fuerza bruta:
 
 \subsection{Versión 1}
-Podría ocurrirsenos ejecutar 900 veces el algoritmo con cada combinación para
+Podría ocurrírsenos ejecutar 900 veces el algoritmo con cada combinación para
 ver si encuentra todos los números del 100, y eso ejecutarlo con las 27 mil
 combinaciones.
 
@@ -52,24 +44,20 @@ Un tiempo mucho más razonable.
 Describimos aquí el algoritmo con más detalle:
 \vspace{0.25cm}
 
-\begin{algorithm}[H]
+\begin{algo}
 
- \KwIn{$v_0,..v_n$, vector de n elementos;  $N$, meta, $\operatorname{aproximacion}=v_0$,\;
-  $p_0,..,p_k$ booleanos}
+ \KwIn{$L$,$S$,$M_a$,$p_0,..,p_k$ booleanos}
+ \KwOut{\textbf{true}, si $p_i = \texttt{true} \; \forall i$, \texttt{false} en otro caso}
+ \hspace{0.25cm}	Sean los $b_0,..,b_{m}$ resultado de combinar los $L_i$ y $L_j$ $i \neq j$  \;
+ \While{$i<m$ y $\exists$ j tal que $p_j=\texttt{false}$}{
 
- \KwOut{\texttt{true}, si $p_i =\texttt{true} $ $\forall i$, \texttt{false} en otro caso}
- \hspace{0.25cm}	Sean los $b_0,..,b_{m}$ resultado de combinar los $v_i$ y $v_j$ $i \neq j$  \;
- \While{$i<m$ y $\exists j$ tal que $p_j=\textbf{false}$}{
-
-  \eIf{$b_i$ $\geq 100$ y $b_i$ $\leq$ $1000$ }{
-   		$p_i=\textbf{true}$;
+  \eIf{$b_i \geq 100$ y $b_i \leq 1000$ }{
+   		$p_i=\texttt{true}$ ;
    }{
 
-	Repetir el algoritmo con los $v_j$ que no se usaron para crear el $b_i$ y el $b_i$ \;
+	Repetir el algoritmo con los $L_j$ que no se usaron para crear el $b_i$ y el $b_i$ \;
 	Avanzar el índice $i$ \;
   }
  }
-
-\end{algorithm}
-
+\end{algo}
 Si todos los $p_k$ están puestos a $\textbf{true}$ la combinación es mágica.
