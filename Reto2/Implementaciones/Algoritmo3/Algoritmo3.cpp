@@ -1,3 +1,4 @@
+#include <ctime>
 #include "pila.h"
 #include "vector.h"
 #include <algorithm>
