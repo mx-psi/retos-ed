@@ -1,6 +1,4 @@
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
 using namespace std;
 
 const char OPERADORES[] = {'+', '-', '*', '/'};   // Se va a indicar la suma con 0, la resta con 1, el producto con 2 y el cociente con 3
@@ -135,7 +133,7 @@ void Recrea(const VectorNodos &vec, const Nodo &nodo) {
 }
 
 // Muestra los números disponibles y el número objetivo
-void ImprimeEntrada(int solucion, int disponibles[]) {	
+void ImprimeEntrada(int solucion, int disponibles[]) {
    cout << "[";
    for(int i = 0; i < 6; i++)
       cout << (i?",":"") << disponibles[i];
@@ -146,7 +144,7 @@ void ImprimeEntrada(int solucion, int disponibles[]) {
 void Cifras(int solucion, int disponibles[]) {
    ImprimeEntrada(solucion, disponibles);
    clock_t tini = clock();
-   
+
    VectorNodos nodos;
    for (short int i = 0; i < 6; i++)
       nodos.push_back({0, 0, -1, 1, (1 << i), disponibles[i]}); // El -1 en la operación es para que no se compruebe asociatividad correcta
@@ -160,26 +158,4 @@ void Cifras(int solucion, int disponibles[]) {
 
    // Muestra el tiempo transcurrido
    cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
-}
-
-// Programa principal. Genera los números al azar si no se pasan siete parámetros
-int main(int argc, char* argv[]) {
-   int disponibles[6];
-   int solucion;
-   if (argc == 8) {
-      solucion = atoi(argv[7]);
-      for (int i = 0; i < 6; i++)
-         disponibles[i] = atoi(argv[i+1]);
-   }
-	else {
-      int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
-
-      srand(time(0));
-      solucion = (rand()%900) + 100;
-
-      for (int i = 0; i < 6; i++)
-         disponibles[i] = posibles[rand()%14];
-   }
-
-   Cifras(solucion, disponibles);
 }

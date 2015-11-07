@@ -1,6 +1,5 @@
 #include "pila.h"
 #include "vector.h"
-#include <ctime>
 #include <algorithm>
 using namespace std;
 
@@ -76,21 +75,4 @@ void Cifras(int obj, int iniciales[6]) {
 
   cout << "Obtenida: " << m_a << endl;
   p.Imprime(iniciales, usados);
-}
-
-int main(){
-  int posibles[14] = {1,2,3,4,5,6,7,8,9,10,25,50,75,100};
-
-  srand(time(0));
-  int obj = (rand()%900) + 100;
-  int iniciales[6];
-
-  for (int i = 0; i < 6; i++)
-    iniciales[i] = posibles[rand()%14];
-
-  clock_t tini = clock();
-  Cifras(obj,iniciales);
-  clock_t tfin = clock();
-
-  cout << (tfin-tini)/(double)CLOCKS_PER_SEC << endl;
 }
