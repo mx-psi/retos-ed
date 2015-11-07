@@ -102,7 +102,7 @@ bool OtraGeneracion(VectorNodos &nodos, int &mas_cercano, int objetivo, short in
          if (!SeSolapan(usados_i, nodos[j].usados))
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
-               if (resultado != 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
+               if (resultado > 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
                   int diferencia = Diferencia(resultado, objetivo);
                   bool es_mejor = diferencia < Diferencia(nodos[mas_cercano].valor, objetivo);
                   if (generacion != 6 || es_mejor)
