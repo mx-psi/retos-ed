@@ -117,7 +117,7 @@ bool OtraGeneracion(VectorNodos &nodos, short int generacion) {
          if (!SeSolapan(usados_i, nodos[j].usados))
             for (short int k = 0; k < 4; k++) {
                int resultado = Opera(nodos[i].valor, nodos[j].valor, k);
-               if (resultado != 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
+               if (resultado > 0 && !Repite(nodos, resultado, i, j) && !MalAsociacion(nodos, i, j, k)) {
                   nodos.Marca(resultado);
                	if (generacion != 6)
                      nodos.push_back({i, j, k, generacion, usados_i | nodos[j].usados, resultado});

@@ -22,6 +22,8 @@ salirse del rango y obtener resultados falsos o perder resultados correctos.
 	$3 \cdot 50 = 53; 25 \cdot 53 = 1325; 3+1325=1328; 75 \cdot 1328 = 99600; 99600/100=996$.
 \end{itemize}
 
+Con un entero de 32 bits también es posible salirse del rango (con $100^5$, por ejemplo), pero si el entero tiene signo, al provocar desbordamiento obtendremos un número negativo, por lo que se cancelará y nunca obtendremos un resultado falso; y por otro lado se requiere operar con todos los números menos uno para llegar a provocar desbordamiento, pero, en tal situación, al dividir por un número que como máximo será $100$ en ningún caso el resultado será menor que $1000$, por lo que tampoco es posible que se pierda una solución correcta.\\
+
 $i$ y $j$ serán dos enteros de 32 bits que indicarán la posición de los $L_i$
 y $L_j$ de los que se obtuvo el nodo anterior (como se verá en la siguiente sección, el tamaño de $L$ es menor que $2^{31}$). Dado que los $L_k$ deben tener
 todos la misma estructura, y en lo propuesto los seis primeros elementos (que
