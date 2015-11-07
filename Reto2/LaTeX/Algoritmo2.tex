@@ -1,58 +1,64 @@
 \section{Segundo Algoritmo}
-La entrada es un vector de 6 elementos, los combinamos y producimos un vector de
-60 elementos. Recorremos este vector: si el elemento está, hemos terminado.
-De lo contrario cogemos el primer elemento del vector de las combinaciones y
-creamos un vector de tamaño 5 con este elemento y los 4 que no se hayan usado
-para crearlo, repetimos el proceso.
+Mientras que el algoritmo anterior construía todos los caminos empezando por los
+menos profundos y los exploraba a cada vez mayor profundidad, este algoritmo
+optará por explorar los caminos en profundidad. Esto tendrá la ventaja de que no
+será necesario mantener en memoria todos los caminos en ningún momento, pero
+tendrá el problema de que, si el resultado exacto no se encuentra, habremos
+perdido el camino por el que se llegó al mismo. El procedimiento será recursivo.\\
 
-Creamos un algoritmo recursivo, que describimos a continuación.
-Sea $L$ la lista inicial.
+Tomaremos $L$ como entrada. Combinamos pares de elementos de $L$ con las operaciones
+según se describieron, obteniendo 60 elementos. Comprobamos si hemos llegado al objetivo:
+si el elemento está entre estos elementos, lo hemos encontrado y podremos
+reconstruir la secuencia de operaciones. De lo contrario, para cada elemento
+obtenido (o hasta que encontremos el número), creamos un vector $\bar L$ con este
+elemento y los elementos de $L$ que no se han usado para crearlo y repetimos
+el proceso con $\bar L$ como entrada. \\
+
+El algoritmo es el siguiente:
 
 \begin{algo}
  \KwIn{$L$,$S$}
  \KwOut{Operaciones hasta llegar a $S$}
- \hspace{0.25cm}	Sean $b_0,..,b_m$ el resultado de combinar los $L_i$ y $L_j$ con $i \neq j$  \;
- \While{$i < m$}{
+ \hspace{0.25cm}	Sean $b_0,..,b_m$ resultados de efectuar todas las operaciones posibles sobre pares $L_p$ y $L_q$ con $p < q$ \;
+ \ForAll{$i$ desde $0$ hasta $m$}{
   \eIf{$b_i$ = $S$}{
    \KwRet{Devuelve los $L_j, L_k$ que se usaron para crear el $b_i$}
    }{
-	Repetir el algoritmo con los $L_j$ que no se usaron para crear el $b_i$ y el $b_i$ \;
-	Avanzar el índice $i$ \;
+	Repetir el algoritmo con $\{L_j : L_j$ no fue usado para obtener $b_i\} \cup b_i$ \;
   }
  }
 \end{algo}
 
-La principal característica de esta implementación es que sólo tenemos en memoria
-aquellos elementos necesarios para seguir avanzando, una vez que ya hemos
+\subsection{Características del algoritmo}
+
+La principal característica de esta implementación es que solo tenemos en memoria
+aquellos elementos necesarios para seguir avanzando. Una vez que ya hemos
 recorrido todos los posibles elementos asociados al elemento $b_i$,
-estos dejan de ser necesarios, y se eliminan de memoria.
+estos dejan de ser necesarios y se eliminan de la memoria. \\
 
-\subsubsection{Eficiencia}
-
-El factor $4^i$ de la función $T$ nos marca la eficiencia del algoritmo.
-Para un vector de entrada de tamaño $n$ tenemos más de $4^n$ elementos a
-considerar, como los datos crecen exponencialmente el tiempo para procesarlos
-también. Sin más consideraciones queda claro que todo algoritmo que se base en
-la búsqueda entre las posibles combinaciones es exponencial.
+Sin embargo, el principal problema es que, tal cual está ahora, no permite hallar
+la mejor aproximación.
 
 \subsection{Mejor Aproximación}
 El problema de encontrar la mejor aproximación es bastante sencillo una vez
 ya creado el algoritmo de búsqueda, basta con crear un campo nuevo en el que
-vamos guardando la mejor aproximación:
+vamos guardando la mejor aproximación, $M_a$, que debe ser externo a la función:
 \vspace{0.25cm}
 
 \begin{algo}
-  \KwIn{$L$,$S$,$M_a$}
-  \KwOut{Operaciones hasta llegar a $M_a$}
- \hspace{0.25cm}	Sean los $b_0,..,b_m$ resultado de combinar los $L_i$ y $L_j$ $i \neq j$  \;
- \While{$i < m$}{
-
-  \eIf{$b_i$ = $S$}{
-   \KwRet{Devuelve los $L_j, L_k$ que se usaron para crear el $b_i$}
-   }{
-   	\If{$|b_i-M_a|$ $<$ $|M_a-S|$}{$M_a:=b_i$\;}
-	Repetir el algoritmo con los $L_j$ que no se usaron para crear el $b_i$, y el $b_i$ \;
-	Avanzar el índice $i$ \;
-  }
- }
+	\KwIn{$L$,$S$}
+	\KwOut{Operaciones hasta llegar a $S$}
+	\hspace{0.25cm}	Sean $b_0,..,b_m$ resultados de efectuar todas las operaciones posibles sobre pares $L_p$ y $L_q$ con $p < q$ \;
+	\ForAll{$i$ desde $0$ hasta $m$}{
+		\eIf{$b_i$ = $S$}{
+			\KwRet{Devuelve los $L_j, L_k$ que se usaron para crear el $b_i$}
+		}{
+		\If{$|b_i-M_a|$ $<$ $|M_a-S|$}{$M_a \leftarrow b_i$\;}
+		Repetir el algoritmo con $\{L_j : L_j$ no fue usado para obtener $b_i\} \cup b_i$ \;
+	}
+}
 \end{algo}
+
+Ahora podemos identificar el resultado aproximado más cercano. Sin embargo
+sigue sin ser posible construirlo; tendremos que llamar de nuevo al algoritmo
+con el resultado aproximado más cercano para poder construir las operaciones.
