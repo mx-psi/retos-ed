@@ -17,7 +17,7 @@ int  Combinar(int *v, int n, int* & buffer)
       for(int k=0; k<4; k++)
       {
         buffer[cont] = 0;
-		
+
 		if(k==0){buffer[cont]=v[i]+v[j];}
 
         else if(k==1)
@@ -177,7 +177,7 @@ bool Recorrer(int *v, int n, int meta, nodo * &traza,int& m, bool & encontrado, 
       delete [] tmp;
     }
   }
- 
+
 delete [] buffer;
 return encontrado;
 }
@@ -281,39 +281,26 @@ void WhatMagic(int *v, int n)
 void Imprime(int *v,nodo * traza, int i)
 {
   if(traza[i].op==0)
-  {cout <<traza[i].elemento<<"="<<v[traza[i].comb1]<<"+"<<v[traza[i].comb2];}
+  {cout <<v[traza[i].comb1]<<"+"<<v[traza[i].comb2] << " = " << traza[i].elemento << endl;;}
 
   if(traza[i].op==1)
   {
-    if(v[traza[i].comb1]>v[traza[i].comb2]){cout <<traza[i].elemento<<"="<<v[traza[i].comb1]<<"-"<<v[traza[i].comb2];}
-    else{cout <<traza[i].elemento<<"="<<v[traza[i].comb2]<<"-"<<v[traza[i].comb1];}
+    if(v[traza[i].comb1]>v[traza[i].comb2]){cout <<v[traza[i].comb1]<<"-"<<v[traza[i].comb2] << " = " << traza[i].elemento << endl;;}
+    else{cout <<v[traza[i].comb2]<<"-"<<v[traza[i].comb1] << " = " << traza[i].elemento << endl;;}
   }
 
-  if(traza[i].op==2){cout <<traza[i].elemento<<"="<<v[traza[i].comb1]<<"*"<<v[traza[i].comb2];}
+  if(traza[i].op==2){cout <<v[traza[i].comb1]<<"*"<<v[traza[i].comb2] << " = " << traza[i].elemento << endl;;}
 
   if(traza[i].op==3)
-  { if(v[traza[i].comb1]%v[traza[i].comb2]==0){cout <<traza[i].elemento<<"="<<v[traza[i].comb1]<<"/"<<v[traza[i].comb2];}
-    else{cout <<traza[i].elemento<<"="<<v[traza[i].comb2]<<"/"<<v[traza[i].comb1];}
+  { if(v[traza[i].comb1]%v[traza[i].comb2]==0){cout <<v[traza[i].comb1]<<"/"<<v[traza[i].comb2] << " = " << traza[i].elemento << endl;;}
+    else{cout <<v[traza[i].comb2]<<"/"<<v[traza[i].comb1] << " = " << traza[i].elemento << endl;;}
   }
 }
 
 
-void Preetyprint(int* v,int n,nodo *traza, int m)
+void Prettyprint(int* v,int n,nodo *traza, int m)
 {
   int *p=v;
-  int*tmp=v;
-  int tam=n;
-
   for(int i=m-1; i>=0; i--)
-  {
     Imprime(p,traza,i);
-
-    cout << "    { ";
-    for(int j=0; j<tam; j++){cout<<p[j]<< " ";}
-    cout <<"}"<< endl;
-    tam=new_vec(p,tam,traza[i],tmp);
-      if(i>m-1){delete [] p;}
-    p=tmp;
-  }
-
 }

@@ -114,11 +114,11 @@ void Traza(int *v, int n, int i, nodo *&traza, int &m);
   @brief Imprime los elementos del vector usados para llegar a la meta por pantalla.
 */
 
-void Preetyprint(int* v,int n,nodo *traza, int m);
+void Prettyprint(int* v,int n,nodo *traza, int m);
 
 /**
-  @brief Función auxiliar usada por Preetyprint
-  @see Preetyprint
+  @brief Función auxiliar usada por Prettyprint
+  @see Prettyprint
 */
 
 void Imprime(int *v,nodo * traza, int i);

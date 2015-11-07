@@ -26,7 +26,7 @@ void Cifras(int solucion, int disponibles[6]){
 
 
   if(encontrado)
-  {Preetyprint(disponibles,6,traza,m);}
+  {Prettyprint(disponibles,6,traza,m);}
 
-  cout << "tiempo de ejecución: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" <<endl;
+  cout << "Tiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }

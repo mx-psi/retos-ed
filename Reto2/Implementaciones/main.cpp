@@ -7,7 +7,7 @@ void ImprimeEntrada(int solucion, int disponibles[]) {
    std::cout << "[";
    for(int i = 0; i < 6; i++)
       std::cout << (i?",":"") << disponibles[i];
-   std::cout << "] ⟶ " << solucion << '\n' << std::endl;
+   std::cout << "] ⟶ " << solucion << std::endl;
 }
 
 void Cifras(int solucion,int disponibles[]);
