@@ -7,7 +7,6 @@ using namespace std;
 void Cifras(int solucion, int disponibles[6]){
   nodo *traza=new nodo[6];
   int m=0;
-  int *buffer;
   bool encontrado=false;
   int mejor_aprox=disponibles[0];
 
