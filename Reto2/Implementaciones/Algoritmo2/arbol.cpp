@@ -278,6 +278,7 @@ void WhatMagic(int *v, int n)
     }
 }
 
+
 void Imprime(int *v,nodo * traza, int i)
 {
   if(traza[i].op==0)
@@ -301,6 +302,17 @@ void Imprime(int *v,nodo * traza, int i)
 void Prettyprint(int* v,int n,nodo *traza, int m)
 {
   int *p=v;
+  int*tmp=v;
+  int tam=n;
+
   for(int i=m-1; i>=0; i--)
+  {
     Imprime(p,traza,i);
+
+    tam=new_vec(p,tam,traza[i],tmp);
+    if(i>m-1)
+      delete [] p;
+    p=tmp;
+  }
+
 }

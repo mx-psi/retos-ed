@@ -17,16 +17,15 @@ void Cifras(int solucion, int disponibles[6]){
   encontrado=Recorrer(disponibles,6,solucion,traza,m,encontrado,mejor_aprox);
   tfin=clock();
 
-  if(encontrado){cout <<"exito "<< endl;}
-  else
+  if(!encontrado)
   {
     cout << "fracaso "<<endl;
-    cout << "mejor aproximaxión: "<<mejor_aprox<< endl;
+    cout << "mejor aproximación: "<<mejor_aprox<< endl;
   }
 
 
   if(encontrado)
   {Prettyprint(disponibles,6,traza,m);}
 
-  cout << "Tiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
+  cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }

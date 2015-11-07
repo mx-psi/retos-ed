@@ -77,5 +77,5 @@ void Cifras(int obj, int iniciales[6]) {
 
   cout << "Obtenida: " << m_a << endl;
   p.Imprime(iniciales, usados);
-  cout << "Tiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
+  cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }
