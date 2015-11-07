@@ -132,17 +132,8 @@ void Recrea(const VectorNodos &vec, const Nodo &nodo) {
    }
 }
 
-// Muestra los números disponibles y el número objetivo
-void ImprimeEntrada(int solucion, int disponibles[]) {
-   cout << "[";
-   for(int i = 0; i < 6; i++)
-      cout << (i?",":"") << disponibles[i];
-   cout << "] --> " << solucion << '\n' << endl;
-}
-
 // Resuelve un problema y muestra la solución y el tiempo empleado
 void Cifras(int solucion, int disponibles[]) {
-   ImprimeEntrada(solucion, disponibles);
    clock_t tini = clock();
 
    VectorNodos nodos;

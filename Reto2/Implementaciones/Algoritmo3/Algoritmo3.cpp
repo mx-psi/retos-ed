@@ -62,7 +62,7 @@ void Cifras(int obj, int iniciales[6]) {
   Vector nums(iniciales);
   bool usados[6];
 
-  cout << nums << "⟶ " << obj << endl;
+  clock_t tini = clock();
   Algo3(obj,nums,p,m_a);
 
   if(obj != m_a){
@@ -72,7 +72,9 @@ void Cifras(int obj, int iniciales[6]) {
     m_a = 0;
     Algo3(obj,nums,p,m_a);
   }
+  clock_t tfin = clock();
 
   cout << "Obtenida: " << m_a << endl;
   p.Imprime(iniciales, usados);
+  cout << "Tiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }

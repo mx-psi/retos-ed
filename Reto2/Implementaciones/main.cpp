@@ -1,5 +1,14 @@
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
+
+// Muestra los números disponibles y el número objetivo
+void ImprimeEntrada(int solucion, int disponibles[]) {
+   std::cout << "[";
+   for(int i = 0; i < 6; i++)
+      std::cout << (i?",":"") << disponibles[i];
+   std::cout << "] ⟶ " << solucion << '\n' << std::endl;
+}
 
 void Cifras(int solucion,int disponibles[]);
 
@@ -21,5 +30,6 @@ int main(int argc, char* argv[]) {
          disponibles[i] = posibles[rand()%14];
    }
 
+   ImprimeEntrada(solucion, disponibles);
    Cifras(solucion, disponibles);
 }

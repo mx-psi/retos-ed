@@ -19,7 +19,7 @@ public:
     for (int i = 0; i < 6; i++)
       v[i] = l[i];
   }
-  
+
   void borra(int pos);
   int inserta(int n);
 
@@ -42,5 +42,4 @@ public:
   }
 };
 
-std::ostream& operator<<(std::ostream& os, Vector& v);
 #endif

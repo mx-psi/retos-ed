@@ -1,13 +1,5 @@
 #include "vector.h"
 
-std::ostream& operator<<(std::ostream& os, Vector& v){
-  os << "[";
-  for (int i = 0; i < v.size(); i++)
-    os << v[i] << (i+1!=v.size()?",":"");
-  os << "]";
-  return os;
-}
-
 //Borra el elemento en la posición pos
 void Vector::borra(int pos){
   for(int i = pos; i < nelem; i++)
