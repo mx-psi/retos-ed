@@ -161,12 +161,6 @@ bool Recorrer(int *v, int n, int meta, nodo * &traza,int& m, bool & encontrado, 
 
     if(buffer[i]!=0)
     {
-      for(int j=i+1; j<tam; j++)
-      {
-        if(buffer[i]==buffer[j])    // Dado un elemento buscamos sus copias y las igualamos a 0 para no recorrerlas.
-          buffer[j]=0;
-      }
-
       int *tmp;
       int n_tmp=new_vec(v,n,buffer,i,tmp);  //Creamos el nuevo vector con tmp[0]=buffer[i];
       encontrado=Recorrer(tmp,n_tmp,meta,traza,m,encontrado,mejor_aprox); //Recorremos el vector.
