@@ -129,7 +129,9 @@ siguiente a la del último elemento de $L$.
 La función $\operatorname{miembros}(i)$ podría redefinirse aprovechando $G$ como
 $\{L_k : k \ge G_i, k < G_{i+1}\}$. \\
 
-El bucle que recorre los $i$ debe terminar al final de la última generación $\bar g$ tal que $2\cdot \bar g \le g$, que es la posición anterior a la que comienza la generación posterior. Tal posición es $G_{((g+1)/2+1)}-1$, usando la división entera (con truncamiento)\\
+Aprovechando $G$, podremos determinar con precisión el inicio y el final de los bucles que recorren los elementos del vector. Se explorará $L$ de forma que cada par de elementos considerados sumará $g$ en todo momento y la generación de $L_i$ será menor o igual que la de $L_j$.\\
+
+El bucle que recorre los $i$ debe terminar al final de la última generación $\bar g$ tal que $2\cdot \bar g \le g$, que es la posición anterior a la que comienza la generación posterior. Tal posición es $G_{((g+1)/2+1)}-1$, usando la división entera (con truncamiento).\\
 
 El bucle que recorre los $j$ debe recorrer la generación $\bar g$ que $\bar g + gen(L_i) = g$; pero si ambas fuesen la misma, debería empezar después de $i$. Así, el inicio estará en $\max \{i+1, G_{(g-gen(L_i))}\}$ y el final en $G_{(g-gen(L_i)+1)}-1$.\\
 
