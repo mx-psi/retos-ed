@@ -10,29 +10,24 @@
 \usepackage{enumitem}
 \usepackage[margin=1in]{geometry}
 
-% Para el código, por si queremos al menos mencionar una posible implementación
-% del tipo de dato
-\usepackage{listings}
-\usepackage{xcolor}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\newcommand{\n}[1]{{\color{gray}#1}}
-\lstset{numbers=left,numberstyle=\small\color{gray}}
+\newcommand{\abs}[1]{|#1|} % Valor absoluto
+\newcommand{\gen}{\operatorname{gen}} % Función gen
 
-\newcommand{\abs}[1]{|#1|}
-\newcommand{\gen}{\operatorname{gen}}
-
+% Para los algoritmos de Algoritmo3
 \SetKwFunction{Cifras}{Cifras}
 \SetKwFunction{Imprime}{Imprime}
 
+% Definiciones
 \theoremstyle{definition}
 \newtheorem*{definition}{Definición}
+
+% Entorno para controlar el espacio antes y después de un algoritmo
 \newenvironment{algo}{
 \vspace*{0.5cm}
 \begin{algorithm}[H]}{
 \end{algorithm}
 \vspace*{0.5cm}
 }
-
 
 \title{Reto 2}
 \date{Estructura de Datos}
@@ -45,4 +40,5 @@
 \input{Algoritmo2.tex}
 \input{Algoritmo3.tex}
 \input{Combmagicas.tex}
+\input{Implementacion.tex}
 \end{document}

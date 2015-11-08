@@ -18,16 +18,20 @@ siguiente entrada y salida:
 \begin{description}
 	\item[Entrada:] La entrada consiste de:
 		\begin{itemize}
-			\item Multiconjunto $C$ de 6 elementos de $C_T = ([1,10] \cap \mathbb N) \cup \{ 25, 50, 75, 100\}$
+			\item Multiconjunto $C$ de 6 elementos de
+			$C_T = ([1,10] \cap \mathbb N) \cup \{ 25, 50, 75, 100\}$
 			no necesariamente distintos.
 			\item Entero $S \in [100, 999]$ llamado \textbf{solución}.
 		\end{itemize}
 
-	\item[Salida:] Lista de operaciones binarias básicas (suma $+$, resta $-$, producto $\cdot$, cociente $/$) tales que:
+	\item[Salida:] Lista de operaciones binarias básicas (suma $+$, resta $-$,
+	producto $\cdot$, cociente $/$) tales que:
 	\begin{enumerate}
-		\item Cada operación usa sólo elementos generables por $C$ que o bien estaban en $C$ o bien se han obtenido a través de una operación anterior en la lista.
+		\item Cada operación usa sólo elementos generables por $C$ que o bien estaban
+		 en $C$ o bien se han obtenido a través de una operación anterior en la lista.
 		\item Cada número se utiliza como máximo una vez (contando repeticiones).
-		\item El último resultado es $T \in C^{\ast}$ tal que $|S-T| = \displaystyle \min_{N \in C^{\ast}} |S-N|$
+		\item El último resultado es $T \in C^{\ast}$ tal que
+		$|S-T| = \displaystyle \min_{N \in C^{\ast}} |S-N|$
 		\item Todo número utilizado en las operaciones es un entero no negativo.
 	\end{enumerate}
 \end{description}
@@ -48,8 +52,13 @@ dados 2 elementos $a,b \in \mathbb{N}^{\ast}$ existen cómo máximo 4 operacione
 \begin{enumerate}
 	\item $a+b$. Basta considerar un orden ya que es conmutativa.
 	\item $a\cdot b$. De nuevo, basta considerar un orden ya que es conmutativa.
-	\item $\abs{a-b}$. Esta operación consiste en la resta del menor al mayor. No es necesario considerar la otra resta porque $a < b \implies a-b < 0$ y $a = b \implies a-b = b-a = 0$ (en este caso ninguna resta es posible).
-	\item $\max\{a,b\}/\min\{a,b\}$. Esta operación es el cociente del mayor entre el menor, y solo es posible si el menor divide al mayor y el menor no es igual a $0$. Solo hay como máximo un orden posible porque $a < b \implies b \nmid a$ y $a = b \implies a/b = b/a$.
+	\item $\abs{a-b}$. Esta operación consiste en la resta del menor al mayor.
+	No es necesario considerar la otra resta porque $a < b \implies a-b < 0$ y
+	$a = b \implies a-b = b-a = 0$ (en este caso ninguna resta es posible).
+	\item $\max\{a,b\}/\min\{a,b\}$. Esta operación es el cociente del mayor entre
+	el menor, y solo es posible si el menor divide al mayor y el menor no es igual
+	a $0$. Solo hay como máximo un orden posible porque $a < b \implies b \nmid a$
+	y $a = b \implies a/b = b/a$.
 \end{enumerate}
 
 Sea $a \circ b = c$ una cierta operación.
@@ -57,7 +66,8 @@ Podemos considerar algunos criterios para reducir el número de operaciones:
 
 \begin{itemize}
 	\item Si $c = a$ o $c = b$ la operación puede omitirse de cualquier solución,
-	dado que habrá otra solución que omite este paso y simplemente usa $a$ o $b$, respectivamente, en lugar de $c$.
+	dado que habrá otra solución que omite este paso y simplemente usa $a$ o $b$,
+	respectivamente, en lugar de $c$.
 	\item Si $c = 0$ la operación puede omitirse de cualquier solución, ya que de
 	un 0 solo puede obtenerse otro 0 o un valor ya existente. Podemos redefinir
 	la división como 0 cuando no es válida y entrará en ese caso.
@@ -79,7 +89,8 @@ Podemos considerar algunos criterios para reducir el número de operaciones:
 		\item Si $\circ$ no es conmutativa y es válida, la expresión
 		$a \circ (d \circ e)\ = c$ equivale a $(a \circ^{-1} e) \circ d = c$.
 		Podemos hacer solo este segundo caso y omitir el primero.
-		\item Si $\circ$ es conmutativa y la posición de $d$ en $L$ es anterior a la de $a$, $a \circ (d \circ e) = c$	equivale a $d \circ (a \circ e) = c$.
+		\item Si $\circ$ es conmutativa y la posición de $d$ en $L$ es anterior a la
+		 de $a$, $a \circ (d \circ e) = c$	equivale a $d \circ (a \circ e) = c$.
 		Podemos hacer solo este segundo caso y omitir el primero.
 	\end{itemize}
 \end{itemize}
