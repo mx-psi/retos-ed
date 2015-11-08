@@ -4,7 +4,6 @@ EXT = out
 
 all: Algoritmo1.$(EXT) Algoritmo2.$(EXT) Algoritmo3.$(EXT) Algoritmo1magic.$(EXT)
 
-# Compilación de módulos
 Algoritmo1.$(EXT): main.cpp Algoritmo1/Algoritmo1.cpp
 	$(CXX) $(CPPFLAGS) -o $@ $^
 

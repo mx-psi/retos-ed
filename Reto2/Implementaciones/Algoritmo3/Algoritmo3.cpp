@@ -4,6 +4,7 @@
 #include <algorithm>
 using namespace std;
 
+// Algoritmo principal
 bool Algo3(int obj, Vector& nums, Pila& p, int& m_a){
 
   // Caso base: 2 elementos
@@ -56,6 +57,7 @@ bool Algo3(int obj, Vector& nums, Pila& p, int& m_a){
   return false;
 }
 
+// Función con interfaz común
 void Cifras(int obj, int iniciales[6]) {
   Pila p;
   int m_a = 0;
@@ -75,7 +77,6 @@ void Cifras(int obj, int iniciales[6]) {
   }
   clock_t tfin = clock();
 
-  cout << "Obtenida: " << m_a << endl;
   p.Imprime(iniciales, usados);
   cout << "\nTiempo: " << (tfin-tini)/(double)CLOCKS_PER_SEC << " segundos" << endl;
 }

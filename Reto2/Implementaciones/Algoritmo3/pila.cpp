@@ -11,11 +11,7 @@ int Opera(const int a, const int b, int op){
 // Representación de operaciones
 char repr[4] = {'+', '-', '*', '/'};
 
-std::ostream& operator<<(std::ostream& os, const Operacion& op){
-  os << op.arg2 << repr[op.op] << op.arg1 << "\t= " << Opera(op.arg1, op.arg2, op.op);
-  return os;
-}
-
+// Algoritmo de impresión
 void Pila::Imprime(int iniciales[6], bool usados[6], int n){
   if(n == -1) n = size() - 1;
 
@@ -38,5 +34,6 @@ void Pila::Imprime(int iniciales[6], bool usados[6], int n){
       break;
     }
 
-  std::cout << pila[n] << std::endl;
+    printf("%-4d %c %-4d = %-4d\n",
+    pila[n].arg2, repr[pila[n].op], pila[n].arg1, Resultado(pila[n]));
 }
