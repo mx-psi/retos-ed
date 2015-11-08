@@ -4,9 +4,9 @@
   Una combinación $C$ se dice \textbf{mágica} si $[100,999] \subseteq C^{\ast}$.
 \end{definition}
 
-No existen propiedades destacables de las combinaciones mágicas, que nos permitan
-acotar el número de casos a probar. Proponemos una refinación de la fuerza bruta,
-que compruebe todas las combinaciones una a una en busca de las que sean mágicas. \\
+No conocemos propiedades de las combinaciones mágicas que nos permitan descartar
+combinaciones sin comprobarlas. Proponemos una refinación de la fuerza bruta, que
+compruebe todas las combinaciones una a una en busca de las que sean mágicas. \\
 
 En primer lugar calcularemos el número de combinaciones posibles, que son 
 los conjuntos $C$ posibles a escoger de $C_T$. Como el número de elementos de
@@ -59,4 +59,10 @@ de operaciones en el bucle más interno (no hay que calcular la mejor aproximaci
 lo que evita tener que calcular dos diferencias a cada paso), el tiempo resultante
 es, en nuestra máquina, aproximadamente 53 segundos. Como muestra,
 en una ejecución realizada en el momento en que se redactó esto, el tiempo de
-ejecución ha resultado ser de \textbf{52,1 segundos}.
+ejecución ha resultado ser de \textbf{52,1 segundos}. \\
+
+Para recorrer todas las combinaciones emplearemos seis bucles anidados que recorran
+los catorce números iniciales posibles de menor a mayor. Cada bucle empezará en el
+valor que toma la variable del bucle en el que está contenido, para considerar solo
+las combinaciones ordenados. De esta forma, se obtienen las \textbf{1242}
+combinaciones mágicas existentes en orden lexicográfico.
