@@ -1,9 +1,6 @@
 #ifndef _ARBOL_H
 #define  _ARBOL_H
 
-#include <iostream>
-using namespace std;
-
 /**
   @file arbol.h
   @brief Fichero de cabecera

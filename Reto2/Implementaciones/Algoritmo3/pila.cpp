@@ -34,6 +34,6 @@ void Pila::Imprime(int iniciales[6], bool usados[6], int n){
       break;
     }
 
-    printf("%-4d %c %-4d = %-4d\n",
+    printf("%-6d%c %-6d= %d\n",
     pila[n].arg2, repr[pila[n].op], pila[n].arg1, Resultado(pila[n]));
 }

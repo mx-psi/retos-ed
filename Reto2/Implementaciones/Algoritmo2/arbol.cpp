@@ -1,5 +1,6 @@
 #include "arbol.h"
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
@@ -275,21 +276,12 @@ void WhatMagic(int *v, int n)
 
 void Imprime(int *v,nodo * traza, int i)
 {
-  if(traza[i].op==0)
-  {printf("%-4d %c %-4d = %-4d\n",v[traza[i].comb1],'+',v[traza[i].comb2],traza[i].elemento);}
+  char operadores[] = {'+', '-', '*', '/'};
+  if(traza[i].op % 2 == 0 || v[traza[i].comb1] >= v[traza[i].comb2])
+    printf("%-6d%c %-6d= %d\n", v[traza[i].comb1], operadores[traza[i].op], v[traza[i].comb2], traza[i].elemento);
+  else
+    printf("%-6d%c %-6d= %d\n", v[traza[i].comb2], operadores[traza[i].op], v[traza[i].comb1], traza[i].elemento);
 
-  if(traza[i].op==1)
-  {
-    if(v[traza[i].comb1]>v[traza[i].comb2]){printf("%-4d %c %-4d = %-4d\n",v[traza[i].comb1],'-',v[traza[i].comb2],traza[i].elemento);}
-    else{printf("%-4d %c %-4d = %-4d\n",v[traza[i].comb2],'-',v[traza[i].comb1],traza[i].elemento);}
-  }
-
-  if(traza[i].op==2){printf("%-4d %c %-4d = %-4d\n",v[traza[i].comb1],'*',v[traza[i].comb2],traza[i].elemento);}
-
-  if(traza[i].op==3)
-  { if(v[traza[i].comb1]%v[traza[i].comb2]==0){printf("%-4d %c %-4d = %-4d\n",v[traza[i].comb1],'/',v[traza[i].comb2],traza[i].elemento);}
-    else{printf("%-4d %c %-4d = %-4d\n",v[traza[i].comb2],'/',v[traza[i].comb1],traza[i].elemento);}
-  }
 }
 
 

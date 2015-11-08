@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #ifndef __PILA__
 #define __PILA__
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <ctime>
 using namespace std;
 
@@ -127,9 +128,9 @@ void Recrea(const VectorNodos &vec, const Nodo &nodo) {
       int valor1 = vec[nodo.previo1].valor;
       int valor2 = vec[nodo.previo2].valor;
       if ((operador%2) && valor1 < valor2)
-        printf("%-4d %c %-4d = %-4d\n",valor2,OPERADORES[operador], valor1, nodo.valor);
+        printf("%-6d%c %-6d= %d\n",valor2,OPERADORES[operador], valor1, nodo.valor);
       else
-        printf("%-4d %c %-4d = %-4d\n",valor2,OPERADORES[operador], valor1, nodo.valor);
+        printf("%-6d%c %-6d= %d\n",valor2,OPERADORES[operador], valor1, nodo.valor);
    }
 }
 
