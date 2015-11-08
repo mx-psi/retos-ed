@@ -105,7 +105,7 @@ $M_a := R$\;
 \lIf{\Cifras{$L,S,M_a,P$}}{\KwRet{\texttt{true}}}
 \BlankLine
 
-\textbf{Quitar} de $P$\;
+\textbf{Quitar} $(L_j,L_i, \circ)$ de $P$\;
 \textbf{Borrar} $R$ de $L$\;
 \textbf{Insertar} $L_i,L_j$ en $L$\;
 
@@ -141,7 +141,7 @@ a la solución, la devolvemos:
 		\BlankLine
 		\If{$|R-S| < |M_a-S|$}{
 		$M_a := R$\;
-		\If{$res = S$}{
+		\If{$M_a = S$}{
 			\textbf{Poner} $(L_1,L_0, \circ)$ en $P$\;
 			\KwRet{\texttt{true}}
 		}
