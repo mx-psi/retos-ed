@@ -1,9 +1,11 @@
 \section{Implementación}
 
-En la carpeta \texttt{Implementaciones} pueden encontrarse implementaciones de
-los 3 algoritmos. Incluímos un \texttt{Makefile} para facilitar su compilación.
-Para compilar el algoritmo \texttt{n} sólo es necesario utilizar la orden
-\texttt{make Algoritmon.out}.
+En la carpeta \texttt{Implementaciones} pueden encontrarse implementaciones
+en C++ de los tres algoritmos y una modificación del primero que obtiene las
+combinaciones mágicas. Incluimos un \texttt{Makefile} para facilitar
+su compilación.
+Para compilar solo el algoritmo \texttt{n} basta con usar la orden
+\texttt{make Algoritmo[n].out} sin corchetes.\\
 
 Para la ejecución de cada algoritmo existen dos opciones:
 
@@ -13,5 +15,13 @@ Para la ejecución de cada algoritmo existen dos opciones:
   \item No pasar ninguno (en cuyo caso se generará un ejemplo aleatorio).
 \end{itemize}
 
-Los algoritmos muestran las operaciones hasta alcanzar la mejor aproximación y
-el tiempo invertido en hallar la solución.
+Los programas muestran las operaciones hasta alcanzar la mejor aproximación
+(salvo el segundo, que si no encuentra el resultado exacto solo mostrará
+el resultado más cercano sin desplegar las operaciones que llevaron al
+mismo) y el tiempo invertido en hallar la solución. \\
+
+El programa para obtener las combinaciones mágicas, que se compilará con
+el nombre \texttt{Algoritmo1magic.out}, las devuelve encerradas en llaves
+y separadas por saltos de línea en salida estándar (puede redirigirse la
+salida a archivo usando \texttt{Algoritmo1magic.out\ >\ nombrearchivo})
+y adjunta el tiempo de ejecución.
