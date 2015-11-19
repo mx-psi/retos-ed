@@ -31,7 +31,7 @@
  * El espacio requerido para el almacenamiento es O(n), donde n es el número
  * de elementos de la pila.
  *
- * @example UsoPila.cpp
+ * @example PruebaPila.cpp
 */
 
 template<class T>
