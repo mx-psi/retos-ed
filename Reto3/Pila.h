@@ -103,7 +103,7 @@ public:
 		* @return Tamaño de la pila
 		*/
 	int elementos() const {
-		return lista.size();
+		return lista.size();	// A partir de C++11 es O(1). Antes, O(n)
 	}
 };
 
