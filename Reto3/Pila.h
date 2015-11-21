@@ -45,63 +45,63 @@ public:
   */
   Pila() {};
 
-  /**
-    * @brief Constructor de copia.
-    */
+/**
+  * @brief Constructor de copia.
+  */
   Pila(const Pila& p) {
     lista = p.lista;
   }
 
-  /**
-    * @brief Operador de asignación.
-    */
+/**
+  * @brief Operador de asignación.
+  */
   Pila& operator=(const Pila& p) {
     lista = p.lista;
   }
 
-  /**
-    * @brief Indica si la pila está vacía.
-    * @return Si la pila está vacía
-    */
+/**
+  * @brief Indica si la pila está vacía.
+  * @return Si la pila está vacía
+  */
   bool vacia() const {
     return lista.empty();
   }
 
-  /**
-    * @brief Devuelve el elemento en el tope (versión constante).
-    * @return Elemento del tope
-    */
+/**
+  * @brief Devuelve el elemento en el tope (versión constante).
+  * @return Elemento del tope
+  */
   const T& tope() const {
     return lista.front();
   }
 
-  /**
-    * @brief Devuelve el elemento en el tope (versión no constante).
-    * @return Elemento del tope
-    */
+/**
+  * @brief Devuelve el elemento en el tope (versión no constante).
+  * @return Elemento del tope
+  */
   T& tope() {
     return lista.front();
   }
 
-  /**
-    * @brief Pone un elemento en el tope.
-    * @param t Elemento a poner
-    */
+/**
+  * @brief Pone un elemento en el tope.
+  * @param t Elemento a poner
+  */
   void poner(const T& t) {
     lista.push_front(t);
   }
 
-  /**
-    * @brief Elimina el elemento en el tope.
-    */
+/**
+  * @brief Elimina el elemento en el tope.
+  */
   void quitar() {
     lista.pop_front();
   }
 
-  /**
-    * @brief Obtiene el tamaño de la pila.
-    * @return Tamaño de la pila
-    */
+/**
+  * @brief Obtiene el tamaño de la pila.
+  * @return Tamaño de la pila
+  */
   int elementos() const {
     return lista.size();	// A partir de C++11 es O(1). Antes, O(n)
   }
