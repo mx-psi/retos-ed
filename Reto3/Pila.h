@@ -41,18 +41,6 @@ private:
 
 public:
 /**
-  * @brief Constructor por defecto.
-  */
-  Pila() {};
-
-/**
-  * @brief Constructor de copia.
-  */
-  Pila(const Pila& p) {
-    lista = p.lista;
-  }
-
-/**
   * @brief Operador de asignación.
   */
   Pila& operator=(const Pila& p) {
