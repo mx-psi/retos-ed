@@ -15,9 +15,9 @@
   *  @brief T.D.A. Pila
   *
   *
-  * Una instancia @e p del tipo de dato abstracto Pila_max sobre un dominio @e T es
+  * Una instancia @e p del tipo de dato abstracto Pila sobre un dominio @e T es
   * una sucesión finita de elementos del mismo con un funcionamiento @e LIFO
-  * (Last In, First Out}). En una pila, las operaciones de inserción, borrado
+  * (Last In, First Out). En una pila, las operaciones de inserción, borrado
   * y consulta tienen lugar en uno de los extremos, denominado @e tope de la pila.
   * Una pila longitud @e n la denotamos
   *
