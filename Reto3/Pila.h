@@ -41,15 +41,6 @@ private:
 
 public:
 /**
-  * @brief Operador de asignación.
-  * @return Referencia a la pila
-  */
-  Pila& operator=(const Pila& p) {
-    lista = p.lista;    // El operator= de list comprueba que las listas no coinciden
-	return *this;
-  }
-
-/**
   * @brief Indica si la pila está vacía.
   * @return Si la pila está vacía
   */
