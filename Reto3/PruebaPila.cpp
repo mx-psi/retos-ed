@@ -66,7 +66,7 @@ int main ()
   Pila<int> pa(p);
   Pila<int> pb = p;
   bool test2 = true;
-  while(test2 && !p.vacia()) {
+  while(test2 && !p.vacia() && !pa.vacia() && !pb.vacia()) {
     if (p.tope() != pa.tope() || p.tope() != pb.tope()) {
 	  cout << "Las pilas copiadas no coinciden" << endl;
 	  cout << "\tTope de la original: " << p.tope()
@@ -80,5 +80,13 @@ int main ()
 	pb.quitar();
   }
   if (test2)
-	cout << "Correcto" << endl;
+    if (p.vacia() && pa.vacia() && pb.vacia())
+      cout << "Correcto" << endl;
+    else {
+      cout << "No todas las pilas están vacías" << endl;
+      cout << "\tOriginal vacía: " << (p.vacia() ? "sí" : "NO")
+           << "\tCopia por constructor vacía: " << (pa.vacia() ? "sí" : "NO")
+           << "\tCopia por asignación vacía: " << (pb.vacia() ? "sí" : "NO")
+           << endl;
+    }
 }
