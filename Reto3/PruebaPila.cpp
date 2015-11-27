@@ -32,6 +32,7 @@ int main ()
   if(test1)
     cout << "Correcto" << endl;
 
+
   cout << "Test (Equivalencia entre vacía y 0 elementos): ";
   while(!p.vacia() && p.elementos() > 0)
     p.quitar();
@@ -45,6 +46,7 @@ int main ()
   else
     cout << "Correcto" << endl;
 
+
   cout << "Test (Poner y quitar un elemento): ";
   p.poner(1);
   int t = p.tope();
@@ -52,8 +54,20 @@ int main ()
   p.quitar();
 
   if(t != p.tope()){
-    cout << "El tope no coincide al quitar y poner un elemento" << endl;
+    cout << "El tope no coincide al poner y quitar un elemento" << endl;
     cout << "\tTope esperado: " << t << "\tTope obtenido: " << p.tope() << endl;
+  }
+  else
+    cout << "Correcto" << endl;
+
+
+  cout << "Test (Acceso a la referencia del tope): ";
+  int nuevo = p.tope()+7;
+  p.tope() += 7;
+
+  if(nuevo != p.tope()){
+    cout << "El tope no es accedido correctamente" << endl;
+    cout << "\tTope esperado: " << nuevo << "\tTope obtenido: " << p.tope() << endl;
   }
   else
     cout << "Correcto" << endl;
