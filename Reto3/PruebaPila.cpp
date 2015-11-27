@@ -2,8 +2,7 @@
 #include "Pila.h"
 using namespace std;
 
-int
-main ()
+int main ()
 {
   Pila<int> p;
   cout << "Test (Pila vacía al iniciar): ";
@@ -63,7 +62,7 @@ main ()
   cout << "Test (Copia de pilas): ";
   for (int i = 0; i < 10; i++)
     p.poner(i);
-	
+
   Pila<int> pa(p);
   Pila<int> pb = p;
   bool test2 = true;

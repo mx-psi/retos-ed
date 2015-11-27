@@ -42,9 +42,11 @@ private:
 public:
 /**
   * @brief Operador de asignación.
+  * @return Referencia a la pila
   */
   Pila& operator=(const Pila& p) {
-    lista = p.lista;
+    lista = p.lista;    // El operator= de list comprueba que las listas no coinciden
+	return *this;
   }
 
 /**
@@ -91,7 +93,7 @@ public:
   * @return Tamaño de la pila
   */
   int elementos() const {
-    return lista.size();	// A partir de C++11 es O(1). Antes, O(n)
+    return lista.size();    // A partir de C++11 es O(1). Antes, O(n)
   }
 };
 
