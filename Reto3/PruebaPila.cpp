@@ -1,3 +1,7 @@
+// Autores:
+// Pablo Baeyens Fernández
+// José Manuel Muñoz Fuentes
+
 #include <iostream>
 #include "Pila.h"
 using namespace std;
@@ -36,7 +40,7 @@ int main ()
   cout << "Test (Equivalencia entre vacía y 0 elementos): ";
   while(!p.vacia() && p.elementos() > 0)
     p.quitar();
-    
+
   if(p.elementos() != 0){
     cout << "La pila no tiene 0 elementos después de vaciarla" << endl;
     cout << "\tTope: " << p.tope() << endl;

@@ -6,6 +6,10 @@
   * borrado de elementos en la primera posición.
   */
 
+// Autores:
+// Pablo Baeyens Fernández
+// José Manuel Muñoz Fuentes
+
 #ifndef __PILA_H__
 #define __PILA_H__
 
