@@ -18,7 +18,7 @@ int EnteroAleatorio() {
 }
 
 bool NuevoElemento(int nivel) {
-	return RealAleatorio() < 2.0/nivel;
+	return RealAleatorio() < 10.0/nivel;
 }
 
 void Ampliar(AB &a, AB::Nodo n, int nivel) {
