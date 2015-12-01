@@ -43,14 +43,14 @@ int main() {
   cout << "Se ha creado un árbol de " << a.size() << " elementos.\n";
 
   ofstream salida;
-  salida.open("arbol.tree", ios::binary);
+  salida.open("arbol.tree", ios::out | ios::binary);
   GuardaArboles g(salida, &a);
   g.Guarda();
   salida.close();
   
   AB b;
   ifstream entrada;
-  entrada.open("arbol.tree", ios::binary);
+  entrada.open("arbol.tree", ios::in | ios::binary);
   LeeArboles l(entrada, &b);
   l.Lee();
   entrada.close();
