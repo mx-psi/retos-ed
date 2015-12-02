@@ -57,7 +57,14 @@ int main() {
   
   if (a == b)
 	cout << "Éxito: el árbol de memoria y el árbol leído de disco coinciden\n";
-  else
-	cout << "Fracaso\n" << "Árbol original:\n" << a << "\n\nÁrbol recreado de disco:\n" << b << "\n\n";
+  else {
+	cout << "Fracaso.\nSe guardará la impresión del árbol original"
+         << "en error1.dump y la del leído en error2.dump\n\n";
 
+    ofstream error1, error2;
+    error1.open("error1.dump", ios::out);
+    error1 << a;
+    error2.open("error2.dump", ios::out);
+    error2 << a;
+  }
 }
