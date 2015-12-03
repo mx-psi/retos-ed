@@ -64,7 +64,9 @@ int main() {
     ofstream error1, error2;
     error1.open("error1.dump", ios::out);
     error1 << a;
+	error1.close();
     error2.open("error2.dump", ios::out);
-    error2 << a;
+    error2 << b;
+	error2.close();
   }
 }
