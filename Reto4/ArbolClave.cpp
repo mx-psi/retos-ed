@@ -111,8 +111,10 @@ public:
         n = arbol->derecha(arbol->padre(n));
     }
   }
-  
-  void AvanzaRelleno(AB::Nodo n) {
+
+  // Sustituye las etiquetas inválidas por las correctas
+  void RellenaArmazon() {
+	AB::Nodo n = arbol->raiz();
     while (n != 0) {
       Tipo et;
       is.read((char*)&et, sizeof(et));
@@ -120,14 +122,8 @@ public:
 	  Siguiente(n);
 	}
   }
-
-  // Sustituye las etiquetas inválidas por las correctas
-  void RellenaArmazon() {
-    AvanzaRelleno(arbol->raiz());
-  }
   
   void Lee() {
-    arbol->clear();
     CreaArmazon();
 	RellenaArmazon();
   }
