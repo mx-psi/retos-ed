@@ -20,9 +20,9 @@ public:
     c |= (0x40 >> pos);
     pos += 2;
     if (pos == 8) {
-  	  pos = 0;
+      pos = 0;
       os.put(c);
-	  c = 0;
+      c = 0;
     }
     if (izq)
       GuardaBits(arbol->izquierda(n), c, pos);
@@ -42,8 +42,8 @@ public:
     if (n != 0) {
       Tipo et = arbol->etiqueta(n);
       os.write(reinterpret_cast<const char *>(&et), sizeof(et));
-	  GuardaElementos(arbol->izquierda(n));
-	  GuardaElementos(arbol->derecha(n));
+      GuardaElementos(arbol->izquierda(n));
+      GuardaElementos(arbol->derecha(n));
     }
   }
 
@@ -67,22 +67,22 @@ public:
     if (pos == 8) {
       pos = 0;
       is.get(c);
-	}
-	bool izq = c & (0x80 >> pos);
-	bool der = c & (0x40 >> pos);
+    }
+    bool izq = c & (0x80 >> pos);
+    bool der = c & (0x40 >> pos);
 
-	if (izq) {
+    if (izq) {
       AB nuevo(0);
       arbol->insertar_izquierda(n, nuevo);
-	}
-	if (der) {
+    }
+    if (der) {
       AB nuevo(0);
       arbol->insertar_derecha(n, nuevo);
-	}
-	pos += 2;
-	if (izq)
+    }
+    pos += 2;
+    if (izq)
       AvanzaArmazon(arbol->izquierda(n), c, pos);
-	if (der)
+    if (der)
       AvanzaArmazon(arbol->derecha(n), c, pos);
   }
   
@@ -103,7 +103,7 @@ public:
 
     else {
       while (arbol->padre(n) != 0 &&
- 	    (arbol->derecha(arbol->padre(n)) == n || arbol->derecha(arbol->padre(n)) == 0))
+        (arbol->derecha(arbol->padre(n)) == n || arbol->derecha(arbol->padre(n)) == 0))
         n = arbol->padre(n);
       if (arbol->padre(n) == 0)
         n = 0;
@@ -114,18 +114,18 @@ public:
 
   // Sustituye las etiquetas inválidas por las correctas
   void RellenaArmazon() {
-	AB::Nodo n = arbol->raiz();
+    AB::Nodo n = arbol->raiz();
     while (n != 0) {
       Tipo et;
       is.read((char*)&et, sizeof(et));
       n->etiqueta = et;
-	  Siguiente(n);
-	}
+      Siguiente(n);
+    }
   }
   
   void Lee() {
     CreaArmazon();
-	RellenaArmazon();
+    RellenaArmazon();
   }
 };
 
