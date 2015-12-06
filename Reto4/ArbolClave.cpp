@@ -88,7 +88,8 @@ public:
 
   // Crea el árbol con etiquetas inválidas (se asignarán correctamente después)
   void CreaArmazon() {
-    arbol->AsignaRaiz(0);
+    Tipo nuevo; // Valor por defecto
+    arbol->AsignaRaiz(nuevo);
     char c = 0;
     int pos = 8;
     AvanzaArmazon(arbol->raiz(), c, pos);
