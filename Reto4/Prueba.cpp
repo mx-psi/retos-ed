@@ -2,7 +2,8 @@
 #include <fstream>
 #include "ArbolBinario.h"
 #include "ArbolClave.cpp"
-#include <ctime>
+#include <ctime> // time
+#include <sys/stat.h> // stat
 #include <cstdlib> // rand, srand, RAND_MAX
 using namespace std;
 
@@ -62,8 +63,12 @@ int main() {
   entrada.close();
 
   // Se comprueba que coinciden
-  if (a == b)
+  if (a == b){
     cout << "Éxito: el árbol de memoria y el árbol leído de disco coinciden\n";
+    struct stat st;
+    stat("arbol.tree",&st);
+    cout << "Espacio ocupado: " << st.st_size << " bytes\n";
+  }
   else {
     cout << "Fracaso.\nSe guardará la impresión del árbol original"
          << "en error1.dump y la del leído en error2.dump\n\n";
