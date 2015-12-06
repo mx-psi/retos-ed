@@ -1,5 +1,4 @@
 #include "ArbolBinario.h"
-#include <iostream>
 
 using namespace std;
 
