@@ -67,7 +67,7 @@ int main() {
     cout << "Éxito: el árbol de memoria y el árbol leído de disco coinciden\n";
     struct stat st;
     stat("arbol.tree",&st);
-    cout << "Espacio ocupado: " << st.st_size << " bytes\n";
+    cout << "Espacio ocupado: " << st.st_size << " bytes (" << st.st_size*1.0/a.size() << " bytes/elemento)\n";
   }
   else {
     cout << "Fracaso.\nSe guardará la impresión del árbol original"
