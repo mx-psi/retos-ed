@@ -4,8 +4,6 @@
 #include "ArbolClave.cpp"
 #include <ctime>
 #include <cstdlib> // rand, srand, RAND_MAX
-typedef int Tipo;
-typedef ArbolBinario<Tipo> AB;
 using namespace std;
 
 // Genera un número real entre 0 y 1
@@ -26,14 +24,15 @@ bool NuevoElemento(int nivel) {
 }
 
 // Amplía el árbol
-void Ampliar(AB &a, AB::Nodo n, int nivel) {
+template<class Tipo>
+void Ampliar(ArbolBinario<Tipo> &a, typename ArbolBinario<Tipo>::Nodo n, int nivel) {
   if (NuevoElemento(nivel)) {
-    AB nuevo(EnteroAleatorio());
+    ArbolBinario<Tipo> nuevo(EnteroAleatorio());
     a.insertar_izquierda(n, nuevo);
     Ampliar(a, a.izquierda(n), nivel+1);
   }
   if (NuevoElemento(nivel)) {
-    AB nuevo(EnteroAleatorio());
+    ArbolBinario<Tipo> nuevo(EnteroAleatorio());
     a.insertar_derecha(n, nuevo);
     Ampliar(a, a.derecha(n), nivel+1);
   }
@@ -42,7 +41,7 @@ void Ampliar(AB &a, AB::Nodo n, int nivel) {
 int main() {
   // Se construye un árbol aleatorio
   srand(time(0));
-  AB a(EnteroAleatorio());
+  ArbolBinario<int> a(EnteroAleatorio());
   Ampliar(a, a.raiz(), 1);
 
   cout << "Se ha creado un árbol de " << a.size() << " elementos.\n";
@@ -50,15 +49,15 @@ int main() {
   // Se guarda el árbol
   ofstream salida;
   salida.open("arbol.tree", ios::out | ios::binary);
-  GuardaArboles g(salida, &a);
+  GuardaArboles<int> g(salida, &a);
   g.Guarda();
   salida.close();
 
   // Se lee el árbol guardado
-  AB b;
+  ArbolBinario<int> b;
   ifstream entrada;
   entrada.open("arbol.tree", ios::in | ios::binary);
-  LeeArboles l(entrada, &b);
+  LeeArboles<int> l(entrada, &b);
   l.Lee();
   entrada.close();
 

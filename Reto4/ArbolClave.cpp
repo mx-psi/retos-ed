@@ -1,17 +1,19 @@
 #include "ArbolBinario.h"
-typedef int Tipo;
-typedef ArbolBinario<Tipo> AB;
+#include <iostream>
+
 using namespace std;
 
+template<class Tipo>
 class GuardaArboles {
 private:
-  const AB* arbol;
+  const ArbolBinario<Tipo>* arbol;
   ostream& os;
-  
-public:
-  GuardaArboles(ostream& o, const AB* a) :os(o), arbol(a) {};
 
-  void GuardaBits(const AB::Nodo& n, unsigned char& c, int& pos) {
+public:
+
+  GuardaArboles(ostream& o, const ArbolBinario<Tipo>* a) :os(o), arbol(a) {}
+
+  void GuardaBits(const typename ArbolBinario<Tipo>::Nodo& n, unsigned char& c, int& pos) {
     bool izq = arbol->izquierda(n) != 0;
     bool der = arbol->derecha(n) != 0;
     if (izq)
@@ -38,7 +40,7 @@ public:
       os.put(c);
   }
 
-  void GuardaElementos(const AB::Nodo& n) {
+  void GuardaElementos(const typename ArbolBinario<Tipo>::Nodo& n) {
     if (n != 0) {
       Tipo et = arbol->etiqueta(n);
       os.write(reinterpret_cast<const char *>(&et), sizeof(et));
@@ -54,16 +56,15 @@ public:
 };
 
 
-
+template<class Tipo>
 class LeeArboles {
 private:
-  AB* arbol;
+  ArbolBinario<Tipo>* arbol;
   istream& is;
-  
-public:
-  LeeArboles(istream& i, AB* a) :is(i), arbol(a) {};
 
-  void AvanzaArmazon(const AB::Nodo& n, char& c, int& pos) {
+public:
+  LeeArboles(istream& i, ArbolBinario<Tipo>* a) :is(i), arbol(a) {};
+  void AvanzaArmazon(const typename ArbolBinario<Tipo>::Nodo& n, char& c, int& pos) {
     if (pos == 8) {
       pos = 0;
       is.get(c);
@@ -72,11 +73,11 @@ public:
     bool der = c & (0x40 >> pos);
 
     if (izq) {
-      AB nuevo(0);
+      ArbolBinario<Tipo> nuevo(0);
       arbol->insertar_izquierda(n, nuevo);
     }
     if (der) {
-      AB nuevo(0);
+      ArbolBinario<Tipo> nuevo(0);
       arbol->insertar_derecha(n, nuevo);
     }
     pos += 2;
@@ -85,7 +86,7 @@ public:
     if (der)
       AvanzaArmazon(arbol->derecha(n), c, pos);
   }
-  
+
   // Crea el árbol con etiquetas inválidas (se asignarán correctamente después)
   void CreaArmazon() {
     arbol->AsignaRaiz(0);
@@ -93,9 +94,9 @@ public:
     int pos = 8;
     AvanzaArmazon(arbol->raiz(), c, pos);
   }
-  
+
   // Obtiene el siguiente nodo en preorden
-  void Siguiente(AB::Nodo& n) {
+  void Siguiente(typename ArbolBinario<Tipo>::Nodo& n) {
     if (arbol->izquierda(n) != 0)
       n = arbol->izquierda(n);
     else if (arbol->derecha(n) != 0)
@@ -114,7 +115,7 @@ public:
 
   // Sustituye las etiquetas inválidas por las correctas
   void RellenaArmazon() {
-    AB::Nodo n = arbol->raiz();
+    typename ArbolBinario<Tipo>::Nodo n = arbol->raiz();
     while (n != 0) {
       Tipo et;
       is.read((char*)&et, sizeof(et));
@@ -122,10 +123,9 @@ public:
       Siguiente(n);
     }
   }
-  
+
   void Lee() {
     CreaArmazon();
     RellenaArmazon();
   }
 };
-
