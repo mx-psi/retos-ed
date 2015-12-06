@@ -64,8 +64,8 @@ class ArbolBinario {
   * @section faConjunto Función de abstracción
   *
   * Sea @e T un árbol binario sobre el tipo @e Tbase, entonces si lo denotamos
-  * también árbol(T.laraiz), es decir, como el árbol que cuelga de su raíz,
-  * entonces �ste árbol del conjunto de valores en la representación se aplica
+  * también Árbol(T.laraiz), es decir, como el árbol que cuelga de su raíz,
+  * entonces este árbol del conjunto de valores en la representación se aplica
   * al árbol
   *
   * \f[
@@ -79,7 +79,7 @@ class ArbolBinario {
 
   private:
     /** @brief En cada  estructura nodo se almacena una etiqueta del árbol, que
-      * se implementa como un conjunto de nodos enlazados seg�n la relación
+      * se implementa como un conjunto de nodos enlazados según la relación
       * padre-hijo.
       */
 
@@ -130,7 +130,7 @@ class ArbolBinario {
       * @brief Cuenta el número de nodos
       * @param n Nodo del que cuelga el subárbol de nodos a contabilizar
       *
-      * Cuenta cu�ntos nodos cuelgan de @e n, incluido �ste
+      * Cuenta cuántos nodos cuelgan de @e n, incluido este
       */
     int contar(nodo * n) const;
 
@@ -140,7 +140,7 @@ class ArbolBinario {
       * @param n2 Segundo subárbol a comparar
       *
 	  * Comprueba si son iguales los subárboles que cuelgan de @e n1 y @e n2.
-	  * Para ello deber�n tener los mismos nodos en las mismas posiciones y
+	  * Para ello deberán tener los mismos nodos en las mismas posiciones y
 	  * con las mismas etiquetas.
       */
     bool soniguales(nodo * n1, nodo * n2) const;
@@ -153,8 +153,8 @@ class ArbolBinario {
 	  * Escribe en la salida todos los nodos del subárbol que cuelga del nodo
 	  * @e nod siguiendo un recorrido en preorden. La forma de impresión de
 	  * cada nodo es:
-	  *	- Si el nodo es nulo, imprime el car�cter 'x'.
-      *	- Si el nodo no es nulo, imprime el car�cter 'n' seguido de un
+	  *	- Si el nodo es nulo, imprime el carácter 'x'.
+      *	- Si el nodo no es nulo, imprime el carácter 'n' seguido de un
 	  * 	 espacio, al que sigue la impresión de la etiqueta.
       */
     void escribe_arbol(std::ostream& out, nodo * nod) const;
@@ -162,10 +162,10 @@ class ArbolBinario {
     /**
       * @brief Lee un subárbol
       * @param in Stream de entrada desde el que leer
-      * @param nod Referencia al nodo que contendr� el subárbol le�do
+      * @param nod Referencia al nodo que contendrá el subárbol leído
       * @see escribe_arbol
       *
-	  * Lee de la entrada @e in los elementos de un árbol seg�n el formato
+	  * Lee de la entrada @e in los elementos de un árbol según el formato
 	  * que se presenta en la función de escritura.
 	  *
       */
@@ -184,15 +184,15 @@ class ArbolBinario {
       * @brief Tipo Nodo
       *
       * Este tipo nos permite manejar cada uno de los nodos del árbol. Los
-	  * valores que tomar� serán tantos como nodos en el árbol (para poder
-	  * referirse a cada uno de ellos) y adem�s un valor destacado
+	  * valores que tomará serán tantos como nodos en el árbol (para poder
+	  * referirse a cada uno de ellos) y además un valor destacado
 	  * @e nulo (0), que indica que no se refiere a ninguno de ellos.
 	  *
 	  * Una variable @e n de este tipo se declara
 	  *
 	  * <tt> ArbolBinario::Nodo n; </tt>
 	  *
-	  * Las operaciones v�lidas sobre el tipo nodo son:
+	  * Las operaciones válidas sobre el tipo nodo son:
       * - Operador de Asignación (=)
 	  * - Operador de comprobación de igualdad (==)
 	  * - Operador de comprobación de desigualdad (!=)
@@ -253,16 +253,16 @@ class ArbolBinario {
       * @brief Asignar nodo raíz
       * @param e Etiqueta a asignar al nodo raíz
       *
-      * vacía el árbol receptor y le asigna como valor el árbol de un único
+      * Vacía el árbol receptor y le asigna como valor el árbol de un único
       * nodo cuya etiqueta es @e e.
       */
     void AsignaRaiz(const Tbase & e);
 
     /**
-      * @brief raíz del árbol
+      * @brief Raíz del árbol
       * @return Nodo raíz del árbol receptor.
       *
-      * Devuelve el nodo raíz, que es el nodo nulo si el árbol est� vacío.
+      * Devuelve el nodo raíz, que es el nodo nulo si el árbol está vacío.
       * La operación se realiza en tiempo O(1).
       */
     Nodo raiz() const;
@@ -325,7 +325,7 @@ class ArbolBinario {
 
     /**
       * @brief Copia subárbol
-      * @param orig árbol desde el que se va a copiar una rama
+      * @param orig Árbol desde el que se va a copiar una rama
       * @param nod Nodo raíz del subárbol que se copia. Es un nodo del árbol
       * @e orig y no es nulo
       *
@@ -337,33 +337,33 @@ class ArbolBinario {
 
     /**
       * @brief Podar subárbol izquierda
-      * @param n Nodo al que se le podar� la rama hijo izquierda.
-      * @param dest árbol que recibe la rama cortada
-      * @pre @e n no es nulo y es un nodo v�lido del árbol receptor.
+      * @param n Nodo al que se le podará la rama hijo izquierda.
+      * @param dest Árbol que recibe la rama cortada
+      * @pre @e n no es nulo y es un nodo válido del árbol receptor.
       *
       * Asigna un nuevo valor al árbol @e dest, con todos los elementos del
-      * subárbol izquierdo del nodo @e n en el árbol receptor. �ste se queda
+      * subárbol izquierdo del nodo @e n en el árbol receptor. Éste se queda
       * sin dichos nodos. La operación se realiza en tiempo O(1).
       */
     void podar_izquierda(Nodo n, ArbolBinario<Tbase>& dest);
 
     /**
       * @brief Podar subárbol derecha
-      * @param n Nodo al que se le podar� la rama hijo derecha.
-      * @param dest árbol que recibe la rama cortada
-      * @pre @e n no es nulo y es un nodo v�lido del árbol receptor.
+      * @param n Nodo al que se le podará la rama hijo derecha.
+      * @param dest Árbol que recibe la rama cortada
+      * @pre @e n no es nulo y es un nodo válido del árbol receptor.
       *
       * Asigna un nuevo valor al árbol @e dest, con todos los elementos del
-      * subárbol derecho del nodo @e n en el árbol receptor. �ste se queda
+      * subárbol derecho del nodo @e n en el árbol receptor. Éste se queda
       * sin dichos nodos. La operación se realiza en tiempo O(1).
       */
     void podar_derecha(Nodo n, ArbolBinario<Tbase>& dest);
 
     /**
       * @brief Insertar subárbol izquierda
-      * @param n Nodo al que se insertar� el árbol @e rama como hijo izquierdo.
-      * @param rama árbol que se insertar� como hijo izquierdo.
-      * @pre @e n no es nulo y es un nodo v�lido del árbol receptor.
+      * @param n Nodo al que se insertará el árbol @e rama como hijo izquierdo.
+      * @param rama Árbol que se insertará como hijo izquierdo.
+      * @pre @e n no es nulo y es un nodo válido del árbol receptor.
       *
       * El árbol @e rama se inserta como hijo izquierda del nodo @e n del árbol
       * receptor. El árbol @e rama queda vacío y los nodos que estaban en el
@@ -373,9 +373,9 @@ class ArbolBinario {
 
     /**
       * @brief Insertar subárbol derecha
-      * @param n Nodo al que se insertar� el árbol @e rama como hijo derecho.
-      * @param rama árbol que se insertar� como hijo derecho.
-      * @pre @e n no es nulo y es un nodo v�lido del árbol receptor.
+      * @param n Nodo al que se insertará el árbol @e rama como hijo derecho.
+      * @param rama Árbol que se insertará como hijo derecho.
+      * @pre @e n no es nulo y es un nodo válido del árbol receptor.
       *
       * El árbol @e rama se inserta como hijo derecho del nodo @e n del árbol
       * receptor. El árbol @e rama queda vacío y los nodos que estaban en el
@@ -393,7 +393,7 @@ class ArbolBinario {
     void clear();
 
     /**
-      * @brief número de elementos
+      * @brief Número de elementos
       * @return  El número de elementos del árbol receptor.
       *
       * La operación se realiza en tiempo O(n).
@@ -402,7 +402,7 @@ class ArbolBinario {
     int size() const;
 
     /**
-      * @brief vacío
+      * @brief Vacío
       * @return Devuelve @e true si el número de elementos del árbol receptor
       * es cero, @e false en otro caso.
       *
@@ -435,7 +435,7 @@ class ArbolBinario {
     /**
       * @brief Operador de extracción de flujo
       * @param in Stream de entrada
-      * @param v árbol que leer
+      * @param v Árbol que leer
       * @return Referencia al stream de entrada.
       *
       * Lee de @e in un árbol y lo almacena en @e v. El formato aceptado para
@@ -448,13 +448,13 @@ class ArbolBinario {
     /**
       * @brief Operador de inserción de flujo
       * @param out Stream de salida
-      * @param v árbol que escribir
+      * @param v Árbol que escribir
       * @return Referencia al stream de salida.
       *
       * Escribe en la salida todos los nodos del árbol @e v siguiendo un
       * recorrido en preorden. La forma de impresión de cada nodo es:
-      * - Si el nodo es nulo, imprime el car�cter 'x'.
-      * - Si el nodo no es nulo, imprime el car�cter 'n' seguido de
+      * - Si el nodo es nulo, imprime el carácter 'x'.
+      * - Si el nodo no es nulo, imprime el carácter 'n' seguido de
       *   un espacio, al que sigue la impresión de la etiqueta.
       *
       * @see escribe_arbol
@@ -533,7 +533,7 @@ bool ArbolBinario<Tbase>::soniguales(nodo * n1, nodo * n2) const {
 template <class Tbase>
 void ArbolBinario <Tbase>::lee_arbol(std::istream& in, nodo * & nod){
   char c;
-  in >> c;                     //Lectura de un car�cter
+  in >> c;                     //Lectura de un carácter
   if (c=='n'){                 //Si es 'n'
     nod= new nodo;             //Reservamos un nuevo nodo
     in >> nod->etiqueta;       //Leemos la etiqueta
@@ -545,7 +545,7 @@ void ArbolBinario <Tbase>::lee_arbol(std::istream& in, nodo * & nod){
       nod->drcha->padre=nod;   //actualizamos su padre
   }
   else nod= 0;                 //Si no es 'n' hay un error en la entrada
-                               //o no hay m�s caracteres que leer,
+                               //o no hay más caracteres que leer,
                                //y devolvemos un árbol nulo
 }
 
@@ -606,7 +606,7 @@ inline ArbolBinario<Tbase>::~ArbolBinario(){
 template <class Tbase>
 ArbolBinario<Tbase> &
 ArbolBinario<Tbase>::operator = (const ArbolBinario<Tbase>&v){
-  if (this!=&v){              //comprobación de rigor. Si no es el mismo objeto
+  if (this!=&v){              //Comprobación de rigor. Si no es el mismo objeto
     destruir(laraiz);         //destruimos el objeto *this
     copiar (laraiz,v.laraiz); //Llamamos a copiar desde la raíz
     if (laraiz!=0)            //Si no es el árbol vacío
