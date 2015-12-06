@@ -3,6 +3,7 @@
 #include "ArbolBinario.h"
 #include "ArbolClave.cpp"
 #include <ctime>
+#include <cstdlib> // rand, srand, RAND_MAX
 typedef int Tipo;
 typedef ArbolBinario<Tipo> AB;
 using namespace std;
@@ -43,7 +44,7 @@ int main() {
   srand(time(0));
   AB a(EnteroAleatorio());
   Ampliar(a, a.raiz(), 1);
-  
+
   cout << "Se ha creado un árbol de " << a.size() << " elementos.\n";
 
   // Se guarda el árbol
@@ -52,7 +53,7 @@ int main() {
   GuardaArboles g(salida, &a);
   g.Guarda();
   salida.close();
-  
+
   // Se lee el árbol guardado
   AB b;
   ifstream entrada;
@@ -60,7 +61,7 @@ int main() {
   LeeArboles l(entrada, &b);
   l.Lee();
   entrada.close();
-  
+
   // Se comprueba que coinciden
   if (a == b)
     cout << "Éxito: el árbol de memoria y el árbol leído de disco coinciden\n";
