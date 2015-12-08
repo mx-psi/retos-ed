@@ -1,6 +1,6 @@
 #include "ArbolBinario.h"
-
 using namespace std;
+
 
 template<class Tipo>
 class GuardaArboles {
@@ -9,28 +9,35 @@ private:
   ostream& os;
 
 public:
-
+  // Constructor. Determina la salida a la que se manda y el árbol que se guardará
   GuardaArboles(ostream& o, const ArbolBinario<Tipo>* a) :os(o), arbol(a) {}
 
+  // Añade bits a la secuencia
   void GuardaBits(const typename ArbolBinario<Tipo>::Nodo& n, unsigned char& c, int& pos) {
+    /* Añade un bit que indica si cada posible hijo existe */
     bool izq = arbol->izquierda(n) != 0;
     bool der = arbol->derecha(n) != 0;
     if (izq)
-    c |= (0x80 >> pos);
+      c |= (0x80 >> pos);
     if (der)
-    c |= (0x40 >> pos);
+      c |= (0x40 >> pos);
+
     pos += 2;
+    /* Si se ha completado un byte, lo escribe */
     if (pos == 8) {
       pos = 0;
       os.put(c);
       c = 0;
     }
+
+    /* Sigue recorriendo el árbol en preorden */
     if (izq)
       GuardaBits(arbol->izquierda(n), c, pos);
     if (der)
       GuardaBits(arbol->derecha(n), c, pos);
   }
 
+  // Guarda la secuencia de bits que identifica la estructura del árbol
   void GuardaClave() {
     unsigned char c = 0;
     int pos = 0;
@@ -39,15 +46,19 @@ public:
       os.put(c);
   }
 
+  // Guarda las etiquetas
   void GuardaElementos(const typename ArbolBinario<Tipo>::Nodo& n) {
     if (n != 0) {
+      /* Añade la etiqueta del nodo actual */
       Tipo et = arbol->etiqueta(n);
       os.write(reinterpret_cast<const char *>(&et), sizeof(et));
+      /* Prosigue en preorden */
       GuardaElementos(arbol->izquierda(n));
       GuardaElementos(arbol->derecha(n));
     }
   }
 
+  // Guarda el árbol en la salida escogida
   void Guarda() {
     GuardaClave();
     GuardaElementos(arbol->raiz());
@@ -62,12 +73,18 @@ private:
   istream& is;
 
 public:
+  // Constructor. Determina la entrada desde donde se lee y el árbol en que se guardará
   LeeArboles(istream& i, ArbolBinario<Tipo>* a) :is(i), arbol(a) {};
+
+  // Añade nodos al árbol
   void AvanzaArmazon(const typename ArbolBinario<Tipo>::Nodo& n, char& c, int& pos) {
+    /* Si ya se había aplicado completamente el byte anterior, lee otro */
     if (pos == 8) {
       pos = 0;
       is.get(c);
     }
+
+    /* Añade (o no) nodos según los datos */
     bool izq = c & (0x80 >> pos);
     bool der = c & (0x40 >> pos);
 
@@ -80,13 +97,15 @@ public:
       arbol->insertar_derecha(n, nuevo);
     }
     pos += 2;
+
+    /* Sigue generando la estructura en preorden */
     if (izq)
       AvanzaArmazon(arbol->izquierda(n), c, pos);
     if (der)
       AvanzaArmazon(arbol->derecha(n), c, pos);
   }
 
-  // Crea el árbol con etiquetas inválidas (se asignarán correctamente después)
+  // Crea la estructura del árbol (con etiquetas inválidas que se asignarán correctamente después)
   void CreaArmazon() {
     Tipo nuevo; // Valor por defecto
     arbol->AsignaRaiz(nuevo);
@@ -124,6 +143,7 @@ public:
     }
   }
 
+  // Obtiene el árbol a partir de datos de la entrada escogida
   void Lee() {
     CreaArmazon();
     RellenaArmazon();
