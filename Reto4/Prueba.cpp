@@ -63,11 +63,13 @@ int main() {
   entrada.close();
 
   // Se comprueba que coinciden
-  if (a == b){
+  bool coinciden = a == b;
+  if (coinciden){
     cout << "Éxito: el árbol de memoria y el árbol leído de disco coinciden\n";
     struct stat st;
     stat("arbol.tree",&st);
-    cout << "Espacio ocupado: " << st.st_size << " bytes (" << st.st_size*1.0/a.size() << " bytes/elemento)\n";
+    cout << "Espacio ocupado: " << st.st_size << " bytes ("
+         << st.st_size*1.0/a.size() << " bytes/elemento)\n";
   }
   else {
     cout << "Fracaso.\nSe guardará la impresión del árbol original"
@@ -81,4 +83,5 @@ int main() {
     error2 << b;
     error2.close();
   }
+  return !coinciden;
 }
