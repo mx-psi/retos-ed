@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage{multirow}
+\usepackage[spanish]{babel}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage[spanish,onelanguage]{algorithm2e}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts,dsfont}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
+
+\title{Reto 4}
+\date{Estructura de Datos}
+\author{Pablo Baeyens Fernández\\José Manuel Muñoz Fuentes\\Darío Sierra Martínez}
+
+\begin{document}
+\maketitle
+
+\section{Introducción}
+
+% Diría que falta más texto, por lo menos, antes de lo siguiente.
+
+Propondremos una estructura de fichero que tendrá el menor tamaño en disco posible cumpliendo las siguientes premisas:
+\begin{itemize}
+	\item \textbf{La reconstrucción del árbol es correcta y unívoca.} El procedimiento no debe guardar dos archivos distintos al aplicarlo a un mismo árbol, y dos archivos iguales deben generar al mismo árbol.
+	\item \textbf{Los datos se guardan en binario, y no como texto.} Las etiquetas del árbol se almacenarán en el archivo de forma similar a como lo hacen en memoria. Si son un tipo de dato simple, se guardarán como tal. Si son un puntero a un vector de datos que terminan en un elemento terminador, se guardarán estos elementos (incluyendo el terminador). Si son una estructura o un vector de datos de tamaño fijo, se guardarán como la yuxtaposición de los elementos de esa estructura.
+	\item \textbf{Las etiquetas no se modifican.} No se aprovechará el contenido de las etiquetas para, modificando bits que no sean relevantes, introducir información en ellas. Por ejemplo, si el tipo de dato almacenado son enteros sin signo de $32$ bits y se sabe que ningún elemento es mayor que $2^{30}-1$, no se aprovecharán los dos primeros bits para incluir información en ellos.
+	\item \textbf{No se aplica ningún algoritmo de compresión a los datos.} Existen algoritmos de compresión de datos que podrían ayudar a reducir el tamaño de los archivos, tanto en las etiquetas como en los datos adicionales que se incluyan en el fichero. Supondremos que su uso queda fuera del interés de este reto.
+	\item \textbf{No se incluyen bits que identifiquen el tipo de archivo.} No habrá cabecera en los archivos, ni se usará un número mágico, ni se aplicará ninguna suma de verificación que permita comprobar que el tipo de archivo es de un árbol con este formato. Esto también queda fuera de las intenciones del reto. Por ello, será responsabilidad del operario saber si el archivo que está intentando abrir como árbol es realmente un árbol guardado con este formato.
+\end{itemize}
+
+\section{Estructura de fichero}
+
+El archivo se compondrá de la yuxtaposición de una \textbf{clave} y un bloque de \textbf{datos}.
+
+\begin{itemize}
+	\item La \textbf{clave} será un grupo de bytes de longitud indefinida. % Continuar
+	\item El bloque de \textbf{datos} lo formará el grupo de datos, almacenados uno a continuación de otro sin espacios entre ellos. La posición donde empieza un nuevo dato se determinará a partir del tamaño de los tipos de datos (si son de tamaño fijo) o de la posición de un elemento terminador (si son de tamaño variable).
+\end{itemize}
+
+\subsection{Lectura}
+
+\subsection{Escritura}
+
+\end{document}
