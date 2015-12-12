@@ -35,8 +35,8 @@ Propondremos una estructura de fichero que tendrá el menor tamaño en disco pos
 El archivo se compondrá de la yuxtaposición de una \textbf{clave} y un bloque de \textbf{datos}.
 
 \begin{itemize}
-	\item La \textbf{clave} será un grupo de bytes de longitud indefinida. % Continuar
-	\item El bloque de \textbf{datos} lo formará el grupo de datos, almacenados uno a continuación de otro sin espacios entre ellos. La posición donde empieza un nuevo dato se determinará a partir del tamaño de los tipos de datos (si son de tamaño fijo) o de la posición de un elemento terminador (si son de tamaño variable).
+	\item La \textbf{clave} será una lista de bits de longitud indefinida. Para cada nodo del árbol se añadirá un 1 a la lista si el nodo tiene un hijo a la izquierda o un 0 en caso contrario, y a continuación se añadirá un 1 si el nodo tiene un hijo a la derecha o un 0 en caso contrario. Este procedimiento se repite con los nodos hijos (primero el de la izquierda y después el de la derecha), de forma que se almacena el par de bits de cada nodo en preorden. Para que la siguiente sección no comience en una posición intermedia de un byte, si al escribir la lista de bits en disco el número de elementos no es un múltiplo de 8, se añadirán ceros al final hasta que lo sea. (Esto en ningún caso incrementará el tamaño del archivo, puesto que, como el próximo bloque siempre tiene por tamaño un múltiplo de un byte, el sistema operativo añadiría bits al final del archivo hasta que el tamaño fuese un múltiplo de un byte)
+	\item El bloque de \textbf{datos} lo formará el grupo de datos, almacenados en preorden sin espacios entre ellos. La posición donde empieza un nuevo dato se determinará a partir del tamaño de los tipos de datos (si son de tamaño fijo) o de la posición de un elemento terminador (si son de tamaño variable).
 \end{itemize}
 
 \subsection{Lectura}
