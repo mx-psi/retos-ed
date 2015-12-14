@@ -42,8 +42,8 @@ posible cumpliendo las siguientes premisas:
 	\item \textbf{No se aplica ningún algoritmo de compresión a los datos.}
   Existen algoritmos de compresión de datos que podrían ayudar a reducir el
   tamaño de los archivos, tanto en las etiquetas como en los datos adicionales
-  que se incluyan en el fichero. Supondremos que su uso queda fuera del interé
-  s de este reto.
+  que se incluyan en el fichero. Supondremos que su uso queda fuera del interés
+  de este reto.
 	\item \textbf{No se incluyen bits que identifiquen el tipo de archivo
   o garanticen su integridad.} No habrá cabecera en los archivos, ni se usará un
   número mágico, ni se añadirán bytes para forzar un tipo de suma de verificación
@@ -62,14 +62,15 @@ bloque de \textbf{datos}.
   Para cada nodo del árbol se añadirá un 1 a la lista si el nodo tiene un hijo a
   la izquierda o un 0 en caso contrario, y a continuación se añadirá un 1 si el
   nodo tiene un hijo a la derecha o un 0 en caso contrario. Este procedimiento
-  se repite con los nodos hijos (primero el de la izquierda y después el de la
-  derecha), de forma que se almacena el par de bits de cada nodo en preorden.
+  se repite con los nodos hijos si existen (primero el de la izquierda y después
+  el de la derecha), de forma que se almacena el par de bits de cada nodo en preorden.
+
   Para que la siguiente sección no comience en una posición intermedia de un byte,
   si al escribir la lista de bits en disco el número de elementos no es un múltiplo
   de 8, se añadirán ceros al final hasta que lo sea. (Esto en ningún caso
   incrementará el tamaño del archivo, puesto que, como el próximo bloque siempre
   tiene por tamaño un múltiplo de un byte, el sistema operativo añadiría bits al
-  final del archivo hasta que el tamaño fuese un múltiplo de un byte)
+  final del archivo hasta que el tamaño fuese un múltiplo de un byte).
 	\item El bloque de \textbf{datos} lo formará el grupo de datos, almacenados
   en preorden sin espacios entre ellos. La posición donde empieza un nuevo dato
   se determinará a partir del tamaño de los tipos de datos (si son de tamaño fijo)
