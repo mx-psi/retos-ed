@@ -21,7 +21,8 @@
 
 \subsection{Problema}
 
-% Definición de arbol binario?
+% Definición de arbol binario? O de "estructura de árbol binario", que es realmente
+% de lo que estamos hablando aquí
 
 El problema consiste en describir el procedimiento de dos algoritmos que computen
 las aplicaciones $c: A \to \{0,1\}^{\ast}$, $d: c(A) \to A$ donde:
@@ -68,6 +69,39 @@ posible cumpliendo las siguientes premisas:
   Por ello, será responsabilidad del operario saber si el archivo que está
   intentando abrir como árbol es realmente un árbol guardado con este formato.
 \end{itemize}
+
+\subsection{Cotas}
+
+En esta sección ofrecemos una cota inferior al problema. Sea $m \in \mathbb{N}$.
+Mediante un argumento combinatorio es fácil mostrar que:
+
+\[|\{b \in \{0,1\}^{\ast} \; : \; |b| = m\}| = 2^m\]
+
+ya que son las combinaciones de 0 y 1 con $m$ elementos y con repetición. De esta
+forma, podemos ver que si tenemos una familia de $n$ objetos distintos, podremos
+etiquetarlos con etiquetas binarias con una longitud mínima de
+$\lceil \log_2(n) \rceil$.
+
+El número de árboles binarios de $n$ nodos viene dado por la sucesión de los números
+de Catalan:
+
+\[C_n = \frac{1}{n+1} {2n\choose n} \]
+
+% Demostrar fórmulas?
+
+Mediante la fórmula de Stirling podemos mostrar que:
+
+\[\lim_{n \to \infty} \frac{C_n}{\frac{4^n}{n^{3/2\sqrt{\pi}}}} = 1\]
+
+Es decir, podemos aproximar $C_n \sim 4^n$. De esta forma, para árboles binarios
+de $n$ nodos, el número mínimo de bits que necesitaríamos para realizar un
+etiquetado unívoco sería $\lceil \log_2(C_n) \rceil \simeq \log_2(4^n) = 2n$.
+
+Es decir una buena solución no debería necesitar más del
+\textbf{doble del número de nodos} de bits para guardar la estructura de un
+árbol suficientemente grande.
+
+Esta aproximación no tiene en cuenta el guardado de las etiquetas de los nodos.
 
 \section{Estructura de fichero}
 
