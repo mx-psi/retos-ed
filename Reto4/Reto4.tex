@@ -19,6 +19,23 @@
 
 \section{Introducción}
 
+\subsection{Problema}
+
+% Definición de arbol binario?
+
+El problema consiste en describir el procedimiento de dos algoritmos que computen
+las aplicaciones $c: A \to \{0,1\}^{\ast}$, $d: c(A) \to A$ donde:
+
+\begin{itemize}
+  \item $A$ es el conjunto de los árboles binarios de un número arbitrario de nodos
+  \item $\{0,1\}^{\ast}$ es el conjunto de las cadenas formadas por $0$ y $1$.
+  \item $c$ y $d$ son aplicaciones inyectivas.
+  \item $d \circ a = 1_A$, es decir, $d$ es una inversa por la izquierda de $c$.
+  \item Para todo árbol $a \in A$, $|c(a)|$ (longitud de la cadena) es mínima.
+\end{itemize}
+
+\subsection{Condiciones iniciales}
+
 % Diría que falta más texto, por lo menos, antes de lo siguiente.
 
 Propondremos una estructura de fichero que tendrá el menor tamaño en disco
