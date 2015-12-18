@@ -7,12 +7,13 @@
 #include <cstdlib> // rand, srand, RAND_MAX
 using namespace std;
 
+typedef int TipoEntero;  // Tipo de dato usado para las etiquetas
+const int MAXIMO = 100;  // Máximo valor posible de una etiqueta
+
 // Genera un número real entre 0 y 1
 float RealAleatorio() {
   return rand() / (float) RAND_MAX;
 }
-
-const int MAXIMO = 100;
 
 // Genera un número entero entre 0 y MAXIMO
 int EnteroAleatorio() {
@@ -42,7 +43,7 @@ void Ampliar(ArbolBinario<Tipo> &a, typename ArbolBinario<Tipo>::Nodo n, int niv
 int main() {
   // Se construye un árbol aleatorio
   srand(time(0));
-  ArbolBinario<int> a(EnteroAleatorio());
+  ArbolBinario<TipoEntero> a(EnteroAleatorio());
   Ampliar(a, a.raiz(), 1);
 
   cout << "Se ha creado un árbol de " << a.size() << " elementos.\n";
@@ -50,15 +51,15 @@ int main() {
   // Se guarda el árbol
   ofstream salida;
   salida.open("arbol.tree", ios::out | ios::binary);
-  GuardaArboles<int> g(salida, &a);
+  GuardaArboles<TipoEntero> g(salida, &a);
   g.Guarda();
   salida.close();
 
   // Se lee el árbol guardado
-  ArbolBinario<int> b;
+  ArbolBinario<TipoEntero> b;
   ifstream entrada;
   entrada.open("arbol.tree", ios::in | ios::binary);
-  LeeArboles<int> l(entrada, &b);
+  LeeArboles<TipoEntero> l(entrada, &b);
   l.Lee();
   entrada.close();
 
