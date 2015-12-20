@@ -96,7 +96,7 @@ de Catalan:
 
 Mediante la fórmula de Stirling podemos mostrar que:
 
-\[\lim_{n \to \infty} \frac{C_n}{\frac{4^n}{n^{3/2\sqrt{\pi}}}} = 1\]
+\[\lim_{n \to \infty} \frac{C_n}{\frac{4^n}{n^{3/2}\sqrt{\pi}}} = 1\]
 
 Es decir, podemos aproximar $C_n \sim 4^n$. De esta forma, para árboles binarios
 de $n$ nodos, el número mínimo de bits que necesitaríamos para realizar un
@@ -136,6 +136,23 @@ bloque de \textbf{datos}.
 \section{Procedimientos}
 
 \subsection{Lectura}
+
+A la hora de leer el archivo que almacena el árbol, en principio no se sabe dónde
+termina la clave y dónde empieza el bloque de etiquetas. Aunque es posible 
+determinar esa posición leyendo el archivo para después generar simultáneamente la 
+estructura del árbol y su contenido, optaremos en lugar de eso por obtener en
+primer lugar la estructura y después rellenar las etiquetas con los valores
+correctos, lo que permitirá leer el archivo de forma lineal, sin saltos. \\
+
+Para obtener la estructura del árbol se partirá de un árbol con un único nodo y se 
+leerán los bits de dos en dos. En cada par de bits, si el primero de ellos es un
+1, se le añadirá al nodo actual un hijo a la izquierda; y si el segundo es un 1,
+se le asignará un hijo a la derecha. Tras añadir (o no) los hijos, se pasa al
+siguiente nodo en preorden. Este procedimiento sigue hasta que se llegue a un nodo
+vacío. \\
+
+Una vez generada la estructura, se lee el bloque de datos, asignando a cada nodo la
+etiqueta encontrada en el archivo, recorriendo los nodos del árbol en preorden.
 
 \subsection{Escritura}
 
