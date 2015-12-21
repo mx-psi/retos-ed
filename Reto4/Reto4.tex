@@ -135,6 +135,11 @@ bloque de \textbf{datos}.
 
 \section{Procedimientos}
 
+Tanto al leer como al escribir la clave del árbol, será necesario avanzar en 
+bloques de dos bits en lugar de bloques de un byte. Se simulará la entrada y salida
+en bloques más pequeños de un byte leyendo o extrayendo un byte y haciendo cuatro
+operaciones, una para cada grupo de dos bits, con el byte.
+
 \subsection{Lectura}
 
 A la hora de leer el archivo que almacena el árbol, en principio no se sabe dónde
@@ -152,8 +157,38 @@ siguiente nodo en preorden. Este procedimiento sigue hasta que se llegue a un no
 vacío. \\
 
 Una vez generada la estructura, se lee el bloque de datos, asignando a cada nodo la
-etiqueta encontrada en el archivo, recorriendo los nodos del árbol en preorden.
+etiqueta encontrada en el archivo, recorriendo los nodos del árbol en preorden. A
+la hora de leer la primera etiqueta, si el último par de bits leído no constituía 
+los dos últimos bits de un byte, se pasará al siguiente byte, puesto que el bloque 
+de datos empezará en el comienzo de un byte y no en una posición intermedia.
 
 \subsection{Escritura}
+
+Para guardar el árbol simplemente escribiremos en un archivo la clave del árbol 
+seguida del bloque de datos. \\
+
+Para cada nodo, se añadirá un 1 a la clave si tiene un hijo a la izquierda o un 0
+en caso contrario, y se añadirá un 1 si tiene un hijo a la derecha o un 0 en caso 
+contrario. Si el hijo a la izquierda existía, se repetirá este proceso en el hijo
+a la izquierda; y si el hijo a la derecha existía, se procederá igual con este hijo
+a la derecha (después de terminar con el hijo a la izquierda si este existía). De
+esta forma se recorren los nodos en preorden y se rellena la cadena. \\
+
+Después se rellena el bloque de datos (saltando al siguiente byte si el último 
+byte en el que se escribió no quedó completo) en preorden.
+
+\subsection{Lectura de información del árbol}
+
+Es posible obtener cierta información de la estructura del árbol simplemente 
+leyendo la clave, sin generar el árbol completo.
+
+\begin{itemize}
+	\item \textbf{Offset:} Es posible determinar la posición donde comienza el 
+	bloque de datos en el archivo. %Inserte cómo aquí
+	\item \textbf{Tamaño:} Puede obtenerse el número de nodos del árbol incluso
+	si el tamaño del tipo de dato es variable (si fuese fijo, sería aún más fácil 
+	de obtener a partir del tamaño del archivo). %Inserte cómo aquí
+	\item \textbf{Altura:} %Inserte cómo aquí
+\end{itemize}
 
 \end{document}
