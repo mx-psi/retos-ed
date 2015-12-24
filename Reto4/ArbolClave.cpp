@@ -41,7 +41,8 @@ public:
   void GuardaClave() {
     unsigned char c = 0;
     int pos = 0;
-    GuardaBits(arbol->raiz(), c, pos);
+    if (arbol->raiz() != 0)  // Esto comprueba que el árbol no es vacío
+      GuardaBits(arbol->raiz(), c, pos);
     if (pos != 0)  // Si esto es true, hay un fragmento a medias sin escribir aún
       os.put(c);
   }
@@ -145,7 +146,9 @@ public:
 
   // Obtiene el árbol a partir de datos de la entrada escogida
   void Lee() {
-    CreaArmazon();
-    RellenaArmazon();
+    if (is.peek() && !is.eof()) {  // Esto comprueba que la entrada no representa un árbol vacío
+      CreaArmazon();
+      RellenaArmazon();
+    }
   }
 };

@@ -133,6 +133,11 @@ bloque de \textbf{datos}.
   o de la posición de un elemento terminador (si son de tamaño variable).
 \end{itemize}
 
+En principio este formato no es compatible con un posible árbol vacío, ya que
+presupone que el nodo raíz existe. Esto se solventa con facilidad haciendo que se
+guarden los árboles vacíos como archivos vacíos y considerando los archivos vacíos
+como árboles vacíos. 
+
 \section{Procedimientos}
 
 Tanto al leer como al escribir la clave del árbol, será necesario avanzar en 
@@ -180,7 +185,7 @@ byte en el que se escribió no quedó completo) en preorden.
 \subsection{Lectura de información del árbol}
 
 Es posible obtener cierta información de la estructura del árbol simplemente 
-leyendo la clave, sin generar el árbol completo.
+leyendo la clave, sin generar el árbol completo:
 
 \begin{itemize}
 	\item \textbf{Offset:} Es posible determinar la posición donde comienza el 
