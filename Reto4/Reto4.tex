@@ -189,10 +189,26 @@ leyendo la clave, sin generar el árbol completo:
 
 \begin{itemize}
 	\item \textbf{Offset:} Es posible determinar la posición donde comienza el 
-	bloque de datos en el archivo. %Inserte cómo aquí
+	bloque de datos en el archivo. Para ello, fijamos una variable entera con 
+	signo a 1, y por cada byte de archivo le sumamos el peso de Hamming de ese
+	byte (es decir, el número de bits que toman el valor 1) y le restamos 4, hasta
+	que la variable tome un valor no positivo. Cuando esto ocurra, el byte que
+	debería leerse a continuación es el mismo byte donde comienza el bloque de
+	datos.
+	
+	La variable representa el número de nodos que están pendientes de ser añadidos
+	al árbol a cada momento. Cuando esta llega a 0, no quedan más nodos que añadir,
+	por lo que lo siguiente será el bloque de datos.
 	\item \textbf{Tamaño:} Puede obtenerse el número de nodos del árbol incluso
 	si el tamaño del tipo de dato es variable (si fuese fijo, sería aún más fácil 
-	de obtener a partir del tamaño del archivo). %Inserte cómo aquí
+	de obtener a partir del tamaño del archivo). Esto se puede consguir sumando el
+	offset (según se obtuvo en el procedimiento anterior y contando el inicio de
+	archivo como la posición 0) multiplicado por 4 al valor que tomó la variable al
+	ejecutar el procedimiento anterior.
+	
+	Al hacer esto se está anulando la resta de 4 por cada byte al número de nodos
+	pendiente de ser añadidos a cada paso. Por ello, se obtendrá el número total
+	de nodos.
 	\item \textbf{Altura:} %Inserte cómo aquí
 \end{itemize}
 
