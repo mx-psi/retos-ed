@@ -12,6 +12,18 @@
 
 \newtheorem{prop}{Proposición}
 
+% Entorno para controlar el espacio antes y después de un algoritmo
+\newenvironment{algo}{
+\vspace*{0.5cm}
+\begin{algorithm}[H]}{
+\end{algorithm}
+\vspace*{0.5cm}
+}
+
+% Para los algoritmos
+\SetKwFunction{GuardaBits}{GuardaBits}
+\SetKwFunction{AvanzaArmazon}{AvanzaArmazon}
+
 \title{Reto 4}
 \date{Estructura de Datos}
 \author{Pablo Baeyens Fernández\\José Manuel Muñoz Fuentes\\Darío Sierra Martínez}
@@ -162,6 +174,7 @@ la hora de leer la primera etiqueta, si el último par de bits leído no constit
 los dos últimos bits de un byte, se pasará al siguiente byte, puesto que el bloque
 de datos empezará en el comienzo de un byte y no en una posición intermedia.
 
+
 \subsection{Escritura}
 
 Para guardar el árbol simplemente escribiremos en un archivo la clave del árbol
@@ -176,6 +189,25 @@ esta forma se recorren los nodos en preorden y se rellena la cadena. \\
 
 Después se rellena el bloque de datos (saltando al siguiente byte si el último
 byte en el que se escribió no quedó completo) en preorden.
+
+A continuación exponemos el algoritmo, que tendremos que llamar desde el nodo
+raíz. Para simplificar su exposición le pasamos una cadena $s$ por referencia.
+
+\begin{algo}
+\GuardaBits{$n,s$}: \\
+\KwIn{$n$, nodo actual, $s$, cadena}
+
+\BlankLine
+
+\eIf{$n$ tiene hijo \textbf{izquierdo}}{$s \; +\!\!=$ `1'}{$s \; +\!\!=$ `0'}
+\eIf{$n$ tiene hijo \textbf{derecho}}{$s \; +\!\!=$ `1'}{$s \; +\!\!=$ `0'}
+
+\BlankLine
+
+\If{$n$ tiene hijo \textbf{izquierdo}}{\GuardaBits{$n.\operatorname{izq},s$}}
+\If{$n$ tiene hijo \textbf{derecho}}{\GuardaBits{$n.\operatorname{der},s$}}
+
+\end{algo}
 
 \subsection{Lectura de información del árbol}
 
@@ -206,5 +238,4 @@ leyendo la clave, sin generar el árbol completo:
 	de nodos.
 	\item \textbf{Altura:} %Inserte cómo aquí
 \end{itemize}
-
 \end{document}
