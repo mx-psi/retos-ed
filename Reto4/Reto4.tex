@@ -28,9 +28,6 @@ que el tamaño en disco del árbol sea el mínimo posible. \\
 
 \subsection{Problema}
 
-% Definición de arbol binario? O de "estructura de árbol binario", que es realmente
-% de lo que estamos hablando aquí
-
 Propondremos una estructura de fichero que tendrá el menor tamaño en disco
 posible cumpliendo las siguientes premisas:
 \begin{itemize}
@@ -92,8 +89,6 @@ de Catalan:
 
 \[C_n = \frac{1}{n+1} {2n\choose n} \]
 
-% Demostrar fórmulas?
-
 Mediante la fórmula de Stirling podemos mostrar que:
 
 \[\lim_{n \to \infty} \frac{C_n}{\frac{4^n}{n^{3/2}\sqrt{\pi}}} = 1\]
@@ -136,11 +131,11 @@ bloque de \textbf{datos}.
 En principio este formato no es compatible con un posible árbol vacío, ya que
 presupone que el nodo raíz existe. Esto se solventa con facilidad haciendo que se
 guarden los árboles vacíos como archivos vacíos y considerando los archivos vacíos
-como árboles vacíos. 
+como árboles vacíos.
 
 \section{Procedimientos}
 
-Tanto al leer como al escribir la clave del árbol, será necesario avanzar en 
+Tanto al leer como al escribir la clave del árbol, será necesario avanzar en
 bloques de dos bits en lugar de bloques de un byte. Se simulará la entrada y salida
 en bloques más pequeños de un byte leyendo o extrayendo un byte y haciendo cuatro
 operaciones, una para cada grupo de dos bits, con el byte.
@@ -148,13 +143,13 @@ operaciones, una para cada grupo de dos bits, con el byte.
 \subsection{Lectura}
 
 A la hora de leer el archivo que almacena el árbol, en principio no se sabe dónde
-termina la clave y dónde empieza el bloque de etiquetas. Aunque es posible 
-determinar esa posición leyendo el archivo para después generar simultáneamente la 
+termina la clave y dónde empieza el bloque de etiquetas. Aunque es posible
+determinar esa posición leyendo el archivo para después generar simultáneamente la
 estructura del árbol y su contenido, optaremos en lugar de eso por obtener en
 primer lugar la estructura y después rellenar las etiquetas con los valores
 correctos, lo que permitirá leer el archivo de forma lineal, sin saltos. \\
 
-Para obtener la estructura del árbol se partirá de un árbol con un único nodo y se 
+Para obtener la estructura del árbol se partirá de un árbol con un único nodo y se
 leerán los bits de dos en dos. En cada par de bits, si el primero de ellos es un
 1, se le añadirá al nodo actual un hijo a la izquierda; y si el segundo es un 1,
 se le asignará un hijo a la derecha. Tras añadir (o no) los hijos, se pasa al
@@ -163,49 +158,49 @@ vacío. \\
 
 Una vez generada la estructura, se lee el bloque de datos, asignando a cada nodo la
 etiqueta encontrada en el archivo, recorriendo los nodos del árbol en preorden. A
-la hora de leer la primera etiqueta, si el último par de bits leído no constituía 
-los dos últimos bits de un byte, se pasará al siguiente byte, puesto que el bloque 
+la hora de leer la primera etiqueta, si el último par de bits leído no constituía
+los dos últimos bits de un byte, se pasará al siguiente byte, puesto que el bloque
 de datos empezará en el comienzo de un byte y no en una posición intermedia.
 
 \subsection{Escritura}
 
-Para guardar el árbol simplemente escribiremos en un archivo la clave del árbol 
+Para guardar el árbol simplemente escribiremos en un archivo la clave del árbol
 seguida del bloque de datos. \\
 
 Para cada nodo, se añadirá un 1 a la clave si tiene un hijo a la izquierda o un 0
-en caso contrario, y se añadirá un 1 si tiene un hijo a la derecha o un 0 en caso 
+en caso contrario, y se añadirá un 1 si tiene un hijo a la derecha o un 0 en caso
 contrario. Si el hijo a la izquierda existía, se repetirá este proceso en el hijo
 a la izquierda; y si el hijo a la derecha existía, se procederá igual con este hijo
 a la derecha (después de terminar con el hijo a la izquierda si este existía). De
 esta forma se recorren los nodos en preorden y se rellena la cadena. \\
 
-Después se rellena el bloque de datos (saltando al siguiente byte si el último 
+Después se rellena el bloque de datos (saltando al siguiente byte si el último
 byte en el que se escribió no quedó completo) en preorden.
 
 \subsection{Lectura de información del árbol}
 
-Es posible obtener cierta información de la estructura del árbol simplemente 
+Es posible obtener cierta información de la estructura del árbol simplemente
 leyendo la clave, sin generar el árbol completo:
 
 \begin{itemize}
-	\item \textbf{Offset:} Es posible determinar la posición donde comienza el 
-	bloque de datos en el archivo. Para ello, fijamos una variable entera con 
+	\item \textbf{Offset:} Es posible determinar la posición donde comienza el
+	bloque de datos en el archivo. Para ello, fijamos una variable entera con
 	signo a 1, y por cada byte de archivo le sumamos el peso de Hamming de ese
 	byte (es decir, el número de bits que toman el valor 1) y le restamos 4, hasta
 	que la variable tome un valor no positivo. Cuando esto ocurra, el byte que
 	debería leerse a continuación es el mismo byte donde comienza el bloque de
 	datos.
-	
+
 	La variable representa el número de nodos que están pendientes de ser añadidos
 	al árbol a cada momento. Cuando esta llega a 0, no quedan más nodos que añadir,
 	por lo que lo siguiente será el bloque de datos.
 	\item \textbf{Tamaño:} Puede obtenerse el número de nodos del árbol incluso
-	si el tamaño del tipo de dato es variable (si fuese fijo, sería aún más fácil 
+	si el tamaño del tipo de dato es variable (si fuese fijo, sería aún más fácil
 	de obtener a partir del tamaño del archivo). Esto se puede consguir sumando el
 	offset (según se obtuvo en el procedimiento anterior y contando el inicio de
 	archivo como la posición 0) multiplicado por 4 al valor que tomó la variable al
 	ejecutar el procedimiento anterior.
-	
+
 	Al hacer esto se está anulando la resta de 4 por cada byte al número de nodos
 	pendiente de ser añadidos a cada paso. Por ello, se obtendrá el número total
 	de nodos.
