@@ -176,7 +176,7 @@ de datos empezará en el comienzo de un byte y no en una posición intermedia.
 
 A continuación exponemos el algoritmo, que tendremos que llamar con posición inicial 0.
 Para simplificar su exposición le pasamos un nodo $n$ por referencia, que será
-el nodo raíz.
+el nodo raíz. También pasamos la posición por referencia.
 
 \begin{algo}
 \AvanzaArmazon{$n,s,p$}: \\
@@ -184,15 +184,22 @@ el nodo raíz.
 
 \BlankLine
 
-\If{$s[p] == $ `1'}{
-\textbf{Inserta} hijo izquierdo a $n$\;
-\AvanzaArmazon{$n.\operatorname{izquierdo},s,p+2$}\;
-}
+\texttt{izq} $ := s[p] == $ `1'\;
+\texttt{der} $ := s[p+1] == $ `1'\;
+\BlankLine
 
-\If{$s[p+1] == $ `1'}{
-\textbf{Inserta} hijo derecho a $n$\;
-\AvanzaArmazon{$n.\operatorname{derecho},s,p+2$}\;
-}
+\If{\texttt{izq}}{\textbf{Inserta} hijo izquierdo a $n$}
+\If{\texttt{der}}{\textbf{Inserta} hijo derecho a $n$}
+
+\BlankLine
+
+$p \;+\!\!= 2$\;
+
+\BlankLine
+
+\If{\texttt{izq}}{\AvanzaArmazon{$n.\operatorname{izquierdo},s,p$}}
+\If{\texttt{der}}{\AvanzaArmazon{$n.\operatorname{derecho},s,p$}}
+
 \end{algo}
 
 El caso de que el árbol sea vacío se tratará aparte comprobando si la cadena es
