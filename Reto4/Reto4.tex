@@ -174,6 +174,29 @@ la hora de leer la primera etiqueta, si el último par de bits leído no constit
 los dos últimos bits de un byte, se pasará al siguiente byte, puesto que el bloque
 de datos empezará en el comienzo de un byte y no en una posición intermedia.
 
+A continuación exponemos el algoritmo, que tendremos que llamar con posición inicial 0.
+Para simplificar su exposición le pasamos un nodo $n$ por referencia, que será
+el nodo raíz.
+
+\begin{algo}
+\AvanzaArmazon{$n,s,p$}: \\
+\KwIn{$n$, nodo actual, $s$, cadena a leer, $p$, posición en la cadena}
+
+\BlankLine
+
+\If{$s[p] == $ `1'}{
+\textbf{Inserta} hijo izquierdo a $n$\;
+\AvanzaArmazon{$n.\operatorname{izquierdo},s,p+2$}\;
+}
+
+\If{$s[p+1] == $ `1'}{
+\textbf{Inserta} hijo derecho a $n$\;
+\AvanzaArmazon{$n.\operatorname{derecho},s,p+2$}\;
+}
+\end{algo}
+
+El caso de que el árbol sea vacío se tratará aparte comprobando si la cadena es
+vacía.
 
 \subsection{Escritura}
 
@@ -204,8 +227,8 @@ raíz. Para simplificar su exposición le pasamos una cadena $s$ por referencia.
 
 \BlankLine
 
-\If{$n$ tiene hijo \textbf{izquierdo}}{\GuardaBits{$n.\operatorname{izq},s$}}
-\If{$n$ tiene hijo \textbf{derecho}}{\GuardaBits{$n.\operatorname{der},s$}}
+\If{$n$ tiene hijo \textbf{izquierdo}}{\GuardaBits{$n.\operatorname{izquierdo},s$}}
+\If{$n$ tiene hijo \textbf{derecho}}{\GuardaBits{$n.\operatorname{derecho},s$}}
 
 \end{algo}
 
