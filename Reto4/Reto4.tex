@@ -172,11 +172,12 @@ Una vez generada la estructura, se lee el bloque de datos, asignando a cada nodo
 etiqueta encontrada en el archivo, recorriendo los nodos del árbol en preorden. A
 la hora de leer la primera etiqueta, si el último par de bits leído no constituía
 los dos últimos bits de un byte, se pasará al siguiente byte, puesto que el bloque
-de datos empezará en el comienzo de un byte y no en una posición intermedia.
+de datos empezará en el comienzo de un byte y no en una posición intermedia. \\
 
-A continuación exponemos el algoritmo, que tendremos que llamar con posición inicial 0.
+A continuación exponemos el algoritmo, que tendremos que llamar con posición
+inicial 0.
 Para simplificar su exposición le pasamos un nodo $n$ por referencia, que será
-el nodo raíz. También pasamos la posición por referencia.
+el nodo raíz. También pasaremos la posición por referencia.
 
 \begin{algo}
 \AvanzaArmazon{$n,s,p$}: \\
@@ -202,8 +203,8 @@ $p \;+\!\!= 2$\;
 
 \end{algo}
 
-El caso de que el árbol sea vacío se tratará aparte comprobando si la cadena es
-vacía.
+El caso de que el árbol sea vacío se tratará aparte comprobando previamente si la
+cadena es vacía.
 
 \subsection{Escritura}
 
@@ -221,7 +222,9 @@ Después se rellena el bloque de datos (saltando al siguiente byte si el último
 byte en el que se escribió no quedó completo) en preorden.
 
 A continuación exponemos el algoritmo, que tendremos que llamar desde el nodo
-raíz. Para simplificar su exposición le pasamos una cadena $s$ por referencia.
+raíz. Para simplificar su exposición le pasamos una cadena $s$ por referencia y
+definiremos la operación \texttt{+=} entre cadenas como la adición a la primera
+cadena, en su final, de la segunda cadena.
 
 \begin{algo}
 \GuardaBits{$n,s$}: \\
