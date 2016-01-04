@@ -49,10 +49,10 @@ posible cumpliendo las siguientes premisas:
 	\item \textbf{Los datos se guardan en binario, y no como texto.} Las etiquetas
   del árbol se almacenarán en el archivo de forma similar a como lo hacen en
   memoria. Si son un tipo de dato simple, se guardarán como tal. Si son un puntero
-  a un vector de datos que terminan en un elemento terminador, se guardarán
-  estos elementos (incluyendo el terminador). Si son una estructura o un vector
-  de datos de tamaño fijo, se guardarán como la yuxtaposición de los elementos
-  de esa estructura.
+  a un vector de datos que concluye en un elemento terminador, se guardarán estos
+  elementos (incluyendo el terminador). Si son una estructura o un vector de datos
+  de tamaño fijo, se guardarán como la yuxtaposición de los elementos de esa
+  estructura.
 	\item \textbf{Las etiquetas no se modifican.} No se aprovechará el contenido
   de las etiquetas para, modificando bits que no sean relevantes, introducir
   información en ellas. Por ejemplo, si el tipo de dato almacenado son enteros
@@ -77,10 +77,11 @@ unívocamente la estructura del árbol. Así, el reto se reduce a describir dos
 algoritmos que computen las aplicaciones $c: A \to B$, $d: c(A) \to A$, donde:
 
 \begin{itemize}
-	\item $A$ es el conjunto de los árboles binarios de un número arbitrario de nodos
-	\item $B$ es el conjunto de las cadenas formadas por $0$ y $1$.
+	\item $A$ es el conjunto de los árboles binarios de un número finito de nodos.
+	\item $B$ es el conjunto de las cadenas de longitud finita formadas por $0$ y
+	$1$.
 	\item $c$ y $d$ son aplicaciones inyectivas.
-	\item $d \circ a = 1_A$, es decir, $d$ es una inversa por la izquierda de $c$.
+	\item $d \circ c = 1_A$, es decir, $d$ es una inversa por la izquierda de $c$.
 	\item Para todo árbol $a \in A$, $|c(a)|$ (la longitud de la cadena) es mínima.
 \end{itemize}
 
@@ -134,6 +135,7 @@ bloque de \textbf{datos}.
   incrementará el tamaño del archivo, puesto que, como el próximo bloque siempre
   tiene por tamaño un múltiplo de un byte, el sistema operativo añadiría bits al
   final del archivo hasta que el tamaño fuese un múltiplo de un byte).
+
 	\item El bloque de \textbf{datos} lo formará el grupo de datos, almacenados
   en preorden sin espacios entre ellos. La posición donde empieza un nuevo dato
   se determinará a partir del tamaño de los tipos de datos (si son de tamaño fijo)
@@ -148,9 +150,10 @@ como árboles vacíos.
 \section{Procedimientos}
 
 Tanto al leer como al escribir la clave del árbol, será necesario avanzar en
-bloques de dos bits en lugar de bloques de un byte. Se simulará la entrada y salida
-en bloques más pequeños de un byte leyendo o extrayendo un byte y haciendo cuatro
-operaciones, una para cada grupo de dos bits, con el byte.
+bloques de dos bits en lugar de bloques de un byte. En una implementación de estos
+métodos se requerirá la simulación de entrada y salida en bloques más pequeños de
+un byte leyendo o extrayendo un byte y haciendo cuatro operaciones, una para cada
+grupo de dos bits, con el byte.
 
 \subsection{Lectura}
 
@@ -161,12 +164,12 @@ estructura del árbol y su contenido, optaremos en lugar de eso por obtener en
 primer lugar la estructura y después rellenar las etiquetas con los valores
 correctos, lo que permitirá leer el archivo de forma lineal, sin saltos. \\
 
-Para obtener la estructura del árbol se partirá de un árbol con un único nodo y se
-leerán los bits de dos en dos. En cada par de bits, si el primero de ellos es un
-1, se le añadirá al nodo actual un hijo a la izquierda; y si el segundo es un 1,
-se le asignará un hijo a la derecha. Tras añadir (o no) los hijos, se pasa al
-siguiente nodo en preorden. Este procedimiento sigue hasta que se llegue a un nodo
-vacío. \\
+Para obtener la estructura del árbol se partirá de un árbol con un único nodo (a
+no ser, claro está, que el archivo esté vacío) y se leerán los bits de dos en dos.
+En cada par de bits, si el primero de ellos es un 1, se le añadirá al nodo actual
+un hijo a la izquierda; y si el segundo es un 1, se le asignará un hijo a la
+derecha. Tras añadir (o no) los hijos, se pasa al siguiente nodo en preorden. Este
+procedimiento sigue hasta que se llegue a un nodo vacío. \\
 
 Una vez generada la estructura, se lee el bloque de datos, asignando a cada nodo la
 etiqueta encontrada en el archivo, recorriendo los nodos del árbol en preorden. A
@@ -174,14 +177,17 @@ la hora de leer la primera etiqueta, si el último par de bits leído no constit
 los dos últimos bits de un byte, se pasará al siguiente byte, puesto que el bloque
 de datos empezará en el comienzo de un byte y no en una posición intermedia. \\
 
-A continuación exponemos el algoritmo, que tendremos que llamar con posición
-inicial 0.
-Para simplificar su exposición le pasamos un nodo $n$ por referencia, que será
-el nodo raíz. También pasaremos la posición por referencia.
+A continuación exponemos el algoritmo que genera la estructura. Inicialmente le
+pasamos el nodo raíz (que se generará de antemano a no ser que el archivo sea
+vacío, en cuyo caso este algoritmo no se ejecutará) y la posición 0. Tanto el nodo
+como la posición serán tratados por referencia por el algoritmo. La posición debe
+tratarse por referencia porque, hasta que no se haya generado completamente la
+estructura que surge del hijo a la izquierda, no se conocerá la posición en la que
+comienza la información a partir del hijo a la derecha.
 
 \begin{algo}
 \AvanzaArmazon{$n,s,p$}: \\
-\KwIn{$n$, nodo actual, $s$, cadena a leer, $p$, posición en la cadena}
+\KwIn{$n$, nodo actual; $s$, cadena a leer, $p$; posición en la cadena}
 
 \BlankLine
 
@@ -203,8 +209,8 @@ $p \;+\!\!= 2$\;
 
 \end{algo}
 
-El caso de que el árbol sea vacío se tratará aparte comprobando previamente si la
-cadena es vacía.
+El bloque de datos se leería a continuación, a partir de la posición inmediatamente
+posterior al último byte del archivo que correspondía a la clave.
 
 \subsection{Escritura}
 
@@ -219,16 +225,17 @@ a la derecha (después de terminar con el hijo a la izquierda si este existía).
 esta forma se recorren los nodos en preorden y se rellena la cadena. \\
 
 Después se rellena el bloque de datos (saltando al siguiente byte si el último
-byte en el que se escribió no quedó completo) en preorden.
+byte en el que se escribió no quedó completo) leyendo las etiquetas en preorden. \\
 
-A continuación exponemos el algoritmo, que tendremos que llamar desde el nodo
-raíz. Para simplificar su exposición le pasamos una cadena $s$ por referencia y
-definiremos la operación \texttt{+=} entre cadenas como la adición a la primera
-cadena, en su final, de la segunda cadena.
+Así queda el algoritmo que escribe la clave. Inicialmente lo llamaremos con el
+nodo raíz y una cadena vacía (que será modificada por referencia) como parámetros.
+Para simplificar su exposición, definiremos la operación \texttt{+=} entre cadenas
+como la concatenación o anexión a la primera cadena, en su final, de la segunda
+cadena.
 
 \begin{algo}
 \GuardaBits{$n,s$}: \\
-\KwIn{$n$, nodo actual, $s$, cadena}
+\KwIn{$n$, nodo actual; $s$, cadena}
 
 \BlankLine
 
@@ -241,6 +248,10 @@ cadena, en su final, de la segunda cadena.
 \If{$n$ tiene hijo \textbf{derecho}}{\GuardaBits{$n.\operatorname{derecho},s$}}
 
 \end{algo}
+
+A continuación se escribiría en el archivo el contenido de las etiquetas, en
+preorden. Si el árbol resultaba ser vacío, se escribirá un archivo vacío y no se
+ejecutará este algoritmo ni la escritura de etiquetas posterior.
 
 \subsection{Lectura de información del árbol}
 
