@@ -89,32 +89,44 @@ algoritmos que computen las aplicaciones $c: A \to B$, $d: c(A) \to A$, donde:
 
 En esta sección ofrecemos una cota inferior al problema. Sea $m \in \mathbb{N}$.
 Mediante un argumento combinatorio es fácil mostrar que:
-
 \[|\{b \in B\; : \; |b| = m\}| = 2^m\]
 
 ya que son las combinaciones de 0 y 1 con $m$ elementos y con repetición. De esta
 forma, podemos ver que si tenemos una familia de $n$ objetos distintos, podremos
 etiquetarlos con etiquetas binarias con una longitud mínima de
-$\lceil \log_2(n) \rceil$.
+$\lceil \log_2(n) \rceil$. \\
 
 El número de árboles binarios de $n$ nodos viene dado por la sucesión de los números
 de Catalan:
 
-\[C_n = \frac{1}{n+1} {2n\choose n} \]
+\[C_n = \frac{1}{n+1} {2n\choose n} = \frac{(2n)!}{n!(n+1)!} \]
 
-Mediante la fórmula de Stirling podemos mostrar que:
+Puede probarse que $C_n \le 4^n \ \ \forall n \in \mathbb N$. Para $C_0$ es
+cierto: $C_0 = 1 = 4^0$. Sea cierto que $C_n \le 4^n$ para un $n \in \mathbb N$.
+Se observa que $C_{n+1} < 4C_n \ \ \forall n \in \mathbb N$ puesto que:
+\[\frac{C_{n+1}}{C_n} = \frac{(2n+2)!}{(n+1)!(n+2)!} \frac{n!(n+1)!}{(2n)!}
+= \frac{(2n+2)(2n+1)}{(n+2)(n+1)} = \frac{2(n+1)(2n+1)}{(n+2)(n+1)} =
+\frac{2(2n+1)}{(n+2)} < \frac{2(2n+4)}{n+2} = 4 \]
 
-\[\lim_{n \to \infty} \frac{C_n}{\frac{4^n}{n^{3/2}\sqrt{\pi}}} = 1\]
+Por ello, $C_{n+1} \le 4 C_n \le 4 \cdot 4^n = 4^{n+1}$. Queda así probado que
+$4^n$ es una cota superior para $C_n$.
 
-Es decir, podemos aproximar $C_n \sim 4^n$. De esta forma, para árboles binarios
-de $n$ nodos, el número mínimo de bits que necesitaríamos para realizar un
-etiquetado unívoco sería $\lceil \log_2(C_n) \rceil \simeq \log_2(4^n) = 2n$.
+%Creo que sobra lo siguiente.
+%Mediante la fórmula de Stirling podemos mostrar que:
 
-Es decir, una buena solución no debería necesitar más del
-\textbf{doble del número de nodos} de bits para guardar la estructura de un
-árbol suficientemente grande.
+%\[\lim_{n \to \infty} \frac{C_n}{\frac{4^n}{n^{3/2}\sqrt{\pi}}} = 1\]
 
-Esta aproximación no tiene en cuenta el guardado de las etiquetas de los nodos.
+%Es decir, podemos aproximar $C_n \sim 4^n$.
+
+De esta forma, para árboles binarios de $n$ nodos, el número máximo de bits que
+necesitaríamos para realizar un etiquetado unívoco sería $\lceil \log_2(C_n)
+\rceil \simeq \log_2(4^n) = 2n$. Por ello, una buena solución no debería necesitar
+más del doble del número de nodos de bits para guardar la estructura de un
+árbol suficientemente grande. La solución propuesta se ajustará precisamente a esta
+cota superior. \\
+
+Esta aproximación no tiene en cuenta el guardado de las etiquetas de los nodos ni
+el hecho de que debe diferenciarse la clave de las etiquetas dentro del archivo.
 
 \section{Estructura de fichero}
 
