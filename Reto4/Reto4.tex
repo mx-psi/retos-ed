@@ -264,11 +264,13 @@ leyendo la clave, sin generar el árbol completo:
 \section{Implementación}
 
 Para probar la solución propuesta se adjunta una implementación de dos clases que
-aplican los procedimientos descritos y un código que obtiene un árbol de gran
-tamaño con etiquetas y estructura al azar, lo guarda según este procedimiento, lo
-lee de nuevo y verifica que el árbol leído de disco y el que se había guardado
-coinciden. El árbol generado no se borra tras la ejecución del programa, por lo
-que puede explorarse con un editor hexadecimal tras la ejecución. \\
+aplican los procedimientos descritos y un código en \texttt{Prueba.cpp} que,
+importando las clases (que están en \texttt{ArbolClave.cpp}), obtiene un árbol de
+gran tamaño con etiquetas y estructura al azar, lo guarda según este
+procedimiento, lo lee de nuevo y verifica que el árbol leído de disco y el que se
+había guardado coinciden. El árbol generado no se borra tras la ejecución del
+programa, por lo que puede explorarse con un editor hexadecimal tras la ejecución.
+\\
 
 El programa puede modificarse para que el tipo de dato usado para las etiquetas o
 su máximo valor posible sea distinto. En el ejemplo se ha escogido el tipo de dato
@@ -281,6 +283,7 @@ ejemplo, el árbol rondará las \textbf{175 000 componentes}, pero reduciendo o
 aumentando la constante $10.0$ de la función \texttt{NuevoElemento} se puede
 reducir o aumentar, respectivamente, el número de componentes. \\
 
-La implementación del tipo de dato de árbol binario es la misma que se ha puesto
-como ejemplo en la plataforma de la asignatura, con cambios menores.
+La implementación del tipo de dato de árbol binario, en \texttt{ArbolBinario.h},
+es la misma que se ha puesto como ejemplo en la plataforma de la asignatura, con
+cambios menores.
 \end{document}
