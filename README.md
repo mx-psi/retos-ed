@@ -6,4 +6,4 @@ Retos de Estructura de Datos
 * [Reto 3] (/Reto3): Emulación de una pila a partir de una lista
 * [Reto 4] (/Reto4): Guardado de árbol binario en disco en el menor espacio posible
 
-De [**@tzae**](https://github.com/tzae), [**@josemam**](https://github.com/josemam) y [**@DarioSierra**](https://github.com/DarioSierra)
+De [**@mx-psi**](https://github.com/mx-psi), [**@josemam**](https://github.com/josemam) y [**@DarioSierra**](https://github.com/DarioSierra)
